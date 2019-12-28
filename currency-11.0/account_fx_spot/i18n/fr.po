@@ -1,0 +1,455 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * account_fx_spot
+#
+# Translators:
+# OCA Transbot <transbot@odoo-community.org>, 2018
+# Quentin THEURET <odoo@kerpeo.com>, 2018
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-04-11 12:43+0000\n"
+"PO-Revision-Date: 2018-04-11 12:43+0000\n"
+"Last-Translator: Quentin THEURET <odoo@kerpeo.com>, 2018\n"
+"Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: account_fx_spot
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_form
+msgid "(Incoming/Outgoing)"
+msgstr "(Revenu/Dépense)"
+
+#. module: account_fx_spot
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_form
+msgid "(Outgoing/Incoming)"
+msgstr "(Dépense/Revenu)"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_comment
+msgid "Additional Information"
+msgstr "Informations complémentaires"
+
+#. module: account_fx_spot
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_form
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_payment_from_fx_spot
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: account_fx_spot
+#: selection:account.fx.spot,state:0
+msgid "Cancelled"
+msgstr "Annulé"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_commercial_partner_id
+msgid "Commercial Entity"
+msgstr "Entité commerciale"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_company_id
+msgid "Company"
+msgstr "Société"
+
+#. module: account_fx_spot
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_form
+msgid "Confirm"
+msgstr "Confirmer"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_create_uid
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_payment_create_uid
+msgid "Created by"
+msgstr "Créer par"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_create_date
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_payment_create_date
+msgid "Created on"
+msgstr "Créer le"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_company_currency_id
+msgid "Currency"
+msgstr "Devise"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_display_name
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_payment_display_name
+msgid "Display Name"
+msgstr "Nom à afficher"
+
+#. module: account_fx_spot
+#: selection:account.fx.spot,state:0
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_search
+msgid "Done"
+msgstr "Terminé"
+
+#. module: account_fx_spot
+#: selection:account.fx.spot,state:0
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_search
+msgid "Draft"
+msgstr "Brouillon"
+
+#. module: account_fx_spot
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_payment_form
+msgid "FX Spot Trans."
+msgstr "Trans. de change au comptant"
+
+#. module: account_fx_spot
+#: model:ir.actions.act_window,name:account_fx_spot.action_account_fx_spot
+#: model:ir.ui.menu,name:account_fx_spot.menu_account_fx_spot
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_form
+msgid "FX Spot Transaction"
+msgstr "Transaction de change au comptant"
+
+#. module: account_fx_spot
+#: code:addons/account_fx_spot/models/account_fx_spot.py:350
+#, python-format
+msgid "FX Spot Transaction must be cancelled in order to reset it to draft."
+msgstr ""
+"Une transaction de change au comptant doit être annulée dans le but de la "
+"remettre en brouillon"
+
+#. module: account_fx_spot
+#: code:addons/account_fx_spot/models/account_fx_spot.py:316
+#, python-format
+msgid ""
+"FX Spot Transaction must be done in order to set it to register payment."
+msgstr ""
+"Une transaction de change au comptant doit être terminée pour pouvoir "
+"enregistrer le paiement."
+
+#. module: account_fx_spot
+#: model:ir.ui.menu,name:account_fx_spot.menu_account_fx
+msgid "Foreign Exchange"
+msgstr "Change"
+
+#. module: account_fx_spot
+#: model:ir.model,name:account_fx_spot.model_account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_payment_fx_spot_ids
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_payment_fx_spot_ids
+msgid "Foreign Exchange Spot Transaction"
+msgstr "Transaction de change au comptant"
+
+#. module: account_fx_spot
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_search
+msgid "Group By"
+msgstr "Grouper par"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_payment_has_fx_spots
+msgid "Has Fx Spots"
+msgstr "A des transactions de change au comptant"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_id
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_payment_id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_fx_spot
+#: code:addons/account_fx_spot/models/account_fx_spot_payment.py:82
+#, python-format
+msgid ""
+"In order to pay multiple transactions at once, they must use the same "
+"outgoing or incoming currency."
+msgstr ""
+"Dans le but de payer plusieurs transactions en une fois, elles doivent "
+"utiliser les mêmes devises de revenu et de dépense."
+
+#. module: account_fx_spot
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_form
+msgid "Incoming"
+msgstr "Revenu"
+
+#. module: account_fx_spot
+#: code:addons/account_fx_spot/models/account_fx_spot_payment.py:90
+#, python-format
+msgid "Incoming Currencies does not match."
+msgstr "Les devises de revenu ne correspondent pas."
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_in_currency_id
+msgid "Incoming Currency"
+msgstr "Devise de revenu"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_amount_out
+msgid "Issued Amount"
+msgstr "Montant distribué"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_journal_id
+msgid "Journal"
+msgstr "Journal"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_move_id
+msgid "Journal Entry"
+msgstr "Entrée de journal"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,help:account_fx_spot.field_account_fx_spot_date_transaction
+msgid "Keep empty to use the current date"
+msgstr "Laisser vide pour utiliser la date courante"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot___last_update
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_payment___last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_payment_write_uid
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_write_uid
+msgid "Last Updated by"
+msgstr "Mis à jour par"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_payment_write_date
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_write_date
+msgid "Last Updated on"
+msgstr "Mis à jour le"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_payment_multi
+msgid "Multi"
+msgstr "Multi"
+
+#. module: account_fx_spot
+#: selection:account.fx.spot,state:0
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_search
+msgid "Open"
+msgstr "Ouverte"
+
+#. module: account_fx_spot
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_form
+msgid "Outgoing"
+msgstr "Dépense"
+
+#. module: account_fx_spot
+#: code:addons/account_fx_spot/models/account_fx_spot_payment.py:94
+#, python-format
+msgid "Outgoing Currencies does not match."
+msgstr "Les devises de dépense ne correspondent pas."
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_out_currency_id
+msgid "Outgoing Currency"
+msgstr "Devise de dépense"
+
+#. module: account_fx_spot
+#: code:addons/account_fx_spot/models/account_payment.py:41
+#, python-format
+msgid "Paid FX Spot Transactions"
+msgstr "Transactions de change au comptant payées"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_reconciled
+msgid "Paid/Reconciled"
+msgstr "Payée/Lettrée"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_partner_id
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_search
+msgid "Partner"
+msgstr "Partenaire"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_payment_move_line_ids
+msgid "Payment Move Lines"
+msgstr "Écritures de paiement"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_payment_payment_type
+msgid "Payment Type"
+msgstr "Type de paiement"
+
+#. module: account_fx_spot
+#: code:addons/account_fx_spot/models/account_fx_spot_payment.py:173
+#, python-format
+msgid "Payment Type is not set."
+msgstr "Le type de paiement n'est pas défini"
+
+#. module: account_fx_spot
+#: code:addons/account_fx_spot/models/account_fx_spot_payment.py:217
+#: model:ir.model,name:account_fx_spot.model_account_payment
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_payment_ids
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_form
+#, python-format
+msgid "Payments"
+msgstr "Paiements"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_payments_count
+msgid "Payments count"
+msgstr "Nombre de paiements"
+
+#. module: account_fx_spot
+#: code:addons/account_fx_spot/models/account_fx_spot_payment.py:104
+#, python-format
+msgid ""
+"Programming error: wizard action executed without active_ids in context."
+msgstr ""
+"Erreur de programmation : l'action de l'assistant a été exécutée sans "
+"active_ids dans le contexte."
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_rate
+msgid "Rate"
+msgstr "Taux"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_rate_inv
+msgid "Rate Inverted"
+msgstr "Taux inversé"
+
+#. module: account_fx_spot
+#: selection:account.fx.spot.payment,payment_type:0
+msgid "Receive Money"
+msgstr "Monnaies reçue"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_amount_in
+msgid "Received Amount"
+msgstr "Montant reçu"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_name
+msgid "Reference"
+msgstr "Référence"
+
+#. module: account_fx_spot
+#: model:ir.actions.act_window,name:account_fx_spot.action_account_payment_from_fx_spot
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_form
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_payment_from_fx_spot
+msgid "Register Payment"
+msgstr "Enregistrer le paiement"
+
+#. module: account_fx_spot
+#: model:ir.model,name:account_fx_spot.model_account_fx_spot_payment
+msgid "Register payments on FX Spot Transactions"
+msgstr "Enregistrer les paiements sur les transactions de change au comptant"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_residual_out
+msgid "Remaining amount due"
+msgstr "Montant restant dû"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_residual_company_out
+msgid "Remaining amount due in company currency"
+msgstr "Montant restant dû dans la devise de la société"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_residual_in
+msgid "Remaining amount to receive"
+msgstr "Montant restant à recevoir"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_residual_company_in
+msgid "Remaining amount to receive in company currency"
+msgstr "Montant restant à recevoir dans la devise de la société"
+
+#. module: account_fx_spot
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_form
+msgid "Reset to Draft"
+msgstr "Remettre en brouillon"
+
+#. module: account_fx_spot
+#: selection:account.fx.spot.payment,payment_type:0
+msgid "Send Money"
+msgstr "Envoyer de l'argent"
+
+#. module: account_fx_spot
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_form
+msgid "Spot Exchange Rate"
+msgstr "Taux de change au comptant"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_state
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_search
+msgid "Status"
+msgstr "Statut"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,help:account_fx_spot.field_account_payment_has_fx_spots
+msgid "Technical field for usability purposes"
+msgstr "Champ technique pour des besoins d'interface utilisateur"
+
+#. module: account_fx_spot
+#: model:ir.model.fields,help:account_fx_spot.field_account_fx_spot_payment_multi
+msgid ""
+"Technical field indicating if the user selected transactions from multiple "
+"partners or from different types."
+msgstr ""
+"Champ technique indiquant si l'utilisateur a sélectionné des transactions "
+"depuis des partenaires multiples ou depuis des types différents."
+
+#. module: account_fx_spot
+#: model:ir.model.fields,field_description:account_fx_spot.field_account_fx_spot_date_transaction
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_search
+msgid "Transaction Date"
+msgstr "Date de transaction"
+
+#. module: account_fx_spot
+#: code:addons/account_fx_spot/models/account_fx_spot.py:324
+#, python-format
+msgid "Transaction must be in draft or open state in order to be cancelled."
+msgstr ""
+"La transaction doit être dans un état brouillon ou ouverte pour pouvoir être "
+"annulée"
+
+#. module: account_fx_spot
+#: code:addons/account_fx_spot/models/account_fx_spot.py:304
+#, python-format
+msgid "Transaction must be validated in order to set it to register payment."
+msgstr ""
+"La transaction doit être dans validée pour pouvoir y enregistrer un paiement"
+
+#. module: account_fx_spot
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_search
+msgid "Unpaid (incoming)"
+msgstr "Non payée (revenu)"
+
+#. module: account_fx_spot
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_fx_spot_search
+msgid "Unpaid (outgoing)"
+msgstr "Non payée (dépense)"
+
+#. module: account_fx_spot
+#: model:ir.ui.view,arch_db:account_fx_spot.view_account_payment_from_fx_spot
+msgid "Validate"
+msgstr "Valider"
+
+#. module: account_fx_spot
+#: code:addons/account_fx_spot/models/account_fx_spot_payment.py:112
+#, python-format
+msgid "You can only register payments for open transactions"
+msgstr ""
+"Vous pouvez seulement enregistrer des paiements sur des transactions ouvertes"
+
+#. module: account_fx_spot
+#: code:addons/account_fx_spot/models/account_fx_spot.py:332
+#, python-format
+msgid ""
+"You cannot cancel a transaction which is partially paid. You need to "
+"unreconcile related payment entries first."
+msgstr ""
+"Vous ne pouvez pas annuler une transaction qui est payée partiellement. Vous "
+"devez auparavant annuler le lettrage des écritures de paiement."
+
+#. module: account_fx_spot
+#: code:addons/account_fx_spot/models/account_fx_spot.py:308
+#, python-format
+msgid ""
+"You cannot pay an transaction which is partially paid. You need to reconcile "
+"payment entries first."
+msgstr ""
+"Vous ne pouvez pas payer une transaction qui est payée partiellement. Vous "
+"devez auparavant lettrer les écritures de paiement."

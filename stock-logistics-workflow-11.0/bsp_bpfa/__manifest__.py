@@ -1,0 +1,20 @@
+{
+    'name': 'Bukti Penerimaan Fixed Asset',
+    'summary': 'Form Bukti Penerimaan Fixed Asset',
+    'version': '11.0.1.0.1',
+    'category': 'Inventory',
+    'author': "teddy_r@mail.binasanprima.com",
+    'license': 'AGPL-3',
+    'website': 'http://bis2.com',
+    'depends': ['base', 'mail', 'stock', 'purchase_request', 'purchase', 'product'],
+    'data': [
+            # "security/material_transfer.xml",
+            # "security/ir.model.access.csv",
+            # 'views/material_transfer_order_views.xml',
+            # 'views/stock_picking_views.xml',
+            # 'views/material_transfer_menu.xml',
+            'views/operation_type_view.xml',
+            'views/stock_location_dept.xml',
+            # "data/material_transfer_sequence.xml",
+            ],
+}

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_kontra_bon_document">
+            <t t-call="web.external_layout">
+                <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
+                <div class="page">
+                    <div class="row">
+                        <div name="invoice_address" class="col-xs-5 col-xs-offset-7">
+                            <address t-field="o.partner_id"
+                                t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
+                            <div t-if="o.partner_id.vat" class="mt16"><t t-esc="o.company_id.country_id.vat_label or 'TIN'"/>: <span t-field="o.partner_id.vat"/></div>
+                        </div>
+                    </div>
+
+                    <h2>
+                        <span>Nomor Kontra Bob:</span>
+                        <span t-field="o.name"/>
+                        <span t-if="(o.state == 'paid')">(Paid)</span>
+                        <span t-if="o.state == 'draft'">(Draft)</span>
+                        <span t-if="o.state == 'approved'">(Approved)</span>
+                        <span t-if="o.state == 'open'">(Open)</span>
+                        <span t-if="o.state == 'cancel'">(Canceled)</span>
+                        <span t-if="o.state == 'rejected'">(Rejected)</span>
+                    </h2>
+
+                    <div class="row mt32 mb32">
+                        <div class="col-xs-2" t-if="o.memo">
+                            <strong>Description:</strong>
+                            <p t-field="o.memo"/>
+                        </div>
+                        <div class="col-xs-2" t-if="o.date_doc">
+                            <strong>Tanggal Kontra Bon:</strong>
+                            <p t-field="o.date_doc"/>
+                        </div>
+                        <div class="col-xs-2" t-if="o.date_receipt">
+                            <strong>Tanggal Kembali:</strong>
+                            <p t-field="o.date_receipt"/>
+                        </div>
+                        <div class="col-xs-2" t-if="o.partner_id.ref">
+                            <strong>Rerencee:</strong>
+                            <p t-field="o.partner_id.ref"/>
+                        </div>
+                    </div>
+
+                    <table class="table table-condensed" name="invoice_line_table">
+                        <thead>
+                            <tr>
+                                <th class="text-right">No</th>
+                                <th class="text-right">Tanggal Faktur</th>
+                                <th class="text-right">Nomor Faktur</th>
+                                <th class="text-right">Jumlah[+Pajak]</th>
+                                <th class="text-right">Sisa Bayar</th>
+                                <th class="text-right">Jumlah Bayar</th>
+                                <th class="text-right">Keterangan</th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="invoice_tbody">
+                            <tr t-foreach="o.invoice_line_ids" t-as="l">
+                                <td><span t-esc="p_index"/></td>
+                                <td><span t-field="l.invoice_id"/></td>
+                                <td class="text-right">
+                                    <span t-field="l.date_invoice"/>
+                                </td>
+<!--                                <td class="text-right">-->
+<!--                                    <span t-field="l.amount_untaxed"/>-->
+<!--                                </td>-->
+<!--                                <td class="text-right">-->
+<!--                                    <span t-field="l.amount_tax"/>-->
+<!--                                </td>-->
+                                <td class="text-right">
+                                    <span t-field="l.amount_total"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="l.residual"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="l.amount_payment"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="l.comments"/>
+                                </td>
+                            </tr>
+                            <tr t-foreach="range(max(5-len(o.invoice_line_ids),0))" t-as="l">
+                                <td t-translation="off">&amp;nbsp;</td>
+                                <td class="hidden"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="clearfix">
+                        <div id="total" class="row">
+                            <div class="col-xs-4 pull-right">
+                                <table class="table table-condensed" style="min-width: 250px;max-width: 400px;">
+                                    <tr class="border-black" style="border-bottom:1px solid #dddddd;">
+                                        <td><strong>Total Pembayaran [+Pajak]</strong></td>
+                                        <td class="text-right">
+                                            <span t-field="o.amount_payment_total" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        </td>
+                                    </tr>
+<!--                                    <tr class="border-black">-->
+<!--                                        <td><strong>Total Tax</strong></td>-->
+<!--                                        <td class="text-right">-->
+<!--                                            <span t-field="o.amount_tax_total" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>-->
+<!--                                        </td>-->
+<!--                                    </tr>-->
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="account_payment_kontra_bon.kontra_bon_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="account_payment_kontra_bon.report_kontra_bon_document" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+
+        </data>
+</odoo>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="kontra_bon_tree_view" model="ir.ui.view">
+            <field name="name">Kontra Bon</field>
+            <field name="model">kontra.bon</field>
+            <field name="arch" type="xml">
+                <tree string="Kontra Bon">
+                    <field name="name"/>
+                    <field name="date_doc"/>
+                    <field name="partner_id"/>
+                    <field name="date_receipt"/>
+                    <field name="currency_id"/>
+                    <field name="residual_total" sum="Total Amount Due"/>
+                    <field name="amount_payment_total" sum="Total Amount Payment"/>
+                    <field name="memo"/>
+                    <field name="requested_by"/>
+                    <field name="assigned_to"/>
+                    <field name="company_id"/>
+                    <field name="state"/>
+                    <field name="comp_state" invisible="True"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="kontra_bon_form_view" model="ir.ui.view">
+            <field name="name">Kontra Bon</field>
+            <field name="model">kontra.bon</field>
+            <field name="arch" type="xml">
+                <form string="Kontra Bon">
+                    <header>
+                        <button name="button_draft"
+                                states="to_approve,approved,rejected,paid"
+                                string="Reset"
+                                type="object"
+                                groups="account_payment_kontra_bon.group_kontra_bon_manager"/>
+                        <button name="button_to_approve" states="draft"
+                                string="Request approval" type="object"
+                                class="oe_highlight"/>
+                        <button name="button_approved"
+                                states="to_approve"
+                                string="Approve"
+                                type="object"
+                                class="oe_highlight"
+                                groups="account_payment_kontra_bon.group_kontra_bon_manager"/>
+                        <button name="button_paid"
+                                states="approved,open"
+                                string="Paid"
+                                type="object"
+                                class="oe_highlight"
+                                groups="account_payment_kontra_bon.group_kontra_bon_manager"/>
+                        <button name="button_rejected"
+                                states="to_approve,approved"
+                                string="Reject"
+                                type="object"
+                                groups="account_payment_kontra_bon.group_kontra_bon_manager"/>
+                        <button name="button_cancel"
+                                states="draft,approved"
+                                string="Cancel"
+                                type="object"
+                                groups="account_payment_kontra_bon.group_kontra_bon_manager"/>
+
+                        <!-- passing partner_id, state and ids to wizard model-->
+                        <!-- invoice_line_ids = invoice already added -->
+                        <button name="%(act_open_select_invoices_view)d" type="action"
+                                class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"
+                                context="{'partner_id': partner_id,
+                                            'state': 'open'
+                                          }"
+                                string="Select Bill/Invoices"/>
+
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,to_approve,approved,open,paid,rejected,cancel"
+                               statusbar_colors='{"approved":"blue", "cancel":"red"}'/>
+                    </header>
+
+                    <sheet String="Kontra Bon Supplier" class='oe_chatter'>
+                        <div class="oe_title" attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <h1><field name="name"/></h1>
+                        </div>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object"  name="action_view_payment"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o" attrs="{'invisible':[('state', 'in', ('draft','sent','to approve')),('payment_ids','=',[])]}">
+                            <field name="payment_count" widget="statinfo" string="Payments"/>
+                            <field name='payment_ids' invisible="1"/>
+                        </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="date_doc"/>
+                                <field name="partner_id"/>
+                                <field name="date_receipt"/>
+                                <field name="memo"/>
+                                <field name="requested_by"/>
+                                <field name="assigned_to"/>
+                                <field name="company_id"/>
+                            </group>
+                            <group>
+                                <field name="chk_kwitansi" string="Kwitansi" widget="radio" options="{'horizontal': true}" />
+                                <field name="chk_faktur" string="Faktur" widget="radio" options="{'horizontal': true}" />
+                                <field name="chk_bppb" string="BPPB" widget="radio" options="{'horizontal': true}" />
+                                <field name="chk_qcf" string="QCF" widget="radio" options="{'horizontal': true}" />
+                                <field name="chk_po" string="PO" widget="radio" options="{'horizontal': true}" />
+                                <field name="chk_bpb" string="BPB" widget="radio" options="{'horizontal': true}" />
+                                <field name="chk_bstb" string="BSTB" widget="radio" options="{'horizontal': true}" />
+                                <field name="chk_sj" string="SJ" widget="radio" options="{'horizontal': true}" />
+                                <field name="chk_fpajak" string="F.Pajak"  widget="radio" options="{'horizontal': true}" />
+                            </group>
+                        </group>
+
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers"/>
+                            <field name="activity_ids" widget="mail_activity"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                        <notebook>
+                            <page string="Bill Of Kontra Bon">
+                                <label for="my_detail" string="Auto Fill Payment Amount" class="btn btn-sm btn-primary"/>
+                                <field name="my_detail" invisible="1"/>
+<!--                                <button name="auto_fill_payments_detail" string="Auto-Fill Pay Amount" type="action" class="oe_edit_only " style="background-color:cyan;"/>-->
+                                <field name="invoice_line_ids" colspan="4" nolabel="1" widget="one2many_list">
+                                    <tree string="Kontra Bon lines" editable="bottom">
+                                        <field name="invoice_id" domain="[('state', 'in', ['open']),('partner_id', 'child_of', parent.partner_id)]" options='{"no_open": True,"no_create": True}' context="{'show_date_invoice': True}"/>
+                                        <field name="date_invoice"/>
+                                        <field name="date_due"/>
+                                        <field name="amount_untaxed" sum="Total Amount Untaxed"/>
+                                        <field name="amount_tax" sum="Total Tax"/>
+                                        <field name="amount_total" sum="Total Amount"/>
+                                        <field name="residual" sum="Total Amount Due"/>
+                                        <field name="currency_id"/>
+                                        <field name="amount_payment" sum="Total Amount Payment"/>
+                                        <field name="comments"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="residual_total" widget="monetary"  options="{'currency_field': 'currency_id'}"/>
+                                    <field name="amount_payment_total" widget="monetary"  options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                      <field name="message_follower_ids" widget="mail_followers"/>
+                      <field name="activity_ids" widget="mail_activity"/>
+                      <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="kontra_bon_search">
+            <field name="name">kontra.bon.search</field>
+            <field name="model">kontra.bon</field>
+            <field name="arch" type="xml">
+                <search string="Kontra Bon Search">
+                    <field name="name" string="Kontra Bon Number"/>
+                    <field name="name"/>
+                    <field name="date_doc"/>
+                    <field name="partner_id"/>
+                    <field name="date_receipt"/>
+                    <separator/>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                    <separator/>
+                    <filter string="Draft" name="draft" domain="[('state','=','draft')]"/>
+                    <filter string="In Progress" name="open" domain="[('state','=','open')]"/>
+                    <filter string="Finished" name="done" domain="[('state','=','done')]"/>
+                    <filter string="Cancelled" name="cancel" domain="[('state','=','cancel')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Company" domain="[]"  context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="kontra_bon_order_action">
+            <field name="name">Kontra Bon Payment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kontra.bon</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

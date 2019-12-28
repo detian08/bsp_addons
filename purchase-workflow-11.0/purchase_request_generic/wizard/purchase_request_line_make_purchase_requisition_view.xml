@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_purchase_request_line_make_purchase_requisition" model="ir.ui.view">
+        <field name="name">Purchase Request Line Make Purchase Requisition</field>
+        <field name="model">purchase.request.line.make.purchase.requisition</field>
+        <field name="inherit_id" ref="purchase_request.view_purchase_request_line_make_purchase_requisition"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='keep_description']" position="before">
+                <field name="price_unit"/>
+            </xpath>
+            <xpath expr="//field[@name='keep_description']" position="after">
+                <field name="keep_price"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+

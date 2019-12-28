@@ -1,0 +1,1 @@
+${no.rjust(3)} ${product_name.ljust(20)} ${qty.rjust(6)} ${uom.rjust(6)} ${desc.ljust(20)} ${spec.ljust(20)} ${estcost.rjust(12)}

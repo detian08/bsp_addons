@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="warehouse_stock_report_view" model="ir.ui.view">
+        <field name="name">Print Stock Inventory Report</field>
+        <field name="model">warehouse.stock.report</field>
+        <field name="arch" type="xml">
+        <form string="Warehouse stock report by Date">
+            <group name='main_group'>
+                <group name='sub_group1' attrs="{'invisible':[('inventory_printed','=',True)]}">
+                    <field name="end_date" required="1" string="Inventory Date"/>
+                    <field name="wstart_date"/>
+                    <field name="location_id" required="1"/>
+                </group>
+                <group name='sub_group2' attrs="{'invisible':[('inventory_printed','=',False)]}">
+                    <field name="file_name" invisible="1"/>
+                    <field name="stock_report_file" readonly="1" filename="file_name"/>
+                    <field name="inventory_printed" invisible="1"/>
+                </group>
+            </group>
+            <footer>
+                <button name="action_warehouse_stock_report" string="Print" type="object" default_focus="1" class="oe_highlight"
+                    attrs="{'invisible':[('inventory_printed','=',True)]}"/>
+                <button string="Cancel" class="btn btn-default" special="cancel" />
+            </footer>
+        </form>
+        </field>
+    </record>
+
+    <record id="action_warehouse_stock_report" model="ir.actions.act_window">
+        <field name="name">Warehouse Stock Report123</field>
+        <field name="res_model">warehouse.stock.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="warehouse_stock_report_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem action="action_warehouse_stock_report" id="menu_warehouse_stock_report" 
+        sequence="103" parent="stock.menu_warehouse_report" />
+
+</odoo>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Eficent Business and IT Consulting Services S.L.
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0) -->
+<odoo noupdate="1">
+        <record id="seq_purchase_request_k0" model="ir.sequence">
+            <field name="name">Purchase Request K0</field>
+            <field name="code">purchase.request.k0</field>
+            <field name="prefix">BPPB</field>
+            <field name="padding">5</field>
+        </record>
+        <record id="seq_purchase_request_k1" model="ir.sequence">
+            <field name="name">Purchase Request K1</field>
+            <field name="code">purchase.request.k1</field>
+            <field name="prefix">K1</field>
+            <field name="padding">5</field>
+        </record>
+        <record id="seq_purchase_request_k2" model="ir.sequence">
+            <field name="name">Purchase Request K2</field>
+            <field name="code">purchase.request.k2</field>
+            <field name="prefix">K2</field>
+            <field name="padding">5</field>
+        </record>
+        <record id="seq_purchase_request_k3" model="ir.sequence">
+            <field name="name">Purchase Request K3</field>
+            <field name="code">purchase.request.k3</field>
+            <field name="prefix">K3</field>
+            <field name="padding">5</field>
+        </record>
+        <record id="seq_purchase_request_k4" model="ir.sequence">
+            <field name="name">Purchase Request K4</field>
+            <field name="code">purchase.request.k4</field>
+            <field name="prefix">K4</field>
+            <field name="padding">5</field>
+        </record>
+</odoo>

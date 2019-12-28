@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="spp_tree_view" model="ir.ui.view">
+            <field name="name">Surat Permintaan Pembayaran</field>
+            <field name="model">spp</field>
+            <field name="arch" type="xml">
+                <tree string="Surat Permintaan Pembayaran">
+                    <field name="name"/>
+                    <field name="request_date"/>
+                    <field name="partner_id"/>
+                    <field name="payment_type"/>
+                    <field name="journal_id"/>
+                    <field name="currency_id"/>
+                    <field name="amount_payment_total" sum="Total Amount Payment"/>
+                    <field name="memo"/>
+                    <field name="requested_by"/>
+                    <field name="assigned_to"/>
+                    <field name="company_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="spp_form_view" model="ir.ui.view">
+            <field name="name">Surat Permintaan Pembayaran</field>
+            <field name="model">spp</field>
+            <field name="arch" type="xml">
+                <form string="Surat Permintaan Pembayaran">
+                    <header>
+                        <button name="button_draft"
+                                states="to_approve,approved,rejected"
+                                string="Reset SPP State"
+                                type="object"
+                                groups="account_payment_spp.group_spp_user, account_payment_spp.group_spp_manager"/>
+                        <button name="button_to_approve" states="draft"
+                                string="Request SPP Approval" type="object"
+                                class="oe_highlight"/>
+                        <button name="button_approved"
+                                states="to_approve"
+                                string="Approve SPP"
+                                type="object"
+                                class="oe_highlight"
+                                groups="account_payment_spp.group_spp_manager"/>
+                        <button name="button_paid"
+                                states="approved"
+                                string="Mass Create Advance Payment"
+                                type="object"
+                                attrs="{'invisible': [('payment_type','==','BILL')]}"
+                                class="oe_highlight"
+                                groups="account_payment_spp.group_spp_manager"/>
+                        <button name="button_mass_create_invoice"
+                                states="approved"
+                                string="Mass Create Vendor Bills"
+                                type="object"
+                                attrs="{'invisible': [('payment_type','!=','BILL')]}"
+                                class="oe_highlight"
+                                groups="account_payment_spp.group_spp_manager"/>
+                        <button name="button_mass_payment_bill"
+                                states="approved"
+                                string="Mass Payment for Vendor Bills"
+                                type="object"
+                                attrs="{'invisible': [('payment_type','!=','BILL')]}"
+                                class="oe_highlight"
+                                groups="account_payment_spp.group_spp_manager"/>
+                        <button name="button_payment_bill"
+                                states="approved"
+                                string="Pay Vendor Bill(s)"
+                                type="object"
+                                attrs="{'invisible': [('payment_type','!=','BILL')]}"
+                                class="oe_highlight"
+                                groups="account_payment_spp.group_spp_manager"/>
+                        <button name="button_rejected"
+                                states="to_approve,approved"
+                                string="Reject SPP"
+                                type="object"
+                                groups="account_payment_spp.group_spp_manager"/>
+                        <button name="button_cancel"
+                                states="open"
+                                string="Cancel SPP"
+                                type="object"
+                                groups="account_payment_spp.group_spp_manager"/>
+                        <button name="%(act_open_select_purchaseorder_view)d" type="action"
+                                class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"
+                                context="{'partner_id': partner_id,
+                                            'state': 'purchase'
+                                          }"
+                                string="Select Purchase Order"
+                                states="draft"/>
+
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,to_approve,approved,open,paid,rejected,cancel"
+                               statusbar_colors='{"approved":"blue", "cancel":"red"}'/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="request_date"/>
+                            <field name="partner_id"/>
+                            <field name="payment_type"/>
+                            <field name="journal_id"/>
+                            <field name="memo"/>
+                            <field name="requested_by"/>
+                            <field name="assigned_to"/>
+                            <field name="company_id"/>
+                            <field name="comp_state" invisible="1"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                    <notebook>
+                        <page string="Line Item of SPP" attrs="{'invisible': [('payment_type','==','BILL')]}">
+                            <field name="spp_line_ids" colspan="4" nolabel="1" widget="one2many_list">
+                                <tree string="SPP lines" editable="bottom">
+                                    <field name="purchaseorder_id" options='{"no_open": True,"no_create": True}'/>
+                                    <field name="payment_type" invisible="1"/>
+                                    <field name="date_order"/>
+                                    <field name="amount_untaxed" sum="Total Amount Untaxed"/>
+                                    <field name="amount_tax" sum="Total Tax"/>
+                                    <field name="amount_total" sum="Total Amount"/>
+                                    <field name="currency_id"/>
+                                    <!--                                    <field name="invoice_id" attrs="{'invisible': [('payment_type','!=','BILL')]}"/>-->
+                                    <field name="state"/>
+                                    <field name="amount_payment" sum="Total Amount Payment"
+                                           attrs="{'invisible': [('payment_type','==','BILL')]}"/>
+                                    <field name="comments"/>
+                                    <field name="advance_payment_reference"
+                                           attrs="{'invisible': [('payment_type','==','BILL')]}"/>
+                                    <field name="advance_payment_state" invisible="1"/>
+                                    <field name="amount_total_advance_payment"
+                                           attrs="{'invisible':[ ('payment_type','==','BILL')]}"/>
+
+                                </tree>
+                                <form string="Purchase Order Advance Payment">
+                                    <sheet>
+                                        <group>
+                                            <field name="purchaseorder_id"/>
+                                            <field name="date_order"/>
+                                            <field name="amount_untaxed"/>
+                                            <field name="amount_tax"/>
+                                            <field name="amount_total"/>
+                                            <field name="amount_total_advance_payment"/>
+                                            <field name="currency_id"/>
+                                            <field name="state"/>
+                                            <field name="amount_payment"/>
+                                            <field name="comments"/>
+                                            <field name="partner_id" invisible="1"/>
+                                        </group>
+                                        <notebook>
+                                            <page string="List of PO Advance Payments ">
+                                                <field name="advance_payment_ids"
+                                                       context="{'tree_view_ref': 'account.view_account_supplier_payment_tree',
+                                                    'form_view_ref': 'smile_advance_payment_purchase.view_account_payment_form_supplier_advance_payment',
+                                                    'default_partner_id': partner_id,
+                                                    'default_is_advance_payment': True,
+                                                    'default_payment_type': 'outbound',
+                                                    'default_purchase_id': purchaseorder_id}"/>
+                                            </page>
+                                        </notebook>
+                                    </sheet>
+                                </form>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="amount_payment_total" widget="monetary"
+                                       options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                        </page>
+                        <page string="Line Item of SPP - Billing" attrs="{'invisible': [('payment_type','!=','BILL')]}">
+                            <field name="spp_line_bill_ids" colspan="4" nolabel="1" widget="one2many_list">
+                                <tree string="SPP lines" editable="bottom">
+                                    <field name="purchaseorder_id" options='{"no_open": True,"no_create": True}'/>
+                                    <field name="payment_type" invisible="1"/>
+                                    <field name="date_order"/>
+                                    <field name="po_amount_untaxed" sum="Total PO Amount Untaxed"/>
+                                    <field name="po_amount_tax" sum="Total PO Tax"/>
+                                    <field name="po_amount_total" sum="Total PO Amount"/>
+                                    <field name="currency_id"/>
+                                    <field name="state"/>
+<!--                                    <field name="amount_invoice" sum="Total Amount Invoice"/>-->
+                                    <field name="comments"/>
+                                    <field name="billing_reference"/>
+                                    <!--                                    <field name="billing_state" invisible="1"/>-->
+                                    <field name="amount_invoice_draft" sum="Total Invoice Amount - Draft"/>
+                                    <field name="amount_invoice_open" sum="Total Invoice Amount - Open"/>
+                                    <field name="amount_invoice_paid" sum="Total Invoice Amount - Paid"/>
+                                    <field name="amount_total_billing" sum="Total Invoice Amount - All"/>
+                                    <button name="action_view_invoice"
+                                            string="View Invoice"
+                                            type="object"
+                                            attrs="{'invisible': [('payment_type','!=','BILL')]}"
+                                            class="oe_highlight"/>
+                                </tree>
+                                <form string="Purchase Order Billing">
+                                    <sheet>
+                                        <group>
+                                            <field name="payment_type" invisible="1"/>
+                                            <field name="purchaseorder_id"/>
+                                            <field name="date_order"/>
+                                            <field name="po_amount_untaxed"/>
+                                            <field name="po_amount_tax"/>
+                                            <field name="po_amount_total"/>
+                                            <field name="currency_id"/>
+                                            <field name="state"/>
+                                            <field name="amount_invoice"/>
+                                            <field name="comments"/>
+                                            <field name="partner_id" invisible="1"/>
+                                        </group>
+                                        <!--                                        <notebook>-->
+                                        <!--                                            <page string="List of PO Billing ">-->
+                                        <!--                                                <field name="billing_ids"-->
+                                        <!--                                                       context="{'tree_view_ref': 'account.invoice_supplier_tree',-->
+                                        <!--                                                       'form_view_ref': 'account.invoice_supplier_form',-->
+                                        <!--                                                       'default_partner_id': partner_id,-->
+                                        <!--                                                       'default_origin':purchaseorder_id,-->
+                                        <!--                                                        "/>-->
+                                        <!--                                            </page>-->
+                                        <!--                                        </notebook>-->
+                                    </sheet>
+                                </form>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="amount_payment_total" widget="monetary"
+                                       options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="spp_search">
+            <field name="name">spp.search</field>
+            <field name="model">spp</field>
+            <field name="arch" type="xml">
+                <search string="SPP Search">
+                    <field name="name" string="Number SPP"/>
+                    <field name="partner_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="memo"/>
+                    <separator/>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                    <separator/>
+                    <filter string="Draft" name="draft" domain="[('state','=','draft')]"/>
+                    <filter string="In Progress" name="open" domain="[('state','=','open')]"/>
+                    <filter string="Paid" name="paid" domain="[('state','=','paid')]"/>
+                    <filter string="Cancelled" name="cancel" domain="[('state','=','cancel')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                        <filter string="partner_id" domain="[]" context="{'group_by':'partner_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo>

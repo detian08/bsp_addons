@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template xml:space="preserve">
+    <div t-name="SearchView.GroupByExpandMenu" class="btn-group">
+        <button class="btn btn-sm fa fa-expand btn btn-icon o_group_by_expand"
+            title="Expand"/>
+        <button class="btn btn-sm fa fa-compress btn btn-icon o_group_by_shrink"
+            title="Shrink"/>
+    </div>
+</template>

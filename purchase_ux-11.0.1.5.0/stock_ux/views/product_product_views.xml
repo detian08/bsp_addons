@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="product_form_view_procurement_button" model="ir.ui.view">
+        <field name="name">product.product.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_form_view_procurement_button"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <button name="action_view_stock_move_lines" position="attributes">
+                <attribute name="context">{'search_default_product_id': active_id, 'default_product_id': active_id}</attribute>
+                <attribute name="string">Products Moves Detailed</attribute>
+                <attribute name="help">They are only stock movements made or reserved, includes information of batches and storage locations.</attribute>
+            </button>
+            <button name="action_view_stock_move_lines" position="before">
+                <button string="Products Moves" type="object" name= "action_view_stock_move" attrs="{'invisible':[('type', 'not in', ['product', 'consu'])]}" class="oe_stat_button" icon="fa-arrows-v" groups="stock.group_stock_user" help="Are all stock movements without lot detail or save locations." context="{'search_default_future': 1,'search_default_picking_type': 1}"/>
+            </button>
+        </field>
+    </record>
+
+    <record id="product_product_view_form_easy_inherit_stock" model="ir.ui.view">
+        <field name="name">product.product.view.form.easy.inherit.stock</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_product_view_form_easy_inherit_stock"/>
+        <field name="arch" type="xml">
+            <button name="%(stock.action_view_change_product_quantity)d" position="after">
+                <button string="Replenish" type="action" name="%(action_product_replenish)d" context="{'default_product_id': id}" groups="stock.group_stock_user" attrs="{'invisible': [('type', '!=', 'product')]}"/>
+            </button>
+        </field>
+    </record>
+
+
+</odoo>

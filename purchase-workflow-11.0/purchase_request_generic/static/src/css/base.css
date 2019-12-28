@@ -1,0 +1,4 @@
+.openerp .oe_form_editable .oe_form .oe_form_field_float input
+{
+    text-align: right !important;
+}

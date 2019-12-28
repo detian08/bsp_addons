@@ -1,0 +1,57 @@
+.o_web_client {
+  &.leftbar_close {
+    & > .o_main {
+      .o_sub_menu {
+        position: absolute;
+        left: -181px;
+        -webkit-transition-duration: 0.3s;
+        -moz-transition-duration: 0.3s;
+        -o-transition-duration: 0.3s;
+        transition-duration: 0.3s;
+      }
+    }
+  }
+  & > .o_main {
+    .o_sub_menu {
+      position: relative;
+      left: 0;
+      -webkit-transition-duration: 0.3s;
+      -moz-transition-duration: 0.3s;
+      -o-transition-duration: 0.3s;
+      transition-duration: 0.3s;
+      & > .o_toggle_icon {
+        display: flex;
+        border: 1px solid #c6c6c6;
+        height: 25px;
+        width: 22px;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        right: -22px;
+        top: 10px;
+        z-index: 5;
+        border-left: none;
+        background-color: #F9F9F9;
+        &:hover {
+          cursor:pointer;
+          background-color: darken(#F9F9F9, 5%);
+        }
+      }
+    }
+    .o_main_content {
+      .o_control_panel {
+        padding-left: 25px;
+      }
+    }
+    .o_form_view {
+      .o_form_sheet_bg .o_form_sheet {
+        margin: @padding-base-horizontal;
+        max-width: none;
+        width: auto;
+      }
+      .oe_chatter {
+        max-width: none;
+      }
+    }
+  }
+}

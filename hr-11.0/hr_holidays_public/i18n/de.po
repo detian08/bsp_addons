@@ -1,0 +1,415 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * hr_holidays_public
+#
+# Translators:
+# OCA Transbot <transbot@odoo-community.org>, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-03-03 03:37+0000\n"
+"PO-Revision-Date: 2019-10-11 09:37+0000\n"
+"Last-Translator: Maria Sparenberg <maria.sparenberg@gmx.net>\n"
+"Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.8\n"
+
+#. module: hr_holidays_public
+#: model:ir.ui.view,arch_db:hr_holidays_public.holidays_public_next_year_wizard_view
+msgid ""
+"By default, the most recent public holidays\n"
+"                            for each country are used as template to create\n"
+"                            public holidays for the year following the "
+"templates.\n"
+"                            <br/><br/>\n"
+"                            Normally, you should not need to input anything "
+"in\n"
+"                            optional fields and only need to click on the "
+"button\n"
+"                            \"Create\"."
+msgstr ""
+"Standardmäßig werden die aktuellsten Feiertage\n"
+"                            für jedes Land als Vorlage zum Erstellen\n"
+"                            der Feiertage der nachfolgenden Jahre "
+"verwendet.\n"
+"                            <br/><br/>\n"
+"                            Normalerweise muss im Reiter 'Optional' nichts "
+"weiter eingetragen, \n"
+"                            sondern nur auf den Button 'Erstellen' geklickt "
+"werden."
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_line_year_id
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_year
+msgid "Calendar Year"
+msgstr "Kalenderjahr"
+
+#. module: hr_holidays_public
+#: model:ir.ui.view,arch_db:hr_holidays_public.holidays_public_next_year_wizard_view
+#: model:ir.ui.view,arch_db:hr_holidays_public.hr_holidays_public_generator_view
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_country_id
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_generator_country_id
+msgid "Country"
+msgstr "Land"
+
+#. module: hr_holidays_public
+#: model:ir.ui.view,arch_db:hr_holidays_public.holidays_public_next_year_wizard_view
+msgid "Create"
+msgstr "Erstellen"
+
+#. module: hr_holidays_public
+#: model:ir.actions.act_window,name:hr_holidays_public.action_create_next_year_public_holidays
+#: model:ir.ui.menu,name:hr_holidays_public.menu_create_next_year_public_holidays
+#: model:ir.ui.view,arch_db:hr_holidays_public.holidays_public_next_year_wizard_view
+msgid "Create Next Year Public Holidays"
+msgstr "Feiertage des neues Jahres erstellen"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_create_uid
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_generator_create_uid
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_line_create_uid
+#: model:ir.model.fields,field_description:hr_holidays_public.field_public_holidays_next_year_wizard_create_uid
+msgid "Created by"
+msgstr "Erstellt von"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_create_date
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_generator_create_date
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_line_create_date
+#: model:ir.model.fields,field_description:hr_holidays_public.field_public_holidays_next_year_wizard_create_date
+msgid "Created on"
+msgstr "Erstellt am"
+
+#. module: hr_holidays_public
+#: model:ir.model,name:hr_holidays_public.model_public_holidays_next_year_wizard
+msgid "Creates public holidays from existing ones"
+msgstr "Feiertage ausgehend von den bereits Existierenden erstellen"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_line_date
+msgid "Date"
+msgstr "Datum"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_line_variable_date
+msgid "Date may change"
+msgstr "Datum kann sich ändern"
+
+#. module: hr_holidays_public
+#: code:addons/hr_holidays_public/models/hr_holidays_public.py:169
+#, python-format
+msgid ""
+"Dates of holidays should be the same year as the calendar year they are "
+"being assigned to"
+msgstr ""
+"Die Feiertage sollten das gleiche Jahr wie das Kalenderjahr sein, dem sie "
+"zugewiesen werden"
+
+#. module: hr_holidays_public
+#: model:ir.ui.view,arch_db:hr_holidays_public.holidays_public_next_year_wizard_view
+msgid "Defaults"
+msgstr "Standardeinstellungen"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_generator_display_name
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_line_display_name
+#: model:ir.model.fields,field_description:hr_holidays_public.field_public_holidays_next_year_wizard_display_name
+msgid "Display Name"
+msgstr "Anzeigename"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_status_exclude_public_holidays
+msgid "Exclude Public Holidays"
+msgstr "Feiertage ausschließen"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_generator_template_id
+msgid "From Template"
+msgstr "Vorlage"
+
+#. module: hr_holidays_public
+#: model:ir.ui.view,arch_db:hr_holidays_public.hr_holidays_public_generator_view
+msgid "Generate"
+msgstr "Erstellen"
+
+#. module: hr_holidays_public
+#: model:ir.actions.act_window,name:hr_holidays_public.hr_holidays_public_generator_action
+#: model:ir.ui.menu,name:hr_holidays_public.hr_holidays_public_generator_menu
+#: model:ir.ui.view,arch_db:hr_holidays_public.hr_holidays_public_generator_view
+msgid "Generate Public Holidays"
+msgstr "Feiertage erstellen"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_line_ids
+msgid "Holiday Dates"
+msgstr "Urlaubsdaten"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_generator_id
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_id
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_line_id
+#: model:ir.model.fields,field_description:hr_holidays_public.field_public_holidays_next_year_wizard_id
+msgid "ID"
+msgstr "ID"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,help:hr_holidays_public.field_hr_holidays_status_exclude_public_holidays
+msgid "If enabled, public holidays are skipped in leave days calculation."
+msgstr ""
+"Wenn der Haken gesetzt ist, werden Feiertage in der Urlaubstageberechnung "
+"übersprungen."
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public___last_update
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_generator___last_update
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_line___last_update
+#: model:ir.model.fields,field_description:hr_holidays_public.field_public_holidays_next_year_wizard___last_update
+msgid "Last Modified on"
+msgstr "Zuletzt geändert am"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_generator_write_uid
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_line_write_uid
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_write_uid
+#: model:ir.model.fields,field_description:hr_holidays_public.field_public_holidays_next_year_wizard_write_uid
+msgid "Last Updated by"
+msgstr "Zuletzt aktualisiert von"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_generator_write_date
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_line_write_date
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_write_date
+#: model:ir.model.fields,field_description:hr_holidays_public.field_public_holidays_next_year_wizard_write_date
+msgid "Last Updated on"
+msgstr "Zuletzt aktualisiert am"
+
+#. module: hr_holidays_public
+#: model:ir.model,name:hr_holidays_public.model_hr_holidays
+msgid "Leave"
+msgstr "Urlaub"
+
+#. module: hr_holidays_public
+#: model:ir.model,name:hr_holidays_public.model_hr_holidays_status
+msgid "Leave Type"
+msgstr "Urlaubsart"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_display_name
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_line_name
+msgid "Name"
+msgstr "Bezeichnung"
+
+#. module: hr_holidays_public
+#: code:addons/hr_holidays_public/wizards/holidays_public_next_year_wizard.py:40
+#, python-format
+msgid ""
+"No Public Holidays found as template. Please create the first Public "
+"Holidays manually."
+msgstr ""
+"Es wurde keine Vorlage für Feiertage gefunden. Bitte erstellen Sie die "
+"Feiertage einmalig manuell, um diese dann als Vorlage für das nächste Jahr "
+"zu verwenden."
+
+#. module: hr_holidays_public
+#: model:ir.ui.view,arch_db:hr_holidays_public.holidays_public_next_year_wizard_view
+msgid "Optional"
+msgstr "Optional"
+
+#. module: hr_holidays_public
+#: model:ir.actions.act_window,name:hr_holidays_public.open_holidays_public_view
+#: model:ir.model,name:hr_holidays_public.model_hr_holidays_public
+#: model:ir.ui.menu,name:hr_holidays_public.menu_holidays_public_view
+#: model:ir.ui.menu,name:hr_holidays_public.menu_hr_public_holidays
+#: model:ir.ui.view,arch_db:hr_holidays_public.view_holidays_public_form
+#: model:ir.ui.view,arch_db:hr_holidays_public.view_holidays_public_tree
+msgid "Public Holidays"
+msgstr "Feiertage"
+
+#. module: hr_holidays_public
+#: model:ir.model,name:hr_holidays_public.model_hr_holidays_public_line
+msgid "Public Holidays Lines"
+msgstr "Feiertagszeilen"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_line_state_ids
+msgid "Related States"
+msgstr "Verwandte Staaten"
+
+#. module: hr_holidays_public
+#: model:ir.model,name:hr_holidays_public.model_resource_calendar
+msgid "Resource Calendar"
+msgstr "Ressourcenkalender"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,help:hr_holidays_public.field_public_holidays_next_year_wizard_template_ids
+msgid ""
+"Select the public holidays to use as template. If not set, latest public "
+"holidays of each country will be used. Only the last templates of each "
+"country for each year will be taken into account (If you select templates "
+"from 2012 and 2015, only the templates from 2015 will be taken into account."
+msgstr ""
+"Wählen Sie die Feiertage, die als Vorlage verwenden wollen. Wenn sie keine "
+"auswählen, wird die aktuellste Vorlage für jedes Land verwendet. Wenn Sie "
+"mehrere Vorlagen angeben, wird nur die aktuellste für jedes Land "
+"berücksichtigt. Beispiel: Wenn Sie die Vorlagen von 2012 und 2015 "
+"hinzufügen, wird nur die von 2015 berücksichtigt."
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_generator_state_id
+msgid "State"
+msgstr "Status"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_public_holidays_next_year_wizard_template_ids
+msgid "Templates"
+msgstr "Vorlagen"
+
+#. module: hr_holidays_public
+#: model:ir.ui.view,arch_db:hr_holidays_public.holidays_public_next_year_wizard_view
+msgid ""
+"The below optional fields are here only to handle\n"
+"                            special situations like \"2011 was a special "
+"year with\n"
+"                            an additional public holiday for the 150th\n"
+"                            anniversary of the Italian unification, so you "
+"want to\n"
+"                            replicate the 2010 Italian holidays to 2012.\""
+msgstr ""
+"Die hier angegebenen optionalen Felder werden nur in \n"
+"                           Ausnahmesituationen verwenden, beispielsweise:\n"
+"                           \"2011 war ein spezielles Jahr mit einem "
+"zusätzlichen Feiertag\n"
+"                           für das 150. Jubiläum der italienischen Einheit. "
+"Deswegen\n"
+"                           sollte für das Jahr 2012 die Vorlage von 2010 "
+"verwendet werden.\""
+
+#. module: hr_holidays_public
+#: code:addons/hr_holidays_public/models/hr_holidays_public.py:201
+#, python-format
+msgid ""
+"The check that does not allow to change the date is enabled, the date cannot "
+"be changed for this line."
+msgstr ""
+"Das Datum des Feiertags darf nicht geändert werden, weil der Haken für "
+"\"Datum kann sich ändern\" nicht gesetzt ist."
+
+#. module: hr_holidays_public
+#: code:addons/hr_holidays_public/wizards/hr_holidays_public_generator.py:70
+#, python-format
+msgid ""
+"There is no copy function defined for this county or\n"
+"                    the function name does not fit the requirement -\n"
+"                    action_copy_%s_holidays where %s id the county code."
+msgstr ""
+"Für dieses Land / Ort gibt es keine Kopierfunktion oder \n"
+"der Funktionsname erfüllt die Anforderungen nicht - \n"
+"action_copy_%s_holiday, wobei %s der Landescode ist."
+
+#. module: hr_holidays_public
+#: code:addons/hr_holidays_public/wizards/hr_holidays_public_generator.py:79
+#, python-format
+msgid ""
+"There is no generate function defined for this county\n"
+"                    or the function name does not fit the requirement -\n"
+"                    action_generate_%s_holidays where %s is\n"
+"                    the county code."
+msgstr ""
+"Für dieses Land / Ort gibt es keine Erstellfunktion oder \n"
+"der Funktionsname erfüllt die Anforderungen nicht - \n"
+"action_generate_%s_holiday, wobei %s der Landescode ist."
+
+#. module: hr_holidays_public
+#: model:ir.ui.view,arch_db:hr_holidays_public.holidays_public_next_year_wizard_view
+msgid ""
+"Use this wizard to create public holidays based on the\n"
+"                            existing ones.<br/>\n"
+"                            Only the last templates of each country\n"
+"                            will be taken into account (If you select "
+"templates\n"
+"                            from 2012 and 2015 of the same country; '\n"
+"                            only the templates from 2015 will be taken into\n"
+"                            account)."
+msgstr ""
+"Verwenden Sie diesen Assistenten zum Erstellen der Feiertage\n"
+"                            basierend auf einer bereits existierenden "
+"Vorlage.<br/>\n"
+"                            Wenn Sie mehrere Vorlagen angeben, wird nur die "
+"aktuellste \n"
+"                            für jedes Land berücksichtigt. \n"
+"                            Beispiel: Wenn Sie die Vorlagen von 2012 und "
+"2015 für dasselbe Land \n"
+"                            hinzufügen, wird nur die von 2015 berücksichtigt."
+
+#. module: hr_holidays_public
+#: code:addons/hr_holidays_public/models/hr_holidays_public.py:200
+#, python-format
+msgid "WARNING"
+msgstr "Warnung"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,field_description:hr_holidays_public.field_hr_holidays_public_generator_year
+#: model:ir.model.fields,field_description:hr_holidays_public.field_public_holidays_next_year_wizard_year
+msgid "Year"
+msgstr "Jahr"
+
+#. module: hr_holidays_public
+#: model:ir.model.fields,help:hr_holidays_public.field_public_holidays_next_year_wizard_year
+msgid ""
+"Year for which you want to create the public holidays. By default, the year "
+"following the template."
+msgstr ""
+"Dies ist das Jahr, für das die Feiertage erstellt werden sollen. "
+"Standardmäßig werden sie für das Jahr, das der angegebenen Vorlage folgt, "
+"erstellt."
+
+#. module: hr_holidays_public
+#: code:addons/hr_holidays_public/models/hr_holidays_public.py:184
+#, python-format
+msgid ""
+"You can't create duplicate public holiday per date %s and one of the country "
+"states."
+msgstr ""
+"Sie können keinen öffentlichen Feiertag doppelt pro Datum %s und einem der "
+"Länder erstellen."
+
+#. module: hr_holidays_public
+#: code:addons/hr_holidays_public/models/hr_holidays_public.py:191
+#, python-format
+msgid "You can't create duplicate public holiday per date %s."
+msgstr ""
+"Sie können keinen öffentlichen Feiertag doppelt pro Datum %s erstellen."
+
+#. module: hr_holidays_public
+#: code:addons/hr_holidays_public/models/hr_holidays_public.py:53
+#, python-format
+msgid "You can't create duplicate public holiday per year and/or country"
+msgstr ""
+"Sie können keinen öffentlichen Feiertag doppelt pro Jahr und/oder Land "
+"erstellen"
+
+#. module: hr_holidays_public
+#: code:addons/hr_holidays_public/wizards/holidays_public_next_year_wizard.py:78
+#, python-format
+msgid ""
+"You cannot use as template the public holidays of a year that includes "
+"public holidays on 29th of February (2016, 2020...), please select a "
+"template from another year."
+msgstr ""
+"Sie können keine Vorlage eines Jahres verwenden, das einen Feiertag am 29. "
+"Februar enthält (z.B. 2016, 2020, ...). Bitte wählen Sie als Vorlage ein "
+"anderes Jahr."
+
+#. module: hr_holidays_public
+#: model:ir.model,name:hr_holidays_public.model_hr_holidays_public_generator
+msgid "hr.holidays.public.generator"
+msgstr "hr.holidays.public.generator"

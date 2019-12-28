@@ -1,0 +1,431 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* cx_product_auto_reorder
+# 	* cx_product_auto_reorder_pro
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0-20181126\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-12-26 12:36+0000\n"
+"PO-Revision-Date: 2018-12-26 15:52+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 1.5.4\n"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid ""
+"*<u>Important notice:</u> attribute values are joined using <b>\"AND\"</b> "
+"statement (e.g. \"Size:L\" AND \"Color:White\" AND \"Model:Vintage\").<br/>\n"
+"                      It means that template will be applied to the product "
+"only if <b>ALL</b> attribute values match."
+msgstr ""
+"*<u>Важно:</u> значения атрибутов объединяются с использованием условия <b>"
+"\"И\"</b>  (например \"Размер:L\" И \"Цвет:Белый\" И \"Модель:Внт\").<br/>\n"
+"                      Это означает, что шаблон будет применен только если "
+"совпадают <b>ВСЕ</b> значения атрибутов"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid ""
+"1. Local Attributed: Product Attribute Values* AND Category are matching."
+msgstr ""
+"1. Локальный с атрибутами: Совпадают значения атрибутов* И категория "
+"продукта."
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "2. Local: Category is matching."
+msgstr "2. Локальный: Совпадает категория."
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid ""
+"3. Global Attributed: Product Attribute Values* matching, Category not set."
+msgstr ""
+"3. Глобальный с атрибутами: Совпадают значения атрибутов* , категория не "
+"установлена."
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "4. Global: Product Attribute Values* and Category are not set."
+msgstr "4. Глобальный: Значения атрибутов* и категория не установлены."
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "<b>Click to get Pro Version!</b>"
+msgstr "<b>Нажмите чтобы загрузить версию Pro!</b>"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "<b>Pro Version</b>"
+msgstr "<b>Pro версия</b>"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid ""
+"<b>Warning! Product Category and Attribute Values cannot be changed once "
+"template is created!</b>"
+msgstr ""
+"<b>Внимание! Категория и значения атрибутов не могут быть изменены после "
+"того, как шаблон создан!</b>"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid ""
+"<span attrs=\"{'invisible': [('category_id', '=', False)]}\"> and </span>"
+msgstr ""
+"<span attrs=\"{'invisible': [('category_id', '=', False)]}\"> и </span>"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_active
+msgid "Active"
+msgstr "Актив"
+
+#. module: cx_product_auto_reorder_pro
+#: code:addons/cx_product_auto_reorder_pro/models/cx_stock_product_pro.py:59
+#: code:addons/cx_product_auto_reorder_pro/models/cx_stock_product_pro.py:62
+#, python-format
+msgid "Any Category"
+msgstr "Любая категория"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "Any category"
+msgstr "Любой категории"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "Applies to"
+msgstr "Применяется к"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "Apply Template"
+msgstr "Применить шаблон"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "Apply template to existing products"
+msgstr "Применить шаблон к существующим продуктам"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_search
+msgid "Archived"
+msgstr "Архивировано"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_attr_val_ids
+msgid "Attribute Values"
+msgstr "Значение атрибута"
+
+#. module: cx_product_auto_reorder_pro
+#: model:ir.model.fields,field_description:cx_product_auto_reorder_pro.field_cx_orderpoint_template_attr_string
+#: model:ir.model.fields,field_description:cx_product_auto_reorder_pro.field_product_product_attr_string
+msgid "Checksum"
+msgstr "Контрольная сумма"
+
+#. module: cx_product_auto_reorder
+#: model:ir.actions.act_window,help:cx_product_auto_reorder.cx_orderpoint_template_action
+msgid "Click to add a reordering rule template."
+msgstr "Нажмите для добавления шаблона правил пополнения запасов."
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_company_id
+msgid "Company"
+msgstr "Компания"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_stock_warehouse_orderpoint_template_control
+msgid "Control via Template"
+msgstr "Управляется через шаблон"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_create_uid
+msgid "Created by"
+msgstr "Создано"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_create_date
+msgid "Created on"
+msgstr "Создан"
+
+#. module: cx_product_auto_reorder
+#: selection:cx.orderpoint.template,lead_type:0
+msgid "Day(s) to get the products"
+msgstr "Дня(ей), чтобы получить продукты"
+
+#. module: cx_product_auto_reorder
+#: selection:cx.orderpoint.template,lead_type:0
+msgid "Day(s) to purchase"
+msgstr "Дня(ей) на закупку"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_display_name
+msgid "Display Name"
+msgstr "Отображаемое Имя"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,help:cx_product_auto_reorder.field_product_product_no_auto_reorder
+#: model:ir.model.fields,help:cx_product_auto_reorder.field_product_template_no_auto_reorder
+msgid ""
+"Do not create reordering rules automatically.\n"
+"You can create reordering rules later manually"
+msgstr ""
+"Не создавать правила пополнения запасов автоматически.\n"
+"Вы можете создать правила позже вручную"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_product_product_no_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_product_template_no_auto_reorder
+msgid "Don't create reordering rules from templates"
+msgstr "Не создавать правила пополнения запасов по шаблонам"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid ""
+"First matching template is applied. Templates are searched in the following "
+"order:"
+msgstr ""
+"Будет применем первый из найденых шаблонов. Поиск осуществляется в следующем "
+"порядке:"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "General Setting"
+msgstr "Общие настройки"
+
+#. module: cx_product_auto_reorder
+#: code:addons/cx_product_auto_reorder/models/cx_stock_product.py:69
+#, python-format
+msgid "Global"
+msgstr "Глобальный"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_search
+msgid "Group By"
+msgstr "Группировать по"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "How Templates Work"
+msgstr "Как работают шаблоны"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_id
+msgid "ID"
+msgstr "Номер"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template___last_update
+msgid "Last Modified on"
+msgstr "Последнее изменение"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_write_uid
+msgid "Last Updated by"
+msgstr "Последний раз обновил"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_write_date
+msgid "Last Updated on"
+msgstr "Последнее обновление"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_lead_days
+msgid "Lead Days"
+msgstr "Время выполнения заказа"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_lead_type
+msgid "Lead Type"
+msgstr "Тип Лида"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_location_id
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_search
+msgid "Location"
+msgstr "Место"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_product_max_qty
+msgid "Maximum Quantity"
+msgstr "Максимальное количество"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model,name:cx_product_auto_reorder.model_stock_warehouse_orderpoint
+msgid "Minimum Inventory Rule"
+msgstr "Правило минимального остатка"
+
+#. modules: cx_product_auto_reorder, cx_product_auto_reorder_pro
+#: model:ir.model,name:cx_product_auto_reorder.model_cx_orderpoint_template
+#: model:ir.model,name:cx_product_auto_reorder_pro.model_cx_orderpoint_template
+msgid "Minimum Inventory Rule Template"
+msgstr "Шаблон правила минимального запаса"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_product_min_qty
+msgid "Minimum Quantity"
+msgstr "Минимальное количество"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "Misc"
+msgstr "Прочее"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,help:cx_product_auto_reorder.field_stock_warehouse_orderpoint_template_control
+msgid "Modify rule automatically when template is modified\n"
+msgstr "Изменять правило автоматически при изменение шаблона\n"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_name
+msgid "Name"
+msgstr "Название"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "Please purchase"
+msgstr "Пожалуйста приобретите"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_group_id
+msgid "Procurement Group"
+msgstr "Группа поставки"
+
+#. modules: cx_product_auto_reorder, cx_product_auto_reorder_pro
+#: model:ir.model,name:cx_product_auto_reorder.model_product_product
+#: model:ir.model,name:cx_product_auto_reorder_pro.model_product_product
+msgid "Product"
+msgstr "Продукт"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_category_id
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_search
+msgid "Product Category"
+msgstr "Категория продукта"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model,name:cx_product_auto_reorder.model_product_template
+msgid "Product Template"
+msgstr "Шаблон продукта"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_qty_multiple
+msgid "Qty Multiple"
+msgstr "Кратное кол-во"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "Quantity Multiple"
+msgstr "Множитель количества"
+
+#. module: cx_product_auto_reorder
+#: model:ir.actions.act_window,name:cx_product_auto_reorder.act_template_2_reordering_rules
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_rule_ids
+msgid "Related Rules"
+msgstr "Связанные правила"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_search
+msgid "Reordering Rule Template"
+msgstr "Шаблон правила пополнения"
+
+#. module: cx_product_auto_reorder
+#: model:ir.actions.act_window,name:cx_product_auto_reorder.cx_orderpoint_template_action
+#: model:ir.ui.menu,name:cx_product_auto_reorder.menu_reordering_rule_templates_config
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_tree
+msgid "Reordering Rule Templates"
+msgstr "Шаблоны правил пополнения"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_search
+msgid "Reordering Rule Templates Search"
+msgstr "Поиск по шаблонам правил пополнения"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid ""
+"Reordering Rules Templates are applied to ALL Products EXCEPT for the ones "
+"with \"Don't create reordering rules from templates\" enabled.<br/>\n"
+"                      When new product is created the first matching "
+"Template is applied and reordering rules for the product are created.<br/>"
+msgstr ""
+"Шаблоны правил пополнения запасов применяются ко ВСЕМ продуктам кроме "
+"продуктов, отмеченных \"Не создавать правила пополнения запасов по шаблонам"
+"\" .<br/>\n"
+"                      При создание нового продукта создаются правила "
+"пополнения запасов на основание первого найденного шаблона.<br/>"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "Rules"
+msgstr "Правила"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_rule_ids_count
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_tree
+msgid "Rules Count"
+msgstr "Правил"
+
+#. modules: cx_product_auto_reorder, cx_product_auto_reorder_pro
+#: sql_constraint:cx.orderpoint.template:0
+msgid "Such template already exists for this company!"
+msgstr "Такой шаблон уже существует для данной компании!"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_stock_warehouse_orderpoint_template_id
+msgid "Template"
+msgstr "Шаблон"
+
+#. module: cx_product_auto_reorder_pro
+#: model:ir.model.fields,field_description:cx_product_auto_reorder_pro.field_cx_orderpoint_template_priority
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder_pro.cx_orderpoint_template_search_pro
+msgid "Template Priority"
+msgstr "Приоритет шаблона"
+
+#. module: cx_product_auto_reorder
+#: model:ir.model.fields,field_description:cx_product_auto_reorder.field_cx_orderpoint_template_warehouse_id
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_search
+msgid "Warehouse"
+msgstr "Склад"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "Warehouse Settings"
+msgstr "Настройки склада"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid ""
+"When product category or attribute values are changed Reordering Rules "
+"Templates are applied again.<br/>\n"
+"                      In case no new template can be applied old reordering "
+"rules for the product are deleted.<br/>\n"
+"                      Hint: to prevent automatic deletion or modification of "
+"reordering rules disable \"Control via Template\" in Reordering Rule form."
+"<br/>"
+msgstr ""
+"При изменение категории либо атрибутов продукта шаблон применяется повторно."
+"<br/>\n"
+"                      Если новый шаблон не может быть применен, существующие "
+"правила удаляются.<br/>\n"
+"                      Hint: чтобы избежать автоматического удаления правил "
+"отключите \"Управляется через шаблон\" на форме правила пополнения заказов."
+"<br/>"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "any value"
+msgstr "любое значение"
+
+#. module: cx_product_auto_reorder
+#: model:ir.ui.view,arch_db:cx_product_auto_reorder.cx_orderpoint_template_form
+msgid "to use attribute values"
+msgstr "чтобы использовать значения атрибутов"

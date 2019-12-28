@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record model="ir.ui.view" id="view_purchase_request_pivot">
+            <field name="name">product.month.pivot</field>
+            <field name="model">purchase.request.report</field>
+            <field name="arch" type="xml">
+                <pivot string="Purchase Request Statistics" disable_linking="True">
+                    <field name="partner_id" type="row"/>
+                    <field name="date_start" interval="month" type="col"/>
+                    <field name="unit_quantity" type="measure"/>
+                    <field name="unit_qty_purchase" type="measure"/>
+                    <field name="net_price_total" type="measure"/>
+                    <field name="net_price_average" type="measure"/>
+                    <field name="price_standard" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_purchase_order_graph">
+            <field name="name">product.month.graph</field>
+            <field name="model">purchase.request.report</field>
+            <field name="arch" type="xml">
+                <graph string="Purchase Orders Statistics">
+                    <field name="partner_id" type="row"/>
+                    <field name="date_start" interval="month" type="col"/>
+                    <field name="unit_quantity" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Custom reports (aka filters) -->
+        <record id="filter_purchase_request_monthly_requests" model="ir.filters">
+            <field name="name">Monthly Purchase Requests</field>
+            <field name="model_id">purchase.request.report</field>
+            <field name="domain">[('state','!=','rejected')]</field>
+            <field name="user_id" eval="False"/>
+            <field name="context">{'group_by': ['category_id'], 'col_group_by': ['date_start:month'], 'measures': ['unit_quantity']}</field>
+        </record>
+        <record id="filter_purchase_request_price_per_supplier" model="ir.filters">
+            <field name="name">Price Per Vendor</field>
+            <field name="model_id">purchase.request.report</field>
+            <field name="domain">[('state','!=','draft'),('state','!=','rejected')]</field>
+            <field name="user_id" eval="False"/>
+            <field name="context">{'group_by': ['partner_id'], 'col_group_by': ['product_id'], 'measures': ['price_average']}</field>
+        </record>
+        <record id="filter_purchase_request_average_delivery_time" model="ir.filters">
+            <field name="name">Average Delivery Time</field>
+            <field name="model_id">purchase.request.report</field>
+            <field name="domain">[('state','!=','draft'),('state','!=','rejected')]</field>
+            <field name="user_id" eval="False"/>
+            <field name="context">{'group_by': ['partner_id'], 'measures': ['delay_pass']}</field>
+        </record>
+
+        <record id="view_purchase_request_report_search" model="ir.ui.view">
+        <field name="name">report.purchase.request.search</field>
+        <field name="model">purchase.request.report</field>
+        <field name="arch" type="xml">
+            <search string="Purchase Request">
+                <filter string="Draft" name="quotes" domain="[('state','=','draft')]"/>
+                <filter string="To be approved" name="tobeapproved" domain="[('state','=','to_approve')]"/>
+                <filter string="approved" name="approved" domain="[('state','=','approved')]"/>
+                <filter string="rejected" name="rejected" domain="[('state','=','rejected')]"/>
+                <filter string="done" name="done" domain="[('state','=','done')]"/>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <group expand="0" string="Extended Filters">
+                    <field name="user_id"/>
+                    <field name="picking_type_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="date_start"/>
+                    <field name="date_approve"/>
+                    <field name="category_id" filter_domain="[('category_id', 'child_of', self)]"/>
+                </group>
+                <group expand="1" string="Group By">
+                    <filter string="Vendor" name="group_partner_id" context="{'group_by':'partner_id'}"/>
+                    <filter string="Partner's Country" name="country_id" context="{'group_by':'country_id'}"/>
+                    <filter string="Requested by" name="Requested_by" context="{'group_by':'user_id'}"/>
+                    <filter string="Product Category" name="group_category_id" context="{'group_by':'category_id'}"/>
+                    <filter string="Status" context="{'group_by':'state'}"/>
+                    <filter string="Company" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                    <filter string="Doc Type" context="{'group_by':'doc_type'}"/>
+                    <separator/>
+                    <filter string="Order Month" context="{'group_by':'date_start:month'}" help="Order of Day"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_purchase_request_report_all" model="ir.actions.act_window">
+        <field name="name">Purchase Request Analysis</field>
+        <field name="res_model">purchase.request.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="context">{'search_default_orders': 1}</field>
+        <field name="view_id"></field>  <!-- force empty -->
+        <field name="help">Purchase Request Analysis allows you to easily check and analyse your company purchase request history and performance. From this menu you can track your negotiation performance, the delivery performance of your vendors, etc.</field>
+    </record>
+
+    <menuitem id="purchase_request_report" name="Reporting Analisys" parent="purchase_request.menu_purchase_request" sequence="88"
+         action="action_purchase_request_report_all"/>
+
+</odoo>

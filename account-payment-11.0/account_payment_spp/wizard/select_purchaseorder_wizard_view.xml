@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="view_select_purchaseorder_form" model="ir.ui.view">
+        <field name="name">select.purchaseorder.form</field>
+        <field name="model">select.purchase.order</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Select Purchase Order">
+                <group string="Purchase Orders">
+                    <field name="purchaseorder_ids" nolabel="1"
+                           domain="[('partner_id', 'child_of', context.get('partner_id')),
+                           ('state', '=', context.get('state'))]"/>
+                </group>
+                <footer>
+                    <button name="select_purchaseorders" string="Add" type="object" class="oe_highlight" />
+                    <button string="Cancel" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="act_open_select_purchaseorder_view">
+        <field name="name">Select Purchase Order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">select.purchase.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="act_open_select_purchaseorder_view_form">
+        <field name="act_window_id" ref="act_open_select_purchaseorder_view" />
+        <field name="sequence" eval="10" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_select_purchaseorder_form" />
+    </record>
+
+</odoo>

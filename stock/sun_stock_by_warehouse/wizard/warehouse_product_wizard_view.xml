@@ -1,0 +1,34 @@
+<odoo>
+    <data>
+
+        <record id="stock_inventory_wizard_from_view" model="ir.ui.view">
+            <field name="name">warehouse.inventory.wizard.form</field>
+            <field name="model">warehouse.inventory.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group >
+                        <field name="company_id" class="oe_inline" options="{'no_create':True,'no_edit':True}" groups="base.group_multi_company"/>
+                        <field name="warehouse_ids" widget="many2many_tags"
+                            domain="[('company_id','=',company_id)]" options="{'no_create':True,'no_edit':True}"/>
+                    </group>
+                    <footer>
+                        <button string="PDF" name="generate_pdf_report" type="object" class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_warehouse_inventory_wizard" model="ir.actions.act_window">
+            <field name="name">Warehouse Inventory Report</field>
+            <field name="res_model">warehouse.inventory.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_wizard_warehouse_inventory" parent="stock.menu_warehouse_report" action="action_warehouse_inventory_wizard" />
+
+    </data>
+</odoo>

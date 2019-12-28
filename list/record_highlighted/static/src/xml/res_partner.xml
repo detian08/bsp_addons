@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-extend="ClientDetailsEdit">
+        <t t-jquery="div.client-details-right" t-operation="append">
+            <div class='client-detail'>
+            <span class='label' >Code</span>
+            <input class='detail client-code' name='customer_code'       t-att-value='partner.customer_code || ""' placeholder='Customer Code'></input>
+            </div>
+        </t>
+    </t>
+    <t t-extend="ClientDetails">
+        <t t-jquery="div.client-details-right" t-operation="append">
+            <div class='client-detail'>
+                <span class='label' style="margin-left:-37px;">Customer Code</span>
+                <t t-if='partner.customer_code'>
+                    <span class='detail client-code' style="padding-left:34px;"><t t-esc='partner.customer_code'/></span>
+                </t>
+                <t t-if='!partner.customer_code'>
+                    <span class='detail client-code empty' style="padding-left:34px;">N/A</span>
+                </t>
+            </div>
+        </t>
+    </t>
+    
+<!--    <t t-extend="Product">
+        <t t-jquery=".product-name" t-operation="append">
+            <t t-if="product.default_code">
+                <br/>
+                <span><b>Code:</b></span>
+                    <t t-esc="product.default_code"/>
+            </t>
+            <t t-if="product.mrp_product">
+                <br/>
+                <span><b>MRP:</b></span>
+                    <t t-esc="product.mrp_product"/>
+            </t>
+        </t>
+    </t>-->
+    <t t-extend="Orderline">
+        <t t-jquery="span.price" t-operation="after">
+            <t t-if="line.get_product().default_code">
+                <span><b>Code:</b></span>
+                <t t-esc="line.get_product().default_code"/>
+            </t>
+            <t t-if="line.get_product().mrp_product">
+                <span><b>MRP:</b></span>
+                <t t-esc="line.get_product().mrp_product"/>
+            </t>
+    </t>
+</t>
+    
+</templates>

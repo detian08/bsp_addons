@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_purchase_request_tree" model="ir.ui.view">
+        <field name="name">purchase.request.tree.fleet</field>
+        <field name="model">purchase.request</field>
+        <field name="inherit_id" ref="purchase_request.view_purchase_request_tree" />
+        <field name="arch" type="xml">
+            <!--<field name="date_start" position="after">-->
+            <xpath expr="//field[@name='date_start']" position="after">
+                    <field name="vehicle_id" invisible="not context.get('show_k1', False)" />
+                    <field name="vehicle_model" invisible="not context.get('show_k1', False)" />
+                    <field name="vehicle_model_year" invisible="not context.get('show_k1', False)" />
+                    <field name="vehicle_last_odometer" invisible="not context.get('show_k1', False)" />
+                    <field name="vehicle_repair_status" invisible="not context.get('show_k1', False)" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_purchase_request_form" model="ir.ui.view">
+        <field name="name">purchase.request.form.fleet</field>
+        <field name="model">purchase.request</field>
+        <field name="inherit_id" ref="purchase_request.view_purchase_request_form" />
+        <field name="arch" type="xml">
+            <field name="date_start" position="after">
+                    <field name="vehicle_id" invisible="not context.get('show_k1', False)"
+                           attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                    <field name="vehicle_model" invisible="not context.get('show_k1', False)" />
+                    <field name="vehicle_model_year" invisible="not context.get('show_k1', False)" />
+                    <field name="vehicle_last_odometer" invisible="not context.get('show_k1', False)" />
+                    <field name="vehicle_repair_status" invisible="not context.get('show_k1', False)" widget="radio"/>
+            </field>
+        </field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="purchase_request_form_fleet_action">
+        <field name="name">Pengajuan Perbaikan/Service Kendaraan [K1]</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[('doc_type', '=', 'K1')]</field>
+        <field name="context">{'default_doc_type':'K1', 'search_default_requested_by':uid, 'show_k1': True}</field>
+        <field name="search_view_id" ref="purchase_request.view_purchase_request_search"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to start a new purchase request K1-Form process.
+          </p><p>
+            A purchase request is an instruction to Purchasing to procure
+            a certain quantity of materials services, so that they are
+            available at a certain point in time.
+          </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_purchase_request_fleet_act"
+        name="K1-Form"
+        sequence="10"
+        parent="purchase_request.menu_purchase_request"
+        action="purchase_request_form_fleet_action"
+        />
+</odoo>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="sidebar assets backend" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/web_toggle_sidebar/static/src/less/leftbar.less"/>
+            <script type="text/javascript" src="/web_toggle_sidebar/static/src/js/leftbar.js"/>
+        </xpath>
+    </template>
+    <template id="webclient_bootstrap" inherit_id="web.webclient_bootstrap">
+        <xpath expr="//div[hasclass('o_sub_menu')]" position="inside">
+            <button class="o_toggle_icon" accesskey="h">
+                <i class="fa fa-chevron-left"/>
+            </button>
+        </xpath>
+    </template>
+</odoo>

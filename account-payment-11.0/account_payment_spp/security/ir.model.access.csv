@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_spp_user,spp,model_spp,group_spp_user,1,1,1,1
+access_spp_manager,spp,model_spp,group_spp_manager,1,1,1,1
+access_spp_line_user,spp.line,model_spp_line,group_spp_user,1,1,1,1
+access_spp_line_manager,spp.line,model_spp_line,group_spp_manager,1,1,1,1
+access_spp_line_bill_user,spp.line.bill,model_spp_line_bill,group_spp_user,1,1,1,1
+access_spp_line_bill_manager,spp.line.bill,model_spp_line_bill,group_spp_manager,1,1,1,1

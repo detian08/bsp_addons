@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_purchase_request_recap_reports_user,purchase.request.recap.qcf.reports,model_purchase_request_recap_qcf_reports,purchase.group_purchase_user,1,1,1,0
+access_purchase_request_recap_reports_manager,purchase.request.recap.qcf.reports,model_purchase_request_recap_qcf_reports,purchase.group_purchase_manager,1,1,1,1
+access_wizard_recap_reports_user,wizard.purchase.request.recap.qcf.reports,model_wizard_purchase_request_recap_qcf_reports,purchase.group_purchase_user,1,1,1,0
+access_wizard_recap_reports_manager,wizard.purchase.request.recap.qcf.reports,model_wizard_purchase_request_recap_qcf_reports,purchase.group_purchase_manager,1,1,1,1
+access_purchase_request_recap_reports_user,purchase.request.recap.qcf.reports,model_purchase_request_recap_qcf_reports,base.group_user,1,1,1,0
+access_wizard_recap_reports_user,wizard.purchase.request.recap.qcf.reports,model_wizard_purchase_request_recap_qcf_reports,base.group_user,1,1,1,0

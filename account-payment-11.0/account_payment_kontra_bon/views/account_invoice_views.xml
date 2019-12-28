@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="account_invoice_supplier_tree" model="ir.ui.view">
+            <field name="name">account.invoice</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_tree"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='number']" position="after">
+                    <field name="kontrabon_reference"/>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+
+</odoo>

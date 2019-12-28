@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kontra_bon_user,kontra.bon,model_kontra_bon,group_kontra_bon_user,1,1,1,1
+access_kontra_bon_manager,kontra.bon,model_kontra_bon,group_kontra_bon_manager,1,1,1,1
+access_kontra_bon_line_user,kontra.bon.line,model_kontra_bon_line,group_kontra_bon_user,1,1,1,1
+access_kontra_bon_line_manager,kontra.bon.line,model_kontra_bon_line,group_kontra_bon_manager,1,1,1,1

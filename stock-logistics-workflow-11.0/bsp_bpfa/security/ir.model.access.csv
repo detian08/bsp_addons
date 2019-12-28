@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_material_transfer_user,purchase.request,model_material_transfer,group_material_transfer_user,1,1,1,1
+access_material_transfer_manager,purchase.request,model_material_transfer,group_material_transfer_manager,1,1,1,1
+access_material_transfer_line_user,purchase.request.line,model_material_transfer_line,group_material_transfer_user,1,1,1,1
+access_material_transfer_line_manager,purchase.request.line,model_material_transfer_line,group_material_transfer_manager,1,1,1,1
+access_stock_move_material_transfer_user,stock.move,stock.model_stock_move,group_material_transfer_user,1,0,0,0

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="material_transfer_print_view" model="ir.ui.view">
+			<field name="name">wizard.material.transfer.print</field>
+			<field name="model">wizard.material.transfer.print2</field>
+			<field name="arch" type="xml">
+				<form string="Print BTB">
+				<p class="oe_grey">
+				You want to "Bukti Terima Barang" ?
+				</p>
+					<footer>
+						<button string="Print" class="btn-primary" name="print_report" type="object" />
+						<button string="Cancel" class="btn-primary" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+	</record>
+
+
+	<record id="purchase_excel_views" model="ir.ui.view">
+		<field name="name">Purchase Request Report</field>
+		<field name="model">material.transfer.report.docx</field>
+		<field name="arch" type="xml">
+			<form string="Material Transfer Docx">
+				<group>
+					<field name="file_name" filename="material_transfer_data" />
+					<field name="material_transfer_data" invisible="1" />
+				</group>
+				<footer>
+					<button string="Cancel" class="btn-primary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<!--Menu to Print Docx Report-->
+	<act_window id="action_material_transfer_print"
+				key2="client_action_multi"
+				name="Print BTB (Vendor-BSP)"
+				res_model="wizard.material.transfer.print2"
+				src_model="stock.picking"
+				view_mode="form"
+				target="new"/>
+</odoo>

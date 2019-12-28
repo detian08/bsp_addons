@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	<record id="material_transfer_print_view" model="ir.ui.view">
+			<field name="name">wizard.material.transfer.bstb.print</field>
+			<field name="model">wizard.material.transfer.bstb.print</field>
+			<field name="arch" type="xml">
+				<form string="Print Material Transfer BSTB">
+				<p class="oe_grey">
+				Print Bukti Serah Terima Barang now?
+				</p>
+					<footer>
+						<button string="Print" class="btn-primary" name="print_report" type="object" />
+						<button string="Cancel" class="btn-primary" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+	</record>
+
+    <record id="material_transfer_bstb_view" model="ir.ui.view">
+		<field name="name">Material Transfer BSTB Report</field>
+		<field name="model">material.transfer.bstb.report.docx</field>
+		<field name="arch" type="xml">
+			<form string="Purchase BSTB docx">
+				<group>
+					<field name="file_name" filename="material_transfer_bstb_data" />
+					<field name="material_transfer_bstb_data" invisible="1" />
+				</group>
+				<footer>
+					<button string="Cancel" class="btn-primary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<!--Menu to Print Docx Report-->
+	<act_window id="action_purchase_bstb_print_doc"
+				key2="client_action_multi"
+				name="Bukti Serah Terima Barang (doc)"
+				res_model="wizard.material.transfer.bstb.print"
+				src_model="material.transfer"
+				view_mode="form"
+				target="new"/>
+</odoo>

@@ -1,0 +1,1 @@
+from . import test_stock_removal_location_by_priority

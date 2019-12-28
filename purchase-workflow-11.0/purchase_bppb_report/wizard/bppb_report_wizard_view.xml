@@ -1,0 +1,65 @@
+<odoo>
+    <record id="bppb_report_wizard" model="ir.ui.view">
+        <field name="name">BPPB Report</field>
+        <field name="model">bppb.report.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="BPPB Report">
+                <sheet>
+                    <p class="oe_grey">
+				        You want to Print BPPB ?
+				    </p>
+                    <heade>
+<!--                        <button name="get_report_pdf" string="PDF" type="object" class="oe_highlight"/> |-->
+                        <button name="get_report_excel" string="EXCEL" type="object" class="oe_highlight"/> |
+                        <button name="get_report_doc" string="DOC" type="object" class="oe_highlight"/>
+                    </heade>
+                    <footer>
+                        <p class="oe_grey">
+				            Print to direct printer.
+				        </p>
+                        <button name="get_report_print" string="Print" type="object" class="oe_highlight"/>
+                        <button string="Cancel" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="purchase_excel_views" model="ir.ui.view">
+		<field name="name">qcf.report.out</field>
+		<field name="model">qcf.report.out</field>
+		<field name="arch" type="xml">
+			<form string="Export Purchase Request">
+				<group>
+					<field name="file_name" filename="purchase_request_data" />
+					<field name="purchase_request_data" invisible="1" />
+				</group>
+				<footer>
+					<button string="Cancel" class="btn-primary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+    <act_window id="action_bppb_report_wizard"
+                key2="client_action_multi"
+                name="BPPB Report"
+                res_model="bppb.report.wizard"
+                src_model="purchase.request"
+                view_mode="form"
+                target="new" />
+
+    <!-- This Menu Item must have a parent and an action -->
+    <!--menuitem id="menu_bppb_report_wizard"
+              parent="purchase_request.menu_purchase_request"
+              action="action_bppb_report_wizard" />
+
+    	<act_window id="action_purchase_print"
+				key2="client_action_multi"
+				name="Print Docx"
+				res_model="wizard.purchase.print2"
+				src_model="purchase.order"
+				view_mode="form"
+				target="new"/-->
+</odoo>

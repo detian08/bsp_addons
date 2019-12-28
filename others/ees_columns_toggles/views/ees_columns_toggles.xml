@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="listview" inherit_id="web.assets_backend">
+		<xpath expr="." position="inside">
+			<link rel="stylesheet" href="/ees_columns_toggles/static/src/css/ees_columns_toggles.css"/>
+			<script type="text/javascript" src="/ees_columns_toggles/static/src/js/ees_columns_toggles.js"></script>
+		</xpath>
+    </template>
+</odoo>

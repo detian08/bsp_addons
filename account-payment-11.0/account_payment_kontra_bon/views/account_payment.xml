@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="account_payment_form" model="ir.ui.view">
+        <field name="name">account.payment.form</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']"
+                   position="after">
+                <field name="kontrabon_id"
+                domain="[('state', 'in', ['approved'])]" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

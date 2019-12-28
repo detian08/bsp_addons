@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <menuitem
+        id="menu_material_transfer_root"
+        name="Material Transfer"
+        sequence="100"/>
+
+    <menuitem
+        id="menu_material_transfer_operations"
+        parent="menu_material_transfer_root"
+        name="Operations"
+        sequence="10"/>
+
+    <menuitem id="material_transfer_order_menu"
+              name="Material Transfer Order"
+              parent="menu_material_transfer_operations"
+              action="material_transfer_order_action"
+              sequence="20"
+              groups="group_material_transfer_user,group_material_transfer_manager"/>
+
+    <menuitem id="stock_picking_incoming_menu"
+              name="Incoming"
+              parent="menu_material_transfer_operations"
+              action="stock_picking_incoming_action"
+              sequence="20"/>
+
+    <menuitem id="stock_picking_outgoing_menu"
+              name="Outgoing"
+              parent="menu_material_transfer_operations"
+              action="stock_picking_outgoing_action"
+              sequence="20"/>
+</odoo>

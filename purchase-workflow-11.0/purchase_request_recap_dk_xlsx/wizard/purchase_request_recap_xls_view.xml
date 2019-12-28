@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+		<record id="purchase_request_recap_excel_view" model="ir.ui.view">
+			<field name="name">wizard.purchase.request.recap.reports</field>
+			<field name="model">wizard.purchase.request.recap.reports</field>
+			<field name="arch" type="xml">
+				<form string="Export Recapitulation of Purchase Request">
+				<p class="oe_grey">
+				You want to Print Purchase Request Recapitulation Excel Report?
+				</p>	
+				    <group>
+                    	<group>
+                        	<field name="date_start"/>
+                    	</group>
+                    	<group>
+                        	<field name="date_end"/>
+                    	</group>
+                	</group>		  
+					<footer>
+						<button string="Print Excel Report" class="btn-primary" name="action_purchase_request_recap_report" type="object" />
+						<button string="Cancel" class="btn-primary" special="cancel"/>
+					</footer>
+				</form>						
+			</field>
+		</record>
+
+
+	<record id="purchase_recap_excel_views" model="ir.ui.view">
+		<field name="name">purchase.request.recap.reports</field>
+		<field name="model">purchase.request.recap.reports</field>
+		<field name="arch" type="xml">
+			<form string="Export Purchase Request Recap">
+				<group>
+					<field name="file_name" filename="purchase_request_recap_data" />
+					<field name="purchase_request_recap_data" invisible="1" />					
+				</group>
+				<footer>
+					<button string="Cancel" class="btn-primary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>	
+		
+
+	<act_window id="action_purchase_request_recap_excel"
+				key2="client_action_multi"
+				name="Print Recap Purchase Request to xls"
+				res_model="wizard.purchase.request.recap.reports"
+				src_model="purchase.request"
+				view_mode="form"
+				target="new" />
+
+	 <menuitem id="menu_report_purchase_request_recap_excel"
+        parent="purchase_request.menu_purchase_request"
+        action="action_purchase_request_recap_excel"
+        sequence="88"/>
+
+</odoo>

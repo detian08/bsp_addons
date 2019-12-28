@@ -1,0 +1,32 @@
+<odoo>
+	<record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.report_creator</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="131"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Report Creator" string="Report Creatore" data-key="report_creator" groups="report_creator.group_report_creator_manager">
+                        <h2>Configure File Store</h2>                        
+                        <div class="row mt16 o_settings_container" title="File Store">
+                            <div class="o_setting_left_pane" title="Lets configure your file store to store your report here">                               
+                               	<label for="file_store" string="File Store Path" class="o_light_label"/>
+                                <field name="file_store" nolabel="1"/>                                                              
+                            </div>                                                   
+                        </div>                                               
+                    </div>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="report_creator_config_settings_action" model="ir.actions.act_window">
+            <field name="name">Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'report_creator'}</field>
+        </record>
+        <menuitem id="report_creator_config_settings_menu_action" name="Settings" parent="report_creator_settings_menu"
+            sequence="0" action="report_creator_config_settings_action" groups="base.group_system"/>
+</odoo>

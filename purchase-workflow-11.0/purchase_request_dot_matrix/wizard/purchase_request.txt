@@ -1,0 +1,11 @@
+Purchase Request
+
+Nomor    : ${nomor}
+Tanggal  : ${tgl}
+Cabang   : ${cabang}
+
+${'-'*95}
+No. ${'Nama'.ljust(20)} Jumlah satuan ${'keterangan'.ljust(20)[:20]} ${'spesifikasi'.ljust(20)} ${'Est.Harga'.rjust(12)}
+${'-'*95}
+${rows}${'-'*95}
+${' '*75}TOTAL ${total.rjust(12)}

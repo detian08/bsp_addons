@@ -1,0 +1,195 @@
+<section class="oe_container">
+    <div class="oe_row oe_spaced" style="max-width: 800px;">
+        <div class="oe_span12">
+            <h2 class="oe_slogan" style="color:#e68a00; text-align: center;">Advanced Reordering Rules Control</h2>
+            <div class="oe_demo" style="border:none;">
+                <h4>Main features</h4>
+                <ul>
+                    <li>Use Reordering Rule Templates to manage Product Reordering Rules</li>
+                    <li>Manage multiple Reordering Rules at once easily using flexible rules</li>
+                    <li>Create reordering rules automatically when Reordering Rule Template is created</li>
+                    <li>Modify reordering rules automatically when Reordering Rule Template is modified</li>
+                    <li>Create reordering rules automatically when new product is created</li>
+                    <li>Modify reordering rules automatically when existing product is updated</li>
+                    <li>Define Reordering Rule Templates based on Product Category</li>
+                    <li>Define Reordering Rule Templates based on Product Attribute Values <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder_pro"><b>Click to get PRO version</b></a></li>
+                    <li>Hint: to manage Templates in Multi-Company/Multi-Warehouse configuration enable "Manage Multiple Stock Locations" and "Manage Multiple Warehouses" in User settings</li>
+                </ul>
+                <h4>Support</h4>
+                <ul>
+                    <li>Tested on Odoo Community v11.0</li>
+                    <li>Russian language translations</li>
+                    <li>English, German and Russian language support</li>
+                </ul>
+            </div>
+            <h3 style="text-align: center;"><a target="_blank" href="https://apps.odoo.com/apps/browse?repo_maintainer_id=222445">Click here for more addons!</a></h3>
+        </div>
+    </div>
+
+    <h2 class="oe_slogan" style="color:#e68a00; text-align: center;">How it works</h2>
+
+    <div class="oe_row oe_spaced" style="max-width: 800px;">
+        <h4>Templates are searched and applied in the following order:</h4>
+        <ol>
+            <li><b>Local Attributed*</b>. These type of templates have BOTH Product Category AND Product Attribute Values defined.<br/>
+                <u>Example:</u> When product "Laptop (Color:White,Memory:8Gb)" with category "All/Saleable/Laptops" is created Odoo will search for template with BOTH Category="All/Saleable/Laptops"
+                AND Attribute Values=[Color:White AND Memory 8Gb] and apply it.
+            </li>
+            <li><b>Local</b>. Local templates have ONLY Product Category defined.<br/>
+            <u>Example:</u> In case no Local Attributed* template for our Laptop was found Odoo will search for template with Category="All/Saleable/Laptops" AND NO Attribute Values defined
+                and apply it.</li>
+            <li><b>Global Attributed*</b>. These type of templates have ONLY Product Attribute Values defined.
+            <br/>
+            <u>Example:</u> In case no Local template for our Laptop was found Odoo will search for template with NO Category defined AND Attribute Values=[Color:White AND Memory 8Gb] and apply it.
+            </li>
+            <li><b>Global</b>. This template has NO Product Category AND NO Product Attribute Values defined. Use this template as a fallback in case no other template can be applied.</li>
+        </ol>
+        <h5>* Attributed templates are available in <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder_pro"><b>PRO version</b></a></h5>
+    </div>
+
+    <div class="oe_row oe_spaced" style="max-width: 800px;">
+        <div class="oe_demo">
+            <h3 class='oe_slogan'>Set up Reordering Rules Templates</h3>
+            <p style="color:#e68a00; padding: 20px;">Go to "Inventory -> Master Data -> Reordering Rule Templates</p>
+        </div>
+        <div class="oe_demo oe_screenshot">
+            <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder/arr_1.png">
+                <img src="arr_1.png">
+            </a>
+        </div>
+    </div>
+    <div class="oe_row oe_spaced" style="max-width: 800px;">
+        <div class="oe_demo">
+            <h3 class='oe_slogan'>Create new Rule Template</h3>
+            <p style="color:#e68a00; padding: 20px;">1. Select Product Category and/or Product Attribute Values* (<a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder_pro"><b>* Attribute Values are available in PRO version</b></a>).<br/>
+                2. Configure rule settings (min/max qty, warehouse, company etc.).<br/>
+                3. Do not forget: Category and Product Attribute Values can be specified ONLY when Template is created!<br/>
+                4. Click "Save".
+            </p>
+        </div>
+        <div class="oe_demo oe_screenshot">
+            <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder/arr_2.png">
+                <img src="arr_2.png">
+            </a>
+        </div>
+    </div>
+
+    <div class="oe_row oe_spaced" style="max-width: 800px;">
+        <div class="oe_demo">
+            <h3 class='oe_slogan'>Rules are created automatically</h3>
+            <p style="color:#e68a00; padding: 20px;">Note: "Apply rules" is used only if you modified some Rules manually and want to reset them later</p>
+        </div>
+        <div class="oe_demo oe_screenshot">
+            <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder/arr_3.png">
+                <img src="arr_3.png">
+            </a>
+        </div>
+        <div class="oe_demo oe_screenshot">
+            <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder/arr_3_2.png">
+                <img src="arr_3_2.png">
+            </a>
+        </div>
+    </div>
+
+    <div class="oe_row oe_spaced" style="max-width: 800px;">
+        <div class="oe_demo">
+            <h3 class='oe_slogan'>Modify Template to update Rules</h3>
+            <p style="color:#e68a00; padding: 20px;">Rules are updated automatically when Template is changed</p>
+        </div>
+        <div class="oe_demo oe_screenshot">
+            <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder/arr_4.png">
+                <img src="arr_4.png">
+            </a>
+        </div>
+        <div class="oe_demo oe_screenshot">
+            <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder/arr_4_2.png">
+                <img src="arr_4_2.png">
+            </a>
+        </div>
+    </div>
+
+    <div class="oe_row oe_spaced" style="max-width: 800px;">
+        <div class="oe_demo">
+            <h3 class='oe_slogan'>Rules are re-assigned when Template is deleted</h3>
+            <p style="color:#e68a00; padding: 20px;">
+                1. Rules are automatically re-assigned to the other matching Template when Template is deleted.<br/>
+                2. You can manually assign Reordering Rule to any Template.<br/>
+                3. Or you can uncheck "Control via Template" and disable Rule modification using Template.</p>
+        </div>
+        <div class="oe_demo oe_screenshot">
+            <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder/arr_5.png">
+                <img src="arr_5.png">
+            </a>
+        </div>
+        <div class="oe_demo oe_screenshot">
+            <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder/arr_5_2.png">
+                <img src="arr_5_2.png">
+            </a>
+        </div>
+    </div>
+
+        <div class="oe_row oe_spaced" style="max-width: 800px;">
+        <div class="oe_demo">
+            <h3 class='oe_slogan'>Create new Product</h3>
+            <p style="color:#e68a00; padding: 20px;">
+                1. Select Product Category and/or Product Attribute Values* (<a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder_pro"><b>* Attribute Values work in PRO version</b></a>).<br/>
+                2. Check "Don't create reordering rules from templates" if you do not want to create Reordering Rules automatically.<br/>
+                3. Click "Save".</p>
+        </div>
+        <div class="oe_demo oe_screenshot">
+            <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder/arr_6.png">
+                <img src="arr_6.png">
+            </a>
+        </div>
+    </div>
+
+    <div class="oe_row oe_spaced" style="max-width: 800px;">
+        <div class="oe_demo">
+            <h3 class='oe_slogan'>Rules are created automatically</h3>
+        </div>
+        <div class="oe_demo oe_screenshot">
+            <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder/arr_7.png">
+                <img src="arr_7.png">
+            </a>
+        </div>
+        <div class="oe_demo oe_screenshot">
+            <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder/arr_7_2.png">
+                <img src="arr_7_2.png">
+            </a>
+        </div>
+    </div>
+
+    <div class="oe_row oe_spaced" style="max-width: 800px;">
+        <div class="oe_demo">
+            <h3 class='oe_slogan'>Rules are changed when Product is updated</h3>
+            <p style="color:#e68a00; padding: 20px;">
+            New Templates is applied and Reordering Rules are updated automatically when Product Category and/or Product Attribute Values* are changed (<a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder_pro"><b>* Attribute Values are available in PRO version</b></a>)
+            </p>
+
+        </div>
+        <div class="oe_demo oe_screenshot">
+            <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder/arr_8.png">
+                <img src="arr_8.png">
+            </a>
+        </div>
+        <div class="oe_demo oe_screenshot">
+            <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder/arr_8_2.png">
+                <img src="arr_8_2.png">
+            </a>
+        </div>
+        <div class="oe_demo oe_screenshot">
+            <a target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder/arr_8_3.png">
+                <img src="arr_8_3.png">
+            </a>
+        </div>
+    </div>
+
+
+    <div class="oe_row oe_spaced" style="max-width: 800px;">
+        <div class="oe_demo">
+            <h4 class="oe_slogan"><a target="_blank" href="https://demo.cetmix.com">Click to try it!</a></h4>
+            <h4 class="oe_slogan"><a href="mailto:odooapps@cetmix.com">Click to contact us</a> for support or customization</h4>
+            <h5 class="oe_slogan"><a href="https://www.freepik.com/free-photos-vectors/icon">Icon vector created by Freepik</a></h5>
+        </div>
+    </div>
+</section>

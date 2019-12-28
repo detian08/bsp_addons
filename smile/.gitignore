@@ -1,0 +1,13 @@
+.project
+.settings
+.project
+.pydevproject
+.settings
+.vscode
+*.pyc
+*.pyo
+*~
+
+# Docker files
+Dockerfile
+datadir

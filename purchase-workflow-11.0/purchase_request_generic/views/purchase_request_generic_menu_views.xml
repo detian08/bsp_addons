@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record model="ir.actions.act_window" id="purchase_request.purchase_request_form_action">
+        <field name="name">Bukti Permintaan Pembelian Barang (BPPB) [K0]</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[('doc_type', '=', 'K0')]</field>
+        <field name="context">{'default_doc_type':'K0', 'search_default_requested_by':uid, 'show_k0': True}</field>
+        <field name="search_view_id" ref="purchase_request.view_purchase_request_search"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to start a new purchase request K0-Form (BPPB) process.
+          </p><p>
+            A purchase request is an instruction to Purchasing to procure
+            a certain quantity of materials services, so that they are
+            available at a certain point in time.
+          </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="purchase_request.menu_purchase_request_act"
+        name="BPPB"
+        sequence="5"
+        parent="purchase_request.menu_purchase_request"
+        action="purchase_request.purchase_request_form_action"/>
+
+
+    <record model="ir.actions.act_window" id="purchase_request_form_k2_action">
+        <field name="name">Pengajuan Dana Keperluan Kantor [K2]</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[('doc_type', '=', 'K2')]</field>
+        <field name="context">{'default_doc_type':'K2', 'search_default_requested_by':uid, 'show_k2k4': True}</field>
+        <field name="search_view_id" ref="purchase_request.view_purchase_request_search"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to start a new purchase request K2-Form process.
+          </p><p>
+            A purchase request is an instruction to Purchasing to procure
+            a certain quantity of materials services, so that they are
+            available at a certain point in time.
+          </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_purchase_request_k2_act"
+        name="K2 Form"
+        sequence="20"
+        parent="purchase_request.menu_purchase_request"
+        action="purchase_request_form_k2_action"/>
+
+    <record model="ir.actions.act_window" id="purchase_request_form_k3_action">
+        <field name="name">Pengajuan Penggantian/Penambahan Komputer Barang Umum [K3]</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[('doc_type', '=', 'K3')]</field>
+        <field name="context">{'default_doc_type':'K3', 'search_default_requested_by':uid, 'show_k3': True}</field>
+        <field name="search_view_id" ref="purchase_request.view_purchase_request_search"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to start a new purchase request K3-Form process.
+          </p><p>
+            A purchase request is an instruction to Purchasing to procure
+            a certain quantity of materials services, so that they are
+            available at a certain point in time.
+          </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_purchase_request_k3_act"
+        name="K3 Form"
+        sequence="30"
+        parent="purchase_request.menu_purchase_request"
+        action="purchase_request_form_k3_action"/>
+
+    <record model="ir.actions.act_window" id="purchase_request_form_k4_action">
+        <field name="name">Pengajuan Barang Cetakan [K4]</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="domain">[('doc_type', '=', 'K4')]</field>
+        <field name="context">{'default_doc_type':'K4', 'search_default_requested_by':uid, 'show_k2k4': True}</field>
+        <field name="search_view_id" ref="purchase_request.view_purchase_request_search"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to start a new purchase request K4-Form process.
+          </p><p>
+            A purchase request is an instruction to Purchasing to procure
+            a certain quantity of materials services, so that they are
+            available at a certain point in time.
+          </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_purchase_request_k4_act"
+        name="K4 Form"
+        sequence="40"
+        parent="purchase_request.menu_purchase_request"
+        action="purchase_request_form_k4_action"/>
+
+    <menuitem
+        id="purchase_request.menu_purchase_request_line_act"
+        sequence="50"
+        parent="purchase_request.menu_purchase_request"
+        action="purchase_request.purchase_request_line_form_action"/>
+
+</odoo>

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_purchase_docx_user,purchase.report.docx,purchase.requisition.docx,purchase_request.group_purchase_request_user,1,1,1,0
+access_purchase_docx_manager,purchase.report.docx,purchase.requisition.docx,purchase_request.group_purchase_request_manager,1,1,1,0
+access_purchase_print_wizard_user,wizard.purchase.print2,wizard.purchase.requisition.print2,purchase_request.group_purchase_request_user,1,1,1,0
+access_purchase_print_wizard_manager,wizard.purchase.print2,wizard.purchase.requisition.print2,purchase_request.group_purchase_request_manager,1,1,1,0

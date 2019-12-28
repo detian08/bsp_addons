@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bsp_kontrabon_print_view" model="ir.ui.view">
+        <field name="name">wizard.kontra.bon.print.view</field>
+        <field name="model">wizard.kontra.bon.print</field>
+        <field name="arch" type="xml">
+            <form string="Print Kontrabon">
+                <p class="oe_grey">
+                    Print Kontrabon ?
+                </p>
+                <footer>
+                    <button string="Print" class="btn-primary" name="print_report" type="object" />
+                    <button string="Cancel" class="btn-primary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="bsp_kontrabon_print_views" model="ir.ui.view">
+        <field name="name">BSP Kontrabon</field>
+        <field name="model">kontra.bon.print.docx</field>
+        <field name="arch" type="xml">
+            <form string="BSP Kontrabon">
+                <group>
+                    <field name="file_name" filename="bsp_kontrabon_data" />
+                    <field name="bsp_kontrabon_data" invisible="1" />
+                </group>
+                <footer>
+                    <button string="Cancel" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+	<!--Menu to Print Docx Report-->
+	<act_window id="action_bsp_kontrabon_print"
+				key2="client_action_multi"
+				name="Print Kontrabon DocX"
+				res_model="wizard.kontra.bon.print"
+				src_model="kontra.bon"
+				view_mode="form"
+				target="new"/>
+</odoo>

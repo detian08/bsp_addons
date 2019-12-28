@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+	
+		<!-- Hide page[1]. Show delivery address -->
+        <record id="product_product_tree" model="ir.ui.view">   <!-- l'id completo sarà nomemodulo.xxx -->
+            <field name="name">product.product.tree</field>		<!-- nome. Lo stesso della vista originale -->
+            <field name="model">product.product</field>		
+            <field eval="8" name="priority"/>
+            <field name="inherit_id" ref="product.product_product_tree_view"/>  <!-- id completo della vista originale -->
+            <field name="arch" type="xml">
+				<xpath expr="//tree/field[@name='attribute_value_ids']" position="attributes">
+					<attribute name="invisible">True</attribute>
+				</xpath>
+				<xpath expr="//tree" >
+					<field name="var_desc"/>
+				</xpath>
+            </field>
+        </record>
+		
+	</data>
+</openerp>

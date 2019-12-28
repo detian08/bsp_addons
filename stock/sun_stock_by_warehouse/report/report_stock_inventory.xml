@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="report_stock_inventory">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                    <style>
+                        #custom {
+                            border: 1px solid black
+                            border-collapse: collapse;
+                            border-spacing : 0px;
+                            border-top-spacing : 0px;
+                        }
+                        #custom td, #custom th {
+                            border: 1px solid black
+                        }
+                        #custom tr: {
+                            border: 1px solid black
+                        }
+                        #custom th {
+                            style="border: 1px solid black"
+                        }
+                    </style>
+                        <br/>
+                        <div class="row">
+                                <br/><br/>
+                                <table class="table" id="custom">
+                                    <tbody>
+                                        <tr style="border-top:2px;">
+                                            <th>Company</th>
+                                            <th>Date</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="border: 1.5px solid black"><span t-field="o.company_id.name"/></td>
+                                            <td>
+                                                <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <t t-if="not o.warehouse_ids">
+                                    <t t-set="warehouse_ids"
+                                       t-value="request.env['stock.warehouse'].sudo().search([('company_id','=',o.company_id.id)])"/>
+                                </t>
+                                <t t-if="o.warehouse_ids">
+                                    <t t-set="warehouse_ids" t-value="o.warehouse_ids"/>
+                                </t>
+                                <table class="table table-condensed" id="custom">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:30%">All Product</th>
+                                            <th style="width:10%">UOM</th>
+                                            <t t-foreach="warehouse_ids" t-as="warehouse">
+                                                <th><span t-esc="warehouse.name"/></th>
+                                            </t>
+                                            <th style="width:20%">Total Qty</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="invoice_tbody">
+                                            <t t-foreach="get_products(o)" t-as="product">
+                                                    <tr>
+                                                        <td>
+                                                            <span t-esc="product.name_get()[0][1]"/>
+                                                        </td>
+                                                        <td>
+                                                            <span t-field="product.uom_id.name"/>
+                                                        </td>
+                                                        <t t-set="ending_qty" t-value="0.00"/>
+                                                        <t t-foreach="warehouse_ids" t-as="warehouse">
+                                                            <td>
+                                                                <t t-value="get_inventory(o,product,warehouse)" t-set="product_beg_qty"/>
+                                                                <span t-esc="product_beg_qty"/>
+                                                                <t t-set="ending_qty" t-value="ending_qty + product_beg_qty"/>
+                                                            </td>
+                                                        </t>
+                                                        <td>
+                                                            <span t-esc="ending_qty"/>
+                                                        </td>
+                                                        </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                                <p style="page-break-before:always;"/>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

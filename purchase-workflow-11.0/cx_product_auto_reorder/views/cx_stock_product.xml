@@ -1,0 +1,197 @@
+<?xml version="1.0"?>
+<odoo>
+
+<!--###################
+    # Reordering Rule #
+    ###################-->
+
+<!--## Form ##-->
+    <record id="cx_stock_orderpoint_form" model="ir.ui.view">
+      <field name="name">cx.stock.orderpoint.form</field>
+      <field name="model">stock.warehouse.orderpoint</field>
+      <field name="inherit_id" ref="stock.view_warehouse_orderpoint_form"/>
+      <field name="arch" type="xml">
+        <div class="o_row" position="after">
+          <field name="template_id"/>
+          <field name="template_control"/>
+        </div>
+      </field>
+    </record>
+
+<!--#######################
+    # Orderpoint Template #
+    #######################-->
+
+<!--## Tree ##-->
+    <record id="cx_orderpoint_template_tree" model="ir.ui.view">
+      <field name="name">cx.orderpoint.template.tree</field>
+      <field name="model">cx.orderpoint.template</field>
+      <field name="arch" type="xml">
+        <tree string="Reordering Rule Templates">
+          <field name="name"/>
+          <field name="active" invisible="1"/>
+          <field name="product_min_qty"/>
+          <field name="product_max_qty"/>
+          <field name="rule_ids_count" sum="Rules Count"/>
+        </tree>
+      </field>
+    </record>
+
+<!--## Action: open related reordering rules ##-->
+    <record id="act_template_2_reordering_rules" model="ir.actions.act_window">
+        <field name="name">Related Rules</field>
+        <field name="res_model">stock.warehouse.orderpoint</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,graph</field>
+        <field name="domain">[('template_id','=',active_id)]</field>
+    </record>
+
+<!--## Form ##-->
+    <record id="cx_orderpoint_template_form" model="ir.ui.view">
+      <field name="name">cx.orderpoint.template.form</field>
+      <field name="model">cx.orderpoint.template</field>
+      <field name="arch" type="xml">
+        <form string="Reordering Rule Template">
+          <div attrs="{'invisible': [('id', '!=', False)]}" colspan="2" class="oe_form_box_info oe_text_center">
+              <p style="color:red">
+                <b>Warning! Product Category and Attribute Values cannot be changed once template is created!</b>
+              </p>
+          </div>
+          <header>
+            <button name="apply_template" type="object" string="Apply Template" class="btn-primary"
+              help="Apply template to existing products"
+              attrs="{'invisible': [('id', '&lt;', 1)]}"/>
+          </header>
+          <sheet>
+              <div class="oe_button_box" name="button_box">
+                  <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                      <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                  </button>
+                  <button class="oe_stat_button" type="action" name="%(cx_product_auto_reorder.act_template_2_reordering_rules)d" icon="fa-edit">
+                          <field name="rule_ids_count" widget="statinfo"/>
+                  </button>
+              </div>
+              <field name="id" invisible="1"/>
+              <group>
+                <group name="ts" string="General Setting">
+                  <field name="name" />
+                  <label for="category_id" string="Applies to"/>
+                  <div class="o_row">
+                    <field name="category_id" placeholder='Any category' attrs="{'readonly': [('id', '!=', False)]}"/>
+                    <span attrs="{'invisible': [('category_id', '=', False)]}"> and </span>
+                    <field name="attr_val_ids" widget='many2many_tags' placeholder='any value' attrs="{'readonly': [('id', '!=', False)]}"/>
+                    <div attrs="{'invisible': [('attr_val_ids', '=', False)]}" name="get_pro" style="color:#ff8000"><i>Please purchase <a name="get_pro" target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder_pro"><b>Pro Version</b></a> to use attribute values</i></div>
+                  </div>
+                </group>
+                <group string="Warehouse Settings">
+                  <field name="warehouse_id" widget="selection" groups="stock.group_stock_multi_locations"/>
+                  <field name="location_id" groups="stock.group_stock_multi_locations"/>
+                  <field name="group_id" groups="stock.group_adv_location"/>
+                  <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                </group>
+              </group>
+              <group>
+                <group string="Rules">
+                  <field name="product_min_qty"/>
+                  <field name="product_max_qty"/>
+                  <field name="qty_multiple" string="Quantity Multiple"/>
+                </group>
+                <group string="Misc">
+                  <label for="lead_days"/>
+                  <div class="o_row">
+                    <field name="lead_days"/>
+                    <field name="lead_type"/>
+                  </div>
+                </group>
+              </group>
+              <group name="instruction" string="How Templates Work">
+                  <div name="rule_desc">
+                      Reordering Rules Templates are applied to ALL Products EXCEPT for the ones with "Don't create reordering rules from templates" enabled.<br/>
+                      When new product is created the first matching Template is applied and reordering rules for the product are created.<br/>
+                      <p>
+                      <h4>First matching template is applied. Templates are searched in the following order:</h4>
+                      <ul>
+                          <li>1. Local Attributed: Product Attribute Values* AND Category are matching. <a name="get_pro" target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder_pro"><b>Click to get Pro Version!</b></a></li>
+                          <li>2. Local: Category is matching.</li>
+                          <li>3. Global Attributed: Product Attribute Values* matching, Category not set. <a name="get_pro_2" target="_blank" href="https://apps.odoo.com/apps/modules/11.0/cx_product_auto_reorder_pro"><b>Click to get Pro Version!</b></a></li>
+                          <li>4. Global: Product Attribute Values* and Category are not set.</li>
+                      </ul>
+                      When product category or attribute values are changed Reordering Rules Templates are applied again.<br/>
+                      In case no new template can be applied old reordering rules for the product are deleted.<br/>
+                      Hint: to prevent automatic deletion or modification of reordering rules disable "Control via Template" in Reordering Rule form.<br/>
+                      </p>
+                      *<u>Important notice:</u> attribute values are joined using <b>"AND"</b> statement (e.g. "Size:L" AND "Color:White" AND "Model:Vintage").<br/>
+                      It means that template will be applied to the product only if <b>ALL</b> attribute values match.
+                      <p style="color:red">
+                          <b>Warning! Product Category and Attribute Values cannot be changed once template is created!</b>
+                      </p>
+                  </div>
+              </group>
+
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+<!-- Search -->
+    <record model="ir.ui.view" id="cx_orderpoint_template_search">
+        <field name="name">cx.orderpoint.template.search</field>
+        <field name="model">cx.orderpoint.template</field>
+        <field name="arch" type="xml">
+            <search string="Reordering Rule Templates Search">
+                <field name="name" string="Reordering Rule Template" filter_domain="['|',('category_id','ilike',self),('attr_val_ids','ilike',self)]"/>
+                <field name="warehouse_id" groups="stock.group_stock_multi_locations"/>
+                <field name="location_id" groups="stock.group_stock_multi_locations"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_category" string="Product Category" domain="[]"  context="{'group_by':'category_id'}"/>
+                    <filter string="Warehouse" domain="[]"  context="{'group_by':'warehouse_id'}"/>
+                    <filter string="Location" domain="[]" context="{'group_by':'location_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+<!-- Action -->
+    <record id="cx_orderpoint_template_action" model="ir.actions.act_window">
+        <field name="name">Reordering Rule Templates</field>
+        <field name="res_model">cx.orderpoint.template</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="cx_orderpoint_template_tree"/>
+        <field name="search_view_id" ref="cx_orderpoint_template_search"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to add a reordering rule template.
+          </p>
+        </field>
+    </record>
+
+<!-- Menu -->
+    <menuitem
+        id="menu_reordering_rule_templates_config"
+        action="cx_orderpoint_template_action"
+        name="Reordering Rule Templates" parent="stock.menu_stock_inventory_control" sequence="11"/>
+
+
+<!--####################
+    # Product Template #
+    ####################-->
+
+<!--## Form ##-->
+    <record id="prt_product_template_form" model="ir.ui.view">
+      <field name="name">prt.product.template.form</field>
+      <field name="model">product.template</field>
+      <field name="inherit_id" ref="product.product_template_only_form_view"/>
+      <field name="arch" type="xml">
+        <div name="options" position="inside">
+          <div>
+            <field name="no_auto_reorder"/>
+            <label for="no_auto_reorder"/>
+          </div>
+        </div>
+      </field>
+    </record>
+</odoo>

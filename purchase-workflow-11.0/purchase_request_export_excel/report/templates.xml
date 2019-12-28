@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="report_purchase_request_template" model="xlsx.template">
+        <field name="res_model">report.purchase.request</field>
+        <field name="fname">report_purchase_request.xlsx</field>
+        <field name="name">Report Purchase Request Template</field>
+        <field name="description">Report Purchase Request Template for Export to Excel</field>
+        <field name="input_instruction">
+            {
+                '__EXPORT__': {
+                    1: {
+                        '_HEAD_': {
+                            'B2': 'company_id.display_name${value or ""}#{align=left;style=text}',
+                        },
+                        'results': {
+                            'A5': 'name${value or ""}#{style=text}',
+                            'B5': 'date_start${value or ""}#{style=date}',
+                            'C5': 'est_amount_total${value or 0}#{style=number}@{sum}',
+                        },
+                    },
+                },
+            }
+        </field>
+    </record>
+
+    <function model="xlsx.template" name="load_xlsx_template">
+        <value eval="[ref('report_purchase_request_template')]"/>
+    </function>
+
+</odoo>

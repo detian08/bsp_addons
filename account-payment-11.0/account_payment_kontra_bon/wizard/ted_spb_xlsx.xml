@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+		<record id="spb_excel_wizard" model="ir.ui.view">
+			<field name="name">wizard.spb.xlsx</field>
+			<field name="model">ted.spb.wizard.driver</field>
+			<field name="arch" type="xml">
+				<form string="Export Surat Permohonan Pembayaran">
+				<p class="oe_grey">
+				Anda akan mencetak Surat Permohonan Pembayaran?
+				</p>
+					<footer>
+						<button string="Print SPB Excel"
+                                class="btn-primary"
+                                name="action_spb_output_handler"
+                                type="object" />
+						<button string="Cancel"
+                                class="btn-primary"
+                                special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+
+
+	<record id="spb_excel_result" model="ir.ui.view">
+		<field name="name">ted.spb.wizard.output</field>
+		<field name="model">ted.spb.wizard.output</field>
+		<field name="arch" type="xml">
+			<form string="Export Surat Permohonan Pembayaran">
+				<group>
+					<field name="output_filedata" filename="output_filename" />
+					<field name="output_filename" invisible="1" />
+				</group>
+				<footer>
+					<button string="Cancel" class="btn-primary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+
+	<act_window id="action_spb_excel"
+				key2="client_action_multi"
+				name="SPB XLSX "
+				res_model="ted.spb.wizard.driver"
+				src_model="kontra.bon"
+				view_mode="form"
+				target="new" />
+`
+</odoo>

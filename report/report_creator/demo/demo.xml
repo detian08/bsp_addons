@@ -1,0 +1,65 @@
+<odoo>
+    <data>
+    
+		<record id="object0" model="report.template">
+			<field name="name">user_login</field>
+            <field name="header">&lt;h1&gt;Report Test&lt;/h1&gt;</field>
+            <field name="body">
+	            &lt;table class="table"&gt;
+				  &lt;thead&gt;
+				    &lt;tr&gt;
+				      &lt;th scope="col"&gt;Login Name&lt;/th&gt;
+				      &lt;th scope="col"&gt;Active&lt;/th&gt;
+				      &lt;th scope="col"&gt;Partner ID&lt;/th&gt;
+				      &lt;th scope="col"&gt;Company ID&lt;/th&gt;
+				      &lt;th scope="col"&gt;Create Date&lt;/th&gt;
+				      &lt;th scope="col"&gt;Write Date&lt;/th&gt;
+				    &lt;/tr&gt;
+				  &lt;/thead&gt;
+				  &lt;tbody&gt;
+				  {&#37; for result in results &#37;}
+				    &lt;tr&gt;
+				      &lt;td&gt;{{result['login']}}&lt;/td&gt;
+				      &lt;td&gt;{{result['active']}}&lt;/td&gt;
+				      &lt;td&gt;{{result['partner_id']}}&lt;/td&gt;
+				      &lt;td&gt;{{result['company_id']}}&lt;/td&gt;
+				      &lt;td&gt;{{result['create_date']}}&lt;/td&gt;
+				      &lt;td&gt;{{result['write_date']}}&lt;/td&gt;
+				    &lt;/tr&gt;
+				    {&#37; endfor &#37;}
+				  &lt;/tbody&gt;
+				&lt;/table&gt;
+			</field>
+            <field name="footer">&lt;h1&gt;Report Test&lt;/h1&gt;</field>
+          </record>
+
+        <!-- <record id="object1" model="report.definition">
+            <field name="name">get_timesheet</field>
+            <field name="query">select * from account_analytic_line  where date &gt;= &apos;&#37;(start_date)s&apos; and date &lt;= &apos;&#37;(end_date)s&apos;</field>
+            <field name="export_fields">['name','date','unit_amount','project_id','user_id']</field>
+            <field name="export_as">xls</field>
+          </record> -->
+          
+          <record id="object1" model="report.definition">
+            <field name="name">get_user_login_xls</field>
+            <field name="query">select * from res_users</field>
+            <field name="export_fields">['active','login','company_id','partner_id','create_date','write_date']</field>
+            <field name="export_as">xls</field>
+          </record>
+          
+          <record id="object2" model="report.definition">
+            <field name="name">get_user_login_csv</field>
+            <field name="query">select * from res_users</field>
+            <field name="export_fields">['active','login','company_id','partner_id','create_date','write_date']</field>
+            <field name="export_as">csv</field>
+          </record>
+          
+         <record id="object3" model="report.definition">
+            <field name="name">get_user_login</field>
+            <field name="query">select * from res_users</field>
+            <field name="export_fields">['active','login','company_id','partner_id','create_date','write_date']</field>
+            <field name="export_as">pdf</field>
+            <field name="template_id" ref="object0"/>
+          </record>
+    </data>
+</odoo>

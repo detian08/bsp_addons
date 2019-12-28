@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="action_spp" model="ir.actions.act_window">
+            <field name="name">Surat Permintaan Pembayaran</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">spp</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to record a new Surat Permintaan Pembayaran.
+              </p><p>
+                You can control the Surat Permintaan Pembayaran from your vendor according to
+                what you purchased.
+              </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_spp"
+              parent="account.menu_finance_payables_documents"
+              action="action_spp" sequence="3"
+                  groups="group_spp_user,group_spp_manager"/>
+    </data>
+</odoo>

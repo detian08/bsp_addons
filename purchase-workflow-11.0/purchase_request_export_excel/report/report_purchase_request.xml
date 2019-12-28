@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="report_purchase_request" model="ir.ui.view">
+        <field name="name">report.purchase.request</field>
+        <field name="model">report.purchase.request</field>
+        <field name="inherit_id" ref="excel_import_export.xlsx_report_view"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='criteria']" position="inside">
+                <group>
+                    <field name="company_id"/>
+                </group>
+                <group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_report_purchase_request_export_excel" model="ir.actions.act_window">
+        <field name="name">Report Excel</field>
+        <field name="res_model">report.purchase.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">
+            {'template_domain': [('res_model', '=', 'report.purchase.request'),
+                                 ('fname', '=', 'report_purchase_request.xlsx'),
+                                 ('gname', '=', False)]}
+        </field>
+    </record>
+
+    <menuitem id="menu_report_purchase_request_export_excel"
+        parent="purchase_request.menu_purchase_request"
+        action="action_report_purchase_request_export_excel"
+        sequence="99"/>
+
+</odoo>

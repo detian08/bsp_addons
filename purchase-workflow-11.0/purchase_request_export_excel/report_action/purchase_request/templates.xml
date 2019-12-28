@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="purchase_request_excel_template" model="xlsx.template">
+        <field name="res_model">purchase.request</field>
+        <field name="fname">purchase_request_form.xlsx</field>
+        <field name="name">Purchase Request Template</field>
+        <field name="description">Purchase Request Form Template Excel</field>
+        <field name="input_instruction">
+            {
+                '__EXPORT__': {
+                    'purchase_request': {
+                        '_HEAD_': {
+                            'B2': 'company_id.display_name${value or ""}#{align=left;style=text}',
+                            'B3': 'name${value or ""}#{align=left;style=text}',
+                        },
+                        'line_ids': {
+                            'A6': 'product_id.display_name${value or ""}#{style=text}',
+                            'B6': 'name${value or ""}#{style=text}',
+                            'C6': 'product_qty${value or 0}#{style=number}',
+                            'D6': 'product_uom_id.name${value or ""}#{style=text}',
+                            'E6': 'price_unit${value or 0}#{style=number}',
+                            'G6': 'estimated_cost${value or 0}#{style=number}@{sum}',
+                        }
+                    }
+                },
+            }
+        </field>
+    </record>
+
+    <function model="xlsx.template" name="load_xlsx_template">
+        <value eval="[ref('purchase_request_excel_template')]"/>
+    </function>
+
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="spp_views" model="ir.ui.view">
+        <field name="name">Surat Permintaan Pembayaran</field>
+        <field name="model">spp</field>
+        <field name="inherit_id" ref="account_payment_spp.spp_form_view"/>
+        <field name="arch" type="xml">
+            <field name="request_date" position="after">
+                <field name="up_value"/>
+            </field>
+            <field name="assigned_to" position="before">
+                <field name="acknowledged_1"/>
+            </field>
+            <xpath expr="//notebook/page[2]" position="after">
+                <page name="spp_bank_info" string="Bank Info">
+                    <group>
+                        <field name="payment_dest_bank_acc_id"/>
+                        <!--                        <form string="Bank Info">-->
+                        <!--                                self.payment_dest_bank_acc_name_temp = self.payment_dest_bank_acc_name = ''-->
+                        <field name="payment_dest_bank_acc_name"/>
+                        <!--            self.payment_dest_bank_acc_no_temp = self.payment_dest_bank_acc_no = ''-->
+                        <field name="payment_dest_bank_acc_no"/>
+                        <!--            self.payment_dest_bank_name_temp = self.payment_dest_bank_name = ''-->
+                        <field name="payment_dest_bank_name"/>
+                        <!--            self.payment_dest_bank_branch_name_temp = self.payment_dest_bank_branch_name = ''-->
+                        <field name="payment_dest_bank_branch_name"/>
+                        <!--            self.payment_dest_bank_branch_address_temp = self.payment_dest_bank_branch_address = ''-->
+                        <field name="payment_dest_bank_branch_address"/>
+                        <!--                        </form>-->
+                    </group>
+                </page>
+
+            </xpath>
+        </field>
+    </record>
+</odoo>

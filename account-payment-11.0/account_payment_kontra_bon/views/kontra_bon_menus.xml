@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="action_kontra_bon" model="ir.actions.act_window">
+            <field name="name">Kontra Bon</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">kontra.bon</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to record a new Kontra Bon.
+              </p><p>
+                You can control the invoice from your vendor according to
+                what you purchased or received.
+              </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_kontra_bon"
+              parent="account.menu_finance_payables_documents"
+              action="action_kontra_bon" sequence="2"
+                  groups="group_kontra_bon_user,group_kontra_bon_manager"/>
+    </data>
+</odoo>

@@ -1,0 +1,4 @@
+purchase.requisition  -> purchase_ids -> purchase.order
+purchase.order -> order_line -> purchase.order.line
+purchase.order.line -> purchase_request_lines -> purchase.request.line
+purchase.request.line -> request_id -> purchase.request

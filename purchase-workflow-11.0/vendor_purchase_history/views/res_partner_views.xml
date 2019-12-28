@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--
+© 2018-Today Aktiv Software (http://www.aktivsoftware.com).
+License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+ -->
+<odoo>
+
+    <!-- Partner kanban view inherte -->
+    <record model="ir.ui.view" id="purchases_history_partner_kanban_view">
+        <field name="name">res.partner.kanban.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+        <field name="priority" eval="20"/>
+        <field name="arch" type="xml">
+            <field name="mobile" position="after">
+                <field name="vendor_purchase_count"/>
+            </field>
+            <xpath expr="//div[hasclass('oe_kanban_partner_links')]" position="inside">
+                <span t-if="record.vendor_purchase_count.value>0" class="badge"><i class="fa fa-fw fa-history"/><t t-esc="record.vendor_purchase_count.value"/></span>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- purchase order line Tree View -->
+    <record id="view_purchase_order_line_tree" model="ir.ui.view">
+        <field name="name">purchase.order.line.tree</field>
+        <field name="model">purchase.order.line</field>
+        <field name="arch" type="xml">
+            <tree string="purchases Order Lines" create="false" default_order="product_qty desc">
+                <field name="product_id" invisible="1"/>
+                <field name="order_id"/>
+                <field name="partner_id"/>
+                <field name="name"/>
+                <field name="product_qty" string="Qty"/>
+                <field name="price_unit"/>
+                <field name="product_uom" string="Unit of Measure" groups="product.group_uom"/>
+                <field name="price_subtotal" sum="Total" widget="monetary"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action on the shopping cart button in res partner view -->
+    <record id="view_product_list" model="ir.actions.act_window">
+        <field name="name">Purchases History</field>
+        <field name="res_model">purchase.order.line</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="vendor_purchase_history.view_purchase_order_line_tree"/>
+        <field name="context">{'search_default_partner_id': active_id, 'group_by': ['product_id']}</field>
+        <field name="groups_id" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+    </record>
+
+    <!-- Inherited the res partner view and added shopping cart button -->
+    <record id="res_partner_purchase_history" model="ir.ui.view">
+        <field name="name">res.partner.purchase.history</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="priority" eval="20"/>
+        <field name="groups_id" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+        <field name="arch" type="xml">
+            <button name="toggle_active" position="before">
+                <button class="oe_stat_button vendor_purchase_history" type="action" name="%(vendor_purchase_history.view_product_list)d"
+                    attrs="{'invisible': [('supplier', '=', False)]}"
+                    icon="fa-history">
+                    <div class="o_field_widget o_stat_info">
+                        <field name="vendor_purchase_count" widget="statinfo" nolabel="1"/>
+                        <span class="o_stat_text" style="font-size: 12.14px !important;
+                            overflow: inherit;">Purchase History</span>
+                    </div>
+                </button>
+            </button>
+        </field>
+    </record>
+
+</odoo>

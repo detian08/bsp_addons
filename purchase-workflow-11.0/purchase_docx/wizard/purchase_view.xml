@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="purchase_print_view" model="ir.ui.view">
+			<field name="name">wizard.purchase.print</field>
+			<field name="model">wizard.purchase.print2</field>
+			<field name="arch" type="xml">
+				<form string="Print Purchase">
+				<p class="oe_grey">
+				You want to Print Purchase Order ?
+				</p>
+					<footer>
+						<button string="Print" class="btn-primary" name="print_report" type="object" />
+						<button string="Cancel" class="btn-primary" special="cancel"/>
+					</footer>
+				</form>
+			</field>
+	</record>
+
+
+		<record id="purchase_docx_views" model="ir.ui.view">
+		<field name="name">Purchase Report</field>
+		<field name="model">purchase.report.docx</field>
+		<field name="arch" type="xml">
+			<form string="Purchase Docx">
+				<group>
+					<field name="file_name" filename="purchase_data" />
+					<field name="purchase_data" invisible="1" />
+				</group>
+				<footer>
+					<button string="Cancel" class="btn-primary" special="cancel"/>
+					<button string="Send to Printer" class="btn-primary" name="printWordDocument" type="object"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<!--Menu to Print Docx Report-->
+	<act_window id="action_purchase_print"
+				key2="client_action_multi"
+				name="Print Docx"
+				res_model="wizard.purchase.print2"
+				src_model="purchase.order"
+				view_mode="form"
+				target="new"/>
+</odoo>

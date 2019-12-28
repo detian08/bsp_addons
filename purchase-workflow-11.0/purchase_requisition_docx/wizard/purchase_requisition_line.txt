@@ -1,0 +1,1 @@
+${no.rjust(3)} ${vendor_name.ljust(20)} ${amount_total.rjust(6)} ${payment_term.rjust(6)}

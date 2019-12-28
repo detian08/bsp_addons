@@ -1,0 +1,43 @@
+<odoo>
+    <data>
+        <record id="kontra_bon_tree_view_search" model="ir.ui.view">
+          <field name="name">Kontra Bon Search</field>
+          <field name="model">kontra.bon</field>
+          <field name="arch" type="xml">
+              <search string="Kontra Bon Search">
+                  <field name="state"/>
+                  <filter name="state_draft" string="Draft"
+                     domain="[('state','=','draft')]"/>
+                  <filter name="state_to_approve" string="To be Approve"
+                        domain="[('state','=','to_approve')]"
+                        help="Request is to be approved"/>
+                  <filter name="state_approved" string="Approved"
+                        domain="[('state','=','approved')]"
+                        help="Request is approved"/>
+                  <filter name="state_rejected" string="Rejected"
+                        domain="[('state','=','rejected')]"
+                        help="Request is rejected"/>
+                  <filter name="state_open" string="Open"
+                        domain="[('state','=','open')]"
+                        help="Request is open"/>
+                  <filter name="state_paid" string="Paid"
+                        domain="[('state','=','paid')]"
+                        help="Kontra Bon is paid"/>
+                  <filter name="state_cancel" string="Cancelled"
+                        domain="[('state','=','cancel')]"
+                        help="Request is cancelled"/>
+                  <group expand="0" string="Group By...">
+                        <filter name="name" string="Date KB"
+                            domain="[]" context="{'group_by':'date_doc'}" />
+                        <filter name="partner_id" string="Supplier/Vendor"
+                            domain="[]" context="{'group_by':'partner_id'}" />
+                        <filter name="company_id" string="Cabang"
+                            domain="[]" context="{'group_by':'company_id'}" />
+                        <filter name="state" string="Status"
+                            domain="[]" context="{'group_by':'state'}" />
+                    </group>
+              </search>
+          </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="group_purchase_request_spv" model="res.groups">
+        <field name="name">Purchase Request Supervisor</field>
+        <field name="implied_ids" eval="[(4, ref('purchase_request.group_purchase_request_user'))]"/>
+        <field name="category_id" ref="purchase_request.module_category_purchase_request"/>
+    </record>
+
+    <record id="purchase_request_spv_rule" model="ir.rule">
+        <field name="name">Purchase Request Supervisor</field>
+        <field name="model_id" ref="purchase_request.model_purchase_request"/>
+        <field name="groups" eval="[(6,0, [ref('purchase_request.group_purchase_request_spv')])]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="domain_force">['|',('company_id','child_of',[user.company_id.id]),('company_id','=',False)]</field>
+    </record>
+
+    <record id="purchase_request_line_spv_rule" model="ir.rule">
+        <field name="name">Purchase Request Line Supervisor</field>
+        <field name="model_id" ref="model_purchase_request_line"/>
+        <field name="groups" eval="[(6,0, [ref('group_purchase_request_spv')])]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+        <field name="domain_force">['|',('company_id','child_of',[user.company_id.id]),('company_id','=',False)]</field>
+    </record>
+
+</odoo>

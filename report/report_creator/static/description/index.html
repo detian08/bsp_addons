@@ -1,0 +1,201 @@
+<section class="oe_container">
+  <div class="oe_row oe_spaced">
+    <h2 class="oe_slogan" style="color:#875A7B;">Report Creator</h2>
+    <!-- <div class="oe_span12">
+            <div class="oe_demo oe_picture oe_screenshot">
+                <img src="QuotationForm2.png">
+            </div>
+        </div> -->
+  </div>
+</section>
+
+<section class="oe_container">
+  <div class="oe_row oe_spaced">
+    <div class="oe_span12"></div>
+    <div class="oe_span12">
+      <h2 class="text-center" style="color : #525559 !important;">Overview</h2>
+      <span class="font-weight-bold" style="color : #f05d7b !important;"
+        >To use this module, you need to install pdfkit "pip install
+        pdfkit"</span
+      ><br />
+      <p class="text-justify" style="font-size : 15px !important;">
+        Sometimes we need to generate report and we don't have time to code.
+        With this module you can create a report any time, you only need a query
+        to get the data. See demo video
+        <u><a href="https://youtu.be/eE9j2Bk30II">here</a></u>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="oe_container">
+  <div class="oe_row oe_spaced">
+    <div class="oe_span12"></div>
+    <div class="oe_span12">
+      <h3 class="text-center" style="color : #525559 !important;">
+        Report Creator Configuration
+      </h3>
+      <p class="text-justify" style="font-size : 15px !important;">
+        <span class="font-weight-bold" style="color : #f05d7b !important;"
+          >Only user with access report creator user or report creator manager
+          who can access report creator menu. </span
+        ><br />
+        <span style="color : #f05d7b !important;"
+          >1.Go to Settings -> Users & Companies -> Users, choose user and give
+          access as report creator user or manager.</span
+        ><br />
+        <span style="color : #f05d7b !important;"
+          >2.Go to Report Creator -> Configuration -> Settings , in this menu
+          define path to store your report(It is mandatory).</span
+        >
+      </p>
+    </div>
+    <div class="oe_span12">
+      <div class="oe_demo oe_picture oe_screenshot">
+        <img src="userSettings.png" />
+      </div>
+    </div>
+    <div class="oe_span12">
+      <div class="oe_demo oe_picture oe_screenshot">
+        <img src="fileStore.png" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="oe_container">
+  <div class="oe_row oe_spaced">
+    <div class="oe_span12"></div>
+    <div class="oe_span12">
+      <h3 class="text-center" style="color : #525559 !important;">
+        Define A report
+      </h3>
+      <p class="text-justify" style="font-size : 15px !important;">
+        1. Go to Report Creator -> Report Definition -> Create new report
+        definition. If the report is xls/csv you dont need report template,but
+        if it is PDF, you need report template.<br />
+        -Name : this is the name or your report.<br />
+        -Export As : you can choose the file will be generated to xls,csv or
+        pdf(if pdf you need to make template for your report)<br />
+        -Export Fields : this the fields you want to export in your report, for
+        example you wan to export login, company_id, partner_id from res_users,
+        in this case you need to fill ['login','company_id','partner_id'] in
+        your export fields.<br />
+        -Query : define a query to get the data, for example select * from
+        res_users, when generate report you can use start date and end date as
+        parameters, to do this just put '%(start_date)s' , '%(end_date)s', for
+        example full query : select * from account_analytic_line where date >=
+        '%(start_date)s' and date <= '%(end_date)s'.
+        <br />
+        2. After define a report you can test the query and see the data, just
+        click button Test Query.
+      </p>
+    </div>
+
+    <div>
+      <div class="oe_span12">
+        <div class="oe_demo oe_picture oe_screenshot">
+          <img src="reportDefinexls.png" />
+        </div>
+      </div>
+      <div class="oe_span12">
+        <div class="oe_demo oe_picture oe_screenshot">
+          <img src="reportDefinitionPDF.png" />
+        </div>
+      </div>
+      <div class="oe_span12">
+        <div class="oe_demo oe_picture oe_screenshot">
+          <img src="queryTest.png" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="oe_container">
+  <div class="oe_row oe_spaced">
+    <div class="oe_span12"></div>
+    <div class="oe_span12">
+      <h3 class="text-center" style="color : #525559 !important;">
+        Report Template
+      </h3>
+      <p class="text-justify" style="font-size : 15px !important;">
+        1. Go to Report Creator -> Report Template, Create a a template for your
+        report, in this case you can use bootstrap css class.<br />
+        2. Fetch data, you need to do for iteration and call your export fields,
+        for example :<br />
+        login,active,company_id are our export fields.<br />
+        {% for result in results %}<br />
+        {{ result["login"] }}<br />
+        {{ result["active"] }}<br />
+        {{ result["company_id"] }}<br />
+        {% endfor %}<br />
+      </p>
+    </div>
+    <div class="oe_span12">
+      <div class="oe_demo oe_picture oe_screenshot">
+        <img src="reportTemplate.png" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="oe_container">
+  <div class="oe_row oe_spaced">
+    <div class="oe_span12"></div>
+    <div class="oe_span12">
+      <h3 class="text-center" style="color : #525559 !important;">
+        Generate Report
+      </h3>
+      <p class="text-justify" style="font-size : 15px !important;">
+        1. Go to Report Creator -> Generate Report, wizard(pop up) will show,
+        choose start, end date and click button generate report.<br />
+      </p>
+    </div>
+    <div class="oe_span12">
+      <div class="oe_demo oe_picture oe_screenshot">
+        <img src="generateReport.png" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="oe_container">
+  <div class="oe_row oe_spaced">
+    <div class="oe_span12"></div>
+    <div class="oe_span12">
+      <h3 class="text-center" style="color : #525559 !important;">
+        Report Results
+      </h3>
+      <p class="text-justify" style="font-size : 15px !important;">
+        1. You can see and download the reports, go to Report Creator ->
+        Results, choose your report and click button download.<br />
+      </p>
+    </div>
+    <div class="oe_span12">
+      <div class="oe_demo oe_picture oe_screenshot">
+        <img src="reportResult.png" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="oe_container">
+  <div class="oe_row oe_spaced">
+    <div class="oe_span12"></div>
+    <div class="oe_span12">
+      <h3 class="text-center" style="color : #875A7B !important;">
+        Get In touch
+      </h3>
+      <p
+        class="text-justify"
+        style="font-size : 15px !important; color : #875A7B !important;"
+      >
+        1. Free support for this module in case any bug.<br />
+        2. If you need to develop odoo module or make custom module feel free to
+        contact me.<br />
+        3. E-mail : alfatihridhont@gmail.com
+      </p>
+    </div>
+  </div>
+</section>

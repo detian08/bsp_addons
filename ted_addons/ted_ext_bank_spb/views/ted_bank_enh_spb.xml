@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_partner_bank_form" model="ir.ui.view">
+            <field name="name">res_partner_bank_form_enh</field>
+            <field name="model">res.partner.bank</field>
+            <field name="inherit_id" ref="base.view_partner_bank_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="bank_account_name" string="Atas Nama"/>
+                    <field name="bank_branch_name" string="Nama Cabang"/>
+                    <field name="bank_branch_addr1" string="Alamat Cabang"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

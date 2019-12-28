@@ -1,0 +1,33 @@
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="wizard_get_report_form_view">
+			<field name="name">wizard.get.report.form</field>
+			<field name="model">wizard.get.report</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="wizard get report">
+					<sheet>
+						<group>							
+							<field name="start_date" required="1"/>
+							<field name="end_date" required="1"/>																					
+							<field name="name" required="1" options="{'no_create': True, 'no_create_edit':True, 'no_open': True}" string="Report"/>														
+						</group>						
+						<footer>
+							<button name="get_report" string="Get Report"
+								type="object" />
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<act_window name="Get Report" res_model="wizard.get.report"
+			src_model="report.definition" target="new" view_mode="form"
+		  id="act_wizard_get_report" />
+		  
+		<menuitem id="wizard_get_report"
+			name="Generate Report" parent="report_creator_menu"
+			action="act_wizard_get_report" sequence="2"/>
+
+	</data>
+</odoo>

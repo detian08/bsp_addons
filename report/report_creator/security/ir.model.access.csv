@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_report_definition_user,report.definition,model_report_definition,report_creator.group_report_creator_user,1,1,1,0
+access_report_definition_manager,report.definition,model_report_definition,report_creator.group_report_creator_manager,1,1,1,1
+access_report_definition_normal_user,report.definition,model_report_definition,base.group_user,1,0,0,0
+access_report_result_user,report.result,model_report_result,report_creator.group_report_creator_user,1,1,1,0
+access_report_result_manager,report.result,model_report_result,report_creator.group_report_creator_manager,1,1,1,0
+access_report_result_normal_user,report.result,model_report_result,base.group_user,1,0,0,0
+access_wizard_get_report_user,wizard.get.report,model_wizard_get_report,report_creator.group_report_creator_user,1,1,1,1
+access_wizard_get_report_manager,wizard.get.report,model_wizard_get_report,report_creator.group_report_creator_manager,1,1,1,1
+access_wizard_get_report_normal_user,wizard.get.report,model_wizard_get_report,base.group_user,1,0,0,0
+access_report_template_report_user,report.template,model_report_template,report_creator.group_report_creator_user,1,1,1,0
+access_report_template_report_manager,report.template,model_report_template,report_creator.group_report_creator_manager,1,1,1,1
+access_report_template_report_normal_user,report.template,model_report_template,base.group_user,1,0,0,0

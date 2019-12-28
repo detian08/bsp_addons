@@ -1,0 +1,14 @@
+                                         QUOTATION COMPARISON FORM
+
+Nomor    : ${nomor}                                                             Date    :
+${'-'*95}
+Material/Item       : ${product_name}                                   Code.No         :
+BPPB No. & Date     : ${bppbku}                                         Quanty          :
+Head Office/Branch  : ${cabang}                                         Approx. Value   :
+Departement         :
+
+${'-'*95}
+No. ${'Supplier - Place'.ljust(30)}  ${'Net-Price (Rp)'.rjust(20)}   ${'Payment Term'.ljust(20)}
+
+${rows}${'-'*95}
+${' '*75}

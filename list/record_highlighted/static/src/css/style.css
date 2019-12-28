@@ -1,0 +1,17 @@
+
+
+
+/*List view color changes*/
+table.o_list_view tbody tr:hover{
+    background-color: #ffb3b3;
+}
+table.o_list_view tbody tr:nth-of-type(2n+1):hover{
+    background-color: #ffb3b3 !important;
+}
+table.o_list_view tbody tr.row_selected{
+    background-color: #7c7bad;
+    color:#ffffff
+}
+
+
+

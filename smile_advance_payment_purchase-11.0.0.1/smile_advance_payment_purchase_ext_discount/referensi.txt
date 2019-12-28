@@ -1,0 +1,12 @@
+How to inherit from a view without overriding the original view
+http://www.odooninja.com/inherit-view-without-overriding-original-view/
+langkah-langkah yang harus di kerjakan :
+1. Exten Module smile_advance_payment_purchase
+    1.1. Tambahankan 2 Field Baru kedalam account_payment.py
+    1.2. Define _compute_advance_amount untuk menghitung besaran nomninal berdasarkan percentage
+    1.3. Buat view baru account_payment_view.xml
+         sebagai view Primary, ( tidak overwrite view original )
+    1.4. Buat action baru pada purchase_order_view.xml
+         dimana form yang digunakan referensinya dari point no 1.3
+2. TODO :
+    2.1. Tambahkan validasi percentage max 100 %

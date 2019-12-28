@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- stock move - aggregate/calculated -->
+        <!-- tree in stock picking view form -->
+        <record id="bsp_stock_move_tree_inherit" model="ir.ui.view">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="priority" eval="99"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[2]" position="after">
+                    <group string="Bukti Penerimaan Fixed Asset">
+<!--                            bpfa_flag = fields.Boolean(string='Bukti Penerimaan Fixed Asset')-->
+<!--    bpfa_name = fields.Char(String='BPFA Number', default='New', readonly=True)-->
+<!--    bpfa_tgl_kirim = fields.Date(string='Tanggal Kirim',-->
+<!--                                 default=fields.Date.context_today,-->
+<!--                                 index=True)-->
+<!--    bpfa_tgl_terima = fields.Date(string='Tanggal Terima',-->
+<!--                                  default=fields.Date.context_today,-->
+<!--                                  index=True)-->
+<!--    bpfa_menyerahkan = fields.Many2one(comodel_name='hr.employee',-->
+<!--                                       string='Yang Menyerahkan')-->
+<!--    bpfa_menerima = fields.Many2one(comodel_name='hr.employee',-->
+<!--                                    string='Yang Menerima')-->
+<!--    bpfa_mengetahui = fields.Many2one(comodel_name='hr.employee',-->
+<!--                                      string='Mengetahui')-->
+                        <field name="bpfa_flag"/>
+                        <field name="bpfa_name"/>
+                        <field name="bpfa_tgl_kirim"/>
+                        <field name="bpfa_tgl_terima"/>
+                        <field name="bpfa_menyerahkan"/>
+                        <field name="bpfa_menerima"/>
+                        <field name="bpfa_mengetahui"/>
+                    </group>
+                </xpath>
+                <xpath expr="//notebook/page/field[@name='move_lines']/tree/field[@name='product_uom']" position="after">
+                    <field name="is_damage_aggr"/>
+                    <field name="damage_qty_aggr"/>                    
+                    <field name="damage_uom_aggr"/>
+                    <field name="is_not_match_aggr"/>
+                    <field name="not_match_qty_aggr"/>                    
+                    <field name="not_match_uom_aggr"/>
+                </xpath>
+            </field>
+        </record>
+        <!-- form in detailed operations -->
+        <record id="bsp_stock_move_line_tree_inherit" model="ir.ui.view">
+            <field name="name">stock.move.line.tree</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.view_stock_move_line_operation_tree"/>
+            <field name="priority" eval="99"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_uom_id']" position="after">
+                    <field name="is_damage_line"/>
+                    <field name="damage_qty_line"/>                    
+                    <field name="damage_uom_line"/>
+                    <field name="is_not_match_line"/>
+                    <field name="not_match_qty_line"/>                    
+                    <field name="not_match_uom_line"/>
+                    <field name="notes"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="bsp_stock_move_line_form_inherit" model="ir.ui.view">
+            <field name="name">stock.move.form.tree</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.view_move_line_form"/>
+            <field name="priority" eval="99"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/group/group[2]" position="after">
+                    <group>
+                        <field name="is_damage_line"/>
+                        <field name="damage_qty_line"/>                    
+                        <field name="damage_uom_line"/>
+                        <field name="is_not_match_line"/>
+                        <field name="not_match_qty_line"/>                    
+                        <field name="not_match_uom_line"/>
+                        <field name="notes"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+        
+    <!-- stock move lines - user input -->
+        <!-- tree in detailed operations -->
+        <!-- form in open: move line -->
+
+    <record id="stock_picking_incoming_action" model="ir.actions.act_window">
+        <field name="name">Picking Incoming</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('picking_type_id.code', '=', 'incoming')]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click here to create a new Incoming Picking.
+            </p>
+            <p>
+                You can either do it immediately or mark it as Todo for future processing. Use your scanner to validate
+                the transferred quantity quicker.
+            </p>
+        </field>
+    </record>
+
+    <record id="stock_picking_outgoing_action" model="ir.actions.act_window">
+        <field name="name">Picking Outgoing</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('picking_type_id.code', 'in', ['internal', 'outgoing'])]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click here to create a new Outgoing or Internal Picking.
+            </p>
+            <p>
+                You can either do it immediately or mark it as Todo for future processing. Use your scanner to validate
+                the transferred quantity quicker.
+            </p>
+        </field>
+    </record> 
+    
+
+</odoo>

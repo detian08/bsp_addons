@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+        <record id="seq_kontra_bon" model="ir.sequence">
+            <field name="name">Kontra Bon</field>
+            <field name="code">kontra.bon</field>
+            <field name="prefix">KB</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="seq_permintaan_bayar" model="ir.sequence">
+            <field name="name">Permintaan Bayar</field>
+            <field name="code">permintaan.bayar</field>
+            <field name="prefix">SPB</field>
+            <field name="padding">5</field>
+        </record>
+</odoo>

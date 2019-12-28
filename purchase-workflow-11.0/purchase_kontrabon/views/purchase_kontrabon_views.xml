@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="view_purchase_kontrabon_tree" model="ir.ui.view">
+        <field name="name">purchase.kontrabon.tree</field>
+        <field name="model">purchase.kontrabon</field>
+        <field name="arch" type="xml">
+            <tree string="Purchase Kontrabon">
+                <field name="name"/>
+                <field name="kb_date"/>
+                <field name="vendor_id"/>
+                <field name="return_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_purchase_kontrabon_form" model="ir.ui.view">
+        <field name="name">purchase.kontrabon.form</field>
+        <field name="model">purchase.kontrabon</field>
+        <field name="arch" type="xml">
+            <form string="Purchase Kontrabon">
+<!--                <header>-->
+<!--                    <button name="button_load_payment_kontrabon" type="object"  string="Load Payment" class="oe_highlight" />-->
+<!--                </header>-->
+                <header position="inside">
+                <button name="%(act_open_select_payments_view)d" type="action" string="Select Payments"
+                        class="oe_highlight" />
+            </header>
+
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="kb_date"/>
+                            <field name="vendor_id"/>
+                            <field name="return_date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="List Faktur">
+                            <field name="line_ids">
+                                <tree>
+                                    <field name="line_item"/>
+                                    <field name="invoice_date"/>
+                                    <field name="invoice_no"/>
+                                    <field name="invoice_amount"/>
+                                    <field name="remark"/>
+                                </tree>
+                             </field>
+                        </page>
+                        <page string="Kontrabon Checklist">
+                            <form>
+                                   <group>
+                                                <field name="kwitansi" widget="radio" options="{'horizontal': true}"/>
+                                                <field name="faktur" widget="radio" options="{'horizontal': true}"/>
+                                                <field name="bpb" widget="radio" options="{'horizontal': true}"/>
+                                                <field name="po" widget="radio" options="{'horizontal': true}"/>
+                                                <field name="faktur_pajak" widget="radio" options="{'horizontal': true}"/>
+                                   </group>
+                            </form>
+                       </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="purchase_kontrabon_action">
+        <field name="name">Purchase Kontrabon Payment</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.kontrabon</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain"></field>
+    </record>
+
+</odoo>

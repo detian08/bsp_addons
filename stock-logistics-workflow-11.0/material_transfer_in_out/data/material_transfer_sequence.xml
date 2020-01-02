@@ -3,11 +3,16 @@
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0) -->
 <odoo noupdate="1">
 
-        <record id="seq_material_transfer" model="ir.sequence">
-            <field name="name">Material Transfer</field>
-            <field name="code">material.transfer</field>
-            <field name="prefix">MT</field>
-            <field name="padding">5</field>
-        </record>
-
+    <record id="seq_material_transfer" model="ir.sequence">
+        <field name="name">Material Transfer</field>
+        <field name="code">material.transfer</field>
+        <field name="prefix">MT</field>
+        <field name="padding">5</field>
+    </record>
+    <record id="seq_bpfa" model="ir.sequence">
+        <field name="name">Bukti Penerimaan Fixed Asset</field>
+        <field name="code">mt.bpfa</field>
+        <field name="suffix">/BPFA/%(month)s/%(year)s</field>
+        <field name="padding">3</field>
+    </record>
 </odoo>

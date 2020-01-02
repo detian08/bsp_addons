@@ -67,13 +67,11 @@
                             <field name="department_id"/>
                             <field name="request_id"/>
                             <field name="order_id"/>
+                            <field name="notes"/>
                         </group>
                         <group string="Receiver Info">
                             <field name="final_location"/>
                             <field name="receiver_employee"/>
-                        </group>
-                        <group>
-                            <field name="notes"/>
                         </group>
                     </group>
                     <notebook>
@@ -115,6 +113,17 @@
                                     </sheet>
                                 </form>
                             </field>
+                        </page>
+                        <page name="bpfa_detail" string="BPFA">
+                            <group string="Bukti Penerimaan Fixed Asset">
+                                <field name="bpfa_flag"/>
+                                <field name="bpfa_name"/>
+                                <field name="bpfa_tgl_kirim"/>
+                                <field name="bpfa_tgl_terima"/>
+                                <field name="bpfa_menyerahkan"/>
+                                <field name="bpfa_menerima"/>
+                                <field name="bpfa_mengetahui"/>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>

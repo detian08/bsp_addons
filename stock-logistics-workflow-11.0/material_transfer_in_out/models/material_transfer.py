@@ -114,6 +114,22 @@ class MaterialTransfer(models.Model):
     )
     notes = fields.Text(string='Material Transfer Notes')
 
+    bpfa_flag = fields.Boolean(string='is BPFA',
+                               index=True)
+    bpfa_name = fields.Char(string='No. BPFA', default='New')
+    bpfa_tgl_kirim = fields.Date(string='Tanggal Kirim',
+                                 default=fields.Date.context_today,
+                                 index=True)
+    bpfa_tgl_terima = fields.Date(string='Tanggal Terima',
+                                  default=fields.Date.context_today,
+                                  index=True)
+    bpfa_menyerahkan = fields.Many2one(comodel_name='hr.employee',
+                                       string='Yang Menyerahkan')
+    bpfa_menerima = fields.Many2one(comodel_name='hr.employee',
+                                    string='Yang Menerima')
+    bpfa_mengetahui = fields.Many2one(comodel_name='hr.employee',
+                                      string='Mengetahui')
+
     # @api.onchange('order_id')
     # def _order_id_onchange(self):
     #     if self.order_id:
@@ -202,13 +218,15 @@ class MaterialTransfer(models.Model):
         domain_val = {}
         if self.picking_type_id:
             if self.picking_type_id.department_ids:
-                emp_ids = self.env['hr.employee'].search([('department_id', 'in', self.picking_type_id.department_ids.ids)]).ids
+                employees = self.env['hr.employee'].search(
+                    [('department_id', 'in', self.picking_type_id.department_ids.ids)])
             else:
-                emp_ids = emp_ids = self.env['hr.employee'].search([('company_id', '=', self.env.user.company_id.id)]).ids
-            domain_val = {'domain': {'sender_employee': [('id', 'in', emp_ids)]}}
+                employees = self.env['hr.employee'].search(
+                    [('company_id', '=', self.env.user.company_id.id)])
+            # domain_val = {'domain': {'sender_employee': [('id', 'in', emp_ids)]}}
         else:
-            emp_ids = emp_ids = self.env['hr.employee'].search([('company_id', '=', self.env.user.company_id.id)]).ids
-            domain_val = {'domain': {'sender_employee': [('id', 'in', emp_ids)]}}
+            employees = self.env['hr.employee'].search([('company_id', '=', self.env.user.company_id.id)])
+        domain_val = {'domain': {'sender_employee': [('id', 'in', employees.ids)]}}
         return domain_val
 
     @api.onchange('final_location')
@@ -216,12 +234,13 @@ class MaterialTransfer(models.Model):
         debug = True
         domain_val = {}
         if self.final_location:
-            emp_ids = self.env['hr.employee'].search(
-                [('department_id', 'in', self.final_location.related_dept.ids)]).ids
+            employees = self.env['hr.employee'].search(
+                [('department_id', 'in', self.final_location.related_dept.ids)])
         else:
-            emp_ids = emp_ids = self.env['hr.employee'].search([('company_id', '=', self.env.user.company_id.id)]).ids
-        domain_val = {'domain': {'sender_employee': [('id', 'in', emp_ids)]}}
+            employees = self.env['hr.employee'].search([('company_id', '=', self.env.user.company_id.id)])
+        domain_val = {'domain': {'receiver_employee': [('id', 'in', employees.ids)]}}
         return domain_val
+
     @api.onchange('department_id')
     def _department_id_onchange(self):
         test = 0
@@ -241,15 +260,15 @@ class MaterialTransfer(models.Model):
                          }
                     }
 
-    @api.onchange('final_location')
-    def _receiving_employee(self):
-        if self.final_location:
-            debug = 0
-            # department_ids = self.final_location.
-            if self.final_location.related_dept.ids:
-                emp_ids = self.env['hr.employee'].search(
-                    [('department_id', 'in', self.final_location.related_dept.ids)]).ids
-                return {'domain': {'receiver_employee': [('id', 'in', emp_ids)]}}
+    # @api.onchange('final_location')
+    # def _receiving_employee(self):
+    #     if self.final_location:
+    #         debug = 0
+    #         # department_ids = self.final_location.
+    #         if self.final_location.related_dept.ids:
+    #             emp_ids = self.env['hr.employee'].search(
+    #                 [('department_id', 'in', self.final_location.related_dept.ids)]).ids
+    #             return {'domain': {'receiver_employee': [('id', 'in', emp_ids)]}}
 
     @api.onchange('request_id')
     def _request_id_onchange(self):
@@ -432,7 +451,7 @@ class MaterialTransfer(models.Model):
 
                     for stock_move in moves:
                         order.write({
-                            'move_dest_ids': [(0, 0, stock_move)]
+                            'move_dest_ids': [(0, 0, stock_move.ids)]
                         })
         return True
 
@@ -460,7 +479,7 @@ class MaterialTransfer(models.Model):
                                                                     subtype_id=self.env.ref('mail.mt_note').id)
                         for stock_move in stock_moves_res:
                             mto.write({
-                                'move_receive_ids': [(0, 0, stock_move)]
+                                'move_receive_ids': [(0, 0, stock_move.ids)]
                             })
         return True
 
@@ -482,15 +501,20 @@ class MaterialTransfer(models.Model):
                                 search_res = mto_line.move_receive_ids.filtered(lambda x: x.id == move.id)
                                 if not search_res:
                                     mto_line.write({'move_receive_ids': [(6, 0, move.ids)]})
+        for line in self.line_ids:
+            line._count_quantity()
 
     @api.multi
     def button_create_picking(self, force=False):
+        # self.button_reassign_movement()
         if self.order_id:
             self._create_picking()
+        # self.button_reassign_movement()
         return {}
 
     @api.multi
     def button_finish_picking(self, force=False):
+        # self.button_reassign_movement()
         test = 0
         if self.final_location:
             # check udah pernah ada picking ke Intra/Inter Company
@@ -504,11 +528,15 @@ class MaterialTransfer(models.Model):
                     raise exceptions.ValidationError('Create Outgoing Picking First')
         else:
             raise exceptions.ValidationError('Final Location Empty')
+        # self.button_reassign_movement()
+        return {}
 
     @api.model
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('material.transfer') or '/'
+            if vals.get('bpfa_flag') == True and vals.get('bpfa_name', 'New') == 'New':
+                vals['bpfa_name'] = self.env['ir.sequence'].next_by_code('mt.bpfa') or '/'
         mtransfer = super(MaterialTransfer, self).create(vals)
         if vals.get('assigned_to'):
             mtransfer.message_subscribe_users(user_ids=[mtransfer.assigned_to.id])
@@ -516,6 +544,10 @@ class MaterialTransfer(models.Model):
 
     @api.multi
     def write(self, vals):
+        if vals.get('bpfa_flag') == True \
+                and (vals.get('bpfa_name', 'New') == 'New'
+                     or vals.get('bpfa_name') == '/'):
+            vals['bpfa_name'] = self.env['ir.sequence'].next_by_code('mt.bpfa') or '/'
         res = super(MaterialTransfer, self).write(vals)
         for mtransfer in self:
             if vals.get('assigned_to'):
@@ -556,12 +588,17 @@ class MaterialTransferLine(models.Model):
                                   required=True, track_visibility='onchange')
     retrieved_qty = fields.Float(String='Retrieved Qty',
                                  readonly=True,
+                                 compute='_count_quantity',
                                  track_visibility='onchange')
     retrieved_uom = fields.Many2one('product.uom',
                                     String='Retrieved UoM',
                                     readonly=True,
+                                    compute='_count_quantity',
                                     track_visibility='onchange')
-    delivered_qty = fields.Float(String='Delivered Qty', track_visibility='onchange')
+    delivered_qty = fields.Float(String='Delivered Qty',
+                                 readonly=True,
+                                 compute='_count_quantity',
+                                 track_visibility='onchange')
     delivered_uom = fields.Many2one('product.uom',
                                     String='Delivered UoM',
                                     track_visibility='onchange')
@@ -744,6 +781,64 @@ class MaterialTransferLine(models.Model):
         #     'move_receive_ids': update_vals
         # })
         return done
+
+    @api.depends('move_ids')
+    def _count_quantity(self):
+        if self.move_dest_ids:
+            retrieved_qty = 0
+            for move_out in self.move_dest_ids:
+                retrieved_qty += self.product_uom._compute_quantity(move_out.product_qty,
+                                                                    move_out.product_uom,
+                                                                    rounding_method='HALF-UP')
+            self.retrieved_qty = retrieved_qty
+            self.retrieved_uom = self.product_uom.id
+            self.write({'retrieved_qty': retrieved_qty})
+            self.write({'retrieved_uom': self.product_uom.id})
+        if self.move_receive_ids:
+            delivered_qty = 0
+            for move_in in self.move_receive_ids:
+                delivered_qty += self.product_uom._compute_quantity(move_in.product_qty,
+                                                                    move_in.product_uom,
+                                                                    rounding_method='HALF-UP')
+            self.delivered_qty = delivered_qty
+            self.delivered_uom = self.product_uom.id
+            self.write({'delivered_qty': delivered_qty})
+            self.write({'delivered_uom': self.product_uom.id})
+        #   get damaged
+        damaged_qty = 0
+        damaged_uom = self.product_uom.id
+        not_match_qty = 0
+        not_match_uom = self.product_uom.id
+        sorted_moves = self.move_ids.sorted(key='write_date', reverse=True)
+        if sorted_moves:
+            last_move = sorted_moves[0]
+            for move_line in last_move.move_line_ids:
+                if move_line.is_damage_line == True:
+                    damaged_qty += self.product_uom._compute_quantity(move_line.damage_qty_line,
+                                                                      move_line.damage_uom_line,
+                                                                      rounding_method='HALF-UP')
+                if move_line.is_not_match_line == True:
+                    not_match_qty += self.product_uom._compute_quantity(move_line.not_match_qty_line,
+                                                                        move_line.not_match_uom_line,
+                                                                        rounding_method='HALF-UP')
+            if damaged_qty > 0:
+                self.write({'damage_qty': damaged_qty})
+                self.write({'is_damage': True})
+                self.write({'damage_uom': move_line.damage_uom_line})
+            if not_match_qty > 0:
+                self.write({'not_match_qty': not_match_qty})
+                self.write({'not_match_uom': move_line.not_match_uom_line})
+                self.write({'is_not_match': True})
+        #   get not match
+        # for move in self.move_ids:
+        #     debug = 0
+        #     if '/OUT/' in move.reference:
+        #         #     count retrieved
+        #         # retrieved_val = product_qty = self.product_uom._compute_quantity(diff_quantity, quant_uom, rounding_method='HALF-UP')
+        #         retrieved_uom = ''
+        #     elif '/IN/' in move.reference:
+        #         delivered_qty = 0
+        #         delivered_uom = ''
 
     # @api.multi
     # def _get_stock_move_price_unit(self):

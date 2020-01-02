@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
 from addons import decimal_precision as dp
+from odoo.exceptions import UserError
+from odoo.tools.float_utils import float_compare, float_is_zero, float_round
 
 
 class StockMove(models.Model):
@@ -72,70 +74,127 @@ class StockMoveLine(models.Model):
                                          default=False)
     notes = fields.Text(string='Notes')
 
-class BuktiPenerimaanFixedAsset(models.Model):
-    _name = 'bukti.penerimaan.fixed.asset'
-    bpfa_name = fields.Char(String='BPFA Number', default='New', readonly=True)
-    bpfa_tgl_kirim = fields.Date(string='Tanggal Kirim',
-                                 default=fields.Date.context_today,
-                                 index=True)
-    bpfa_tgl_terima = fields.Date(string='Tanggal Terima',
-                                  default=fields.Date.context_today,
-                                  index=True)
-    bpfa_menyerahkan = fields.Many2one(comodel_name='hr.employee',
-                                       string='Yang Menyerahkan')
-    bpfa_menerima = fields.Many2one(comodel_name='hr.employee',
-                                    string='Yang Menerima')
-    bpfa_mengetahui = fields.Many2one(comodel_name='hr.employee',
-                                      string='Mengetahui')
-    # stock_picking_ids = fields.One2many(comodel_name=)
+class EnhanceStockOverProcessedTransfer(models.TransientModel):
+    _inherit = 'stock.overprocessed.transfer'
+
+class EnhanceStockImmediateTransfer(models.TransientModel):
+    _inherit = 'stock.immediate.transfer'
+
+    def process(self):
+        pick_to_backorder = self.env['stock.picking']
+        pick_to_do = self.env['stock.picking']
+        material_transfer_pointer = self.env['material.transfer']
+        material_transfer_line_pointer = self.env['material.transfer.line']
+        for picking in self.pick_ids:
+            # If still in draft => confirm and assign
+            if picking.state == 'draft':
+                picking.action_confirm()
+                if picking.state != 'assigned':
+                    picking.action_assign()
+                    if picking.state != 'assigned':
+                        raise UserError(_("Could not reserve all requested products. Please use the \'Mark as Todo\' button to handle the reservation manually."))
+            for move in picking.move_lines.filtered(lambda m: m.state not in ['done', 'cancel']):
+                for move_line in move.move_line_ids:
+                    move_line.qty_done = move_line.product_uom_qty
+            if picking._check_backorder():
+                pick_to_backorder |= picking
+                continue
+            pick_to_do |= picking
+            debug = 0
+            current_mto = material_transfer_pointer.search([('id','in',picking.material_transfer_id.ids)])
+            if current_mto:
+                for mto in current_mto:
+                    mto.button_reassign_movement()
+        # Process every picking that do not require a backorder, then return a single backorder wizard for every other ones.
+
+        if pick_to_do:
+            pick_to_do.action_done()
+        if pick_to_backorder:
+            return pick_to_backorder.action_generate_backorder_wizard()
+        return False
+
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
     material_transfer_id = fields.Many2one('material.transfer',
                                            related='move_lines.material_transfer_line_id.transfer_id',
                                            string="Material Transfer", readonly=True)
-    bpfa_flag = fields.Boolean(string='Bukti Penerimaan Fixed Asset')
-    bpfa_id = fields.Many2one(comodel_name='bukti.penerimaan.fixed.asset',
-                              )
-    
-    bpfa_tgl_kirim = fields.Date(string='Tanggal Kirim',
-                                 default=fields.Date.context_today,
-                                 index=True)
-    bpfa_tgl_terima = fields.Date(string='Tanggal Terima',
-                                  default=fields.Date.context_today,
-                                  index=True)
-    bpfa_menyerahkan = fields.Many2one(comodel_name='hr.employee',
-                                       string='Yang Menyerahkan')
-    bpfa_menerima = fields.Many2one(comodel_name='hr.employee',
-                                    string='Yang Menerima')
-    bpfa_mengetahui = fields.Many2one(comodel_name='hr.employee',
-                                      string='Mengetahui')
 
-    # @api.model
-    # def create(self, vals):
-    #     # TDE FIXME: clean that brol
-    #     defaults = self.default_get(['name', 'picking_type_id'])
-    #     if vals.get('name', '/') == '/' and defaults.get('name', '/') == '/' and vals.get('picking_type_id', defaults.get('picking_type_id')):
-    #         vals['name'] = self.env['stock.picking.type'].browse(vals.get('picking_type_id', defaults.get('picking_type_id'))).sequence_id.next_by_id()
-    #
-    #     # TDE FIXME: what ?
-    #     # As the on_change in one2many list is WIP, we will overwrite the locations on the stock moves here
-    #     # As it is a create the format will be a list of (0, 0, dict)
-    #     if vals.get('move_lines') and vals.get('location_id') and vals.get('location_dest_id'):
-    #         for move in vals['move_lines']:
-    #             if len(move) == 3 and move[0] == 0:
-    #                 move[2]['location_id'] = vals['location_id']
-    #                 move[2]['location_dest_id'] = vals['location_dest_id']
-    #     res = super(Picking, self).create(vals)
-    #     res._autoconfirm_picking()
-    #     return res
-    @api.model
-    def create(self, vals):
-        if self.bpfa_flag:
-            # create BPFA Name
-            res = super(StockPicking, self).create(vals)
-        else:
-            res = super(StockPicking, self).create(vals)
+    @api.multi
+    def button_validate(self):
+        self.ensure_one()
+        if not self.move_lines and not self.move_line_ids:
+            raise UserError(_('Please add some lines to move'))
+
+        # If no lots when needed, raise error
+        picking_type = self.picking_type_id
+        precision_digits = self.env['decimal.precision'].precision_get('Product Unit of Measure')
+        no_quantities_done = all(float_is_zero(move_line.qty_done, precision_digits=precision_digits) for move_line in
+                                 self.move_line_ids.filtered(lambda m: m.state not in ('done', 'cancel')))
+        no_reserved_quantities = all(
+            float_is_zero(move_line.product_qty, precision_rounding=move_line.product_uom_id.rounding) for move_line in
+            self.move_line_ids)
+        if no_reserved_quantities and no_quantities_done:
+            raise UserError(_(
+                'You cannot validate a transfer if you have not processed any quantity. You should rather cancel the transfer.'))
+
+        if picking_type.use_create_lots or picking_type.use_existing_lots:
+            lines_to_check = self.move_line_ids
+            if not no_quantities_done:
+                lines_to_check = lines_to_check.filtered(
+                    lambda line: float_compare(line.qty_done, 0,
+                                               precision_rounding=line.product_uom_id.rounding)
+                )
+
+            for line in lines_to_check:
+                product = line.product_id
+                if product and product.tracking != 'none':
+                    if not line.lot_name and not line.lot_id:
+                        raise UserError(_('You need to supply a lot/serial number for %s.') % product.display_name)
+
+        if no_quantities_done:
+            view = self.env.ref('stock.view_immediate_transfer')
+            wiz = self.env['stock.immediate.transfer'].create({'pick_ids': [(4, self.id)]})
+            return {
+                'name': _('Immediate Transfer?'),
+                'type': 'ir.actions.act_window',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'stock.immediate.transfer',
+                'views': [(view.id, 'form')],
+                'view_id': view.id,
+                'target': 'new',
+                'res_id': wiz.id,
+                'context': self.env.context,
+            }
+
+        if self._get_overprocessed_stock_moves() and not self._context.get('skip_overprocessed_check'):
+            view = self.env.ref('stock.view_overprocessed_transfer')
+            wiz = self.env['stock.overprocessed.transfer'].create({'picking_id': self.id})
+            return {
+                'type': 'ir.actions.act_window',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'stock.overprocessed.transfer',
+                'views': [(view.id, 'form')],
+                'view_id': view.id,
+                'target': 'new',
+                'res_id': wiz.id,
+                'context': self.env.context,
+            }
+
+        # Check backorder should check for other barcodes
+        if self._check_backorder():
+            return self.action_generate_backorder_wizard()
+        self.action_done()
+        if self.material_transfer_id:
+        #     update move_dest_ids/move_receive_ids
+            debug = 0
+            current_mto = self.env['material.transfer'].search([('id','in',self.material_transfer_id.ids)])
+            for mto in current_mto:
+                mto.button_reassign_movement()
+        return
+
 
 class StockLocation(models.Model):
     _inherit = 'stock.location'

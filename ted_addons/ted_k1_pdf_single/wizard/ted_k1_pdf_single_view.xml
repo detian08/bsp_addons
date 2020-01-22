@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+		<record id="purchase_request_excel_view" model="ir.ui.view">
+			<field name="name">wizard.purchase.request.reports</field>
+			<field name="model">wizard.purchase.request.reports</field>
+			<field name="arch" type="xml">
+				<form string="Export Purchase Request">
+				<p class="oe_grey">
+				You want to Print Purchase Request Excel Report?
+				</p>			  
+					<footer>
+						<button string="Print Excel Report" class="btn-primary" name="action_purchase_request_report" type="object" />
+						<button string="Cancel" class="btn-primary" special="cancel"/>
+					</footer>
+				</form>						
+			</field>
+		</record>
+
+
+	<record id="purchase_excel_views" model="ir.ui.view">
+		<field name="name">purchase.request.report.out</field>
+		<field name="model">purchase.request.report.out</field>
+		<field name="arch" type="xml">
+			<form string="Export Purchase Request">
+				<group>
+					<field name="file_name" filename="purchase_request_data" />
+					<field name="purchase_request_data" invisible="1" />
+					<field name="file_names" filename="purchase_request_work" />
+					<field name="purchase_request_work" invisible="1" />
+				</group>
+				<footer>
+					<button string="Cancel" class="btn-primary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>	
+		
+
+	<act_window id="action_purchase_request_excel"
+				key2="client_action_multi"
+				name="Purchase Request Excel Report "
+				res_model="wizard.purchase.request.reports"
+				src_model="purchase.request"
+				view_mode="form"
+				target="new" />
+`
+</odoo>

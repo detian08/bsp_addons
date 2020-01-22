@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+		<record id="purchase_request_excel_view" model="ir.ui.view">
+			<field name="name">test.output.docx.k1wizard</field>
+			<field name="model">test.output.docx.k1wizard</field>
+			<field name="arch" type="xml">
+				<form string="Export Purchase Request">
+				<p class="oe_grey">
+				You want to Print Purchase Request Excel Report?
+				</p>			  
+					<footer>
+						<button string="Print Excel Report" class="btn-primary" name="get_result" type="object" />
+						<button string="Cancel" class="btn-primary" special="cancel"/>
+					</footer>
+				</form>						
+			</field>
+		</record>
+
+
+	<record id="purchase_excel_views" model="ir.ui.view">
+		<field name="name">test.output.docx.k1multi</field>
+		<field name="model">test.output.docx.k1multi</field>
+		<field name="arch" type="xml">
+			<form string="Export Purchase Request">
+				<group>
+					<field name="filedata" filename="filename" />
+					<field name="filename" invisible="1" />
+				</group>
+				<footer>
+					<button string="Cancel" class="btn-primary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>	
+		
+
+	<act_window id="action_purchase_request_zip"
+				key2="client_action_multi"
+				name="Test Output Zip File"
+				res_model="test.output.docx.k1wizard"
+				src_model="purchase.request"
+				view_mode="form"
+				target="new" />
+`
+</odoo>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="spb_docx_wizard" model="ir.ui.view">
+        <field name="name">ted.spb.output.wizard</field>
+        <field name="model">ted.spb.output.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Export Surat Permohonan Pembayaran">
+                <p class="oe_grey">
+                    Anda akan mencetak Surat Permohonan Pembayaran?
+                </p>
+                <footer>
+                    <button string="Print SPB Docx"
+                            class="btn-primary"
+                            name="print_report"
+                            type="object"/>
+                    <button string="Cancel"
+                            class="btn-primary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="spb_docx_result" model="ir.ui.view">
+        <field name="name">ted.spb.output.docx</field>
+        <field name="model">ted.spb.output.docx</field>
+        <field name="arch" type="xml">
+            <form string="Export Surat Permohonan Pembayaran">
+                <group>
+                    <field name="spb_file_data" filename="spb_file_name"/>
+                    <field name="spb_file_name" invisible="1"/>
+                </group>
+                <footer>
+                    <button string="Cancel" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <act_window id="action_spb_docx"
+                key2="client_action_multi"
+                name="SPB Docx "
+                res_model="ted.spb.output.wizard"
+                src_model="ted.surat.permohonan.bayar"
+                view_mode="form"
+                target="new"/>
+
+
+    `
+</odoo>

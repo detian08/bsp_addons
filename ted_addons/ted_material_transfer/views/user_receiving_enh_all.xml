@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_material_transfer_tree_enh" model="ir.ui.view">
+        <field name="name">material.transfer.tree.enh</field>
+        <field name="model">material.transfer</field>
+        <field name="inherit_id" ref="material_transfer_in_out.view_material_transfer_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="/tree/field[@name='department_id']" position="after">
+                <field name="employee_id"/>
+                <field name="sender_employee_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_material_transfer_form_enh" model="ir.ui.view">
+        <field name="name">material.transfer.form.enh</field>
+        <field name="model">material.transfer</field>
+        <field name="inherit_id" ref="material_transfer_in_out.view_material_transfer_form"/>
+        <field name="arch" type="xml">
+            <!--            <form>-->
+            <xpath expr="/form/sheet/group/group/field[@name='department_id']" position="after">
+                <!--                <field name="department_id" position="after">-->
+                <field name="employee_id"/>
+                <field name="sender_employee_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

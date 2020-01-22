@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<odoo>
+	<data>
+		<record id="view_partner_property_form_taxes" model="ir.ui.view">
+	        <field name="name">res.partner.account.form.dos</field>
+	        <field name="model">res.partner</field>
+		    <field name="inherit_id" ref="account.view_partner_property_form"/>
+		    <field name="arch" type="xml">		
+	    		<group name="accounting_entries" position="after">
+		    		<group string="Admin Taxes" name="tax_info">
+		    			<field name="vat" placeholder="e.g. BE0477472701" attrs="{'readonly': [('parent_id','!=',False)]}"/>
+		    			<field name="vendor_tax"/>
+			    		<field name="pkp_no"/>
+			        	<field name="taxes_id" widget="many2many_tags" attrs="{'invisible': [('customer','=',False)]}"/>
+			        	<field name="supplier_taxes_id" widget="many2many_tags" attrs="{'invisible': [('supplier','=',False)]}"/>
+			    		<!-- <field name="taxes_wth_id" widget="many2many_tags" attrs="{'invisible': [('customer','=',False)]}"/>
+			        	<field name="supplier_taxes_wth_id" widget="many2many_tags" attrs="{'invisible': [('supplier','=',False)]}"/> -->
+			    		<field name="admin_tax_name"/>
+			    		<field name="admin_tax_email"/>
+			    		<field name="admin_tax_wp"/>
+			    	</group>
+		    		<!-- <group string="Banks" name="banks_detail">
+			    		<field name="bank_ids" nolabel="1">
+			    			<tree string="Bank Accounts">
+			                    <field name="sequence" invisible="1"/>
+			                    <field name="bank_id"/>
+			                    <field name="acc_number" string="Bank No"/>
+			                    <field name="bank_name"/>
+			                    <field name="bank_bic" string="Swift Code"/>
+			                    <field name="street"/>
+			                    <field name="street2"/>
+			                    <field name="company_id" groups="base.group_multi_company"/>
+			                </tree>
+			                <form string="Bank Accounts">
+			                	<group col="4" colspan="4">
+			                    	<field name="bank_id"/>
+				                    <field name="acc_number" string="Bank No"/>
+				                    <field name="bank_name"/>
+				                    <field name="bank_bic" string="Swift Code"/>
+				                    <field name="street"/>
+				                    <field name="street2"/>
+				                    <field name="company_id" groups="base.group_multi_company"/>
+			                	</group>
+			                </form>
+			    		</field>
+			    	</group> -->
+		    	</group>
+		    </field>
+		</record>
+	        
+        <!-- <record id="view_tax_aos_partner_form" model="ir.ui.view">
+            <field name="name">account.tax.form</field>
+            <field name="model">account.tax</field>
+		    <field name="inherit_id" ref="account.view_tax_form"/>
+            <field name="arch" type="xml">
+            	<field name="tax_adjustment" position="after">
+            		<field name="tax_witholding"/>
+            	</field>
+            </field>
+        </record> -->
+		
+	</data>
+</odoo>

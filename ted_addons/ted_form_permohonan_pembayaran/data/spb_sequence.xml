@@ -1,0 +1,8 @@
+<odoo noupdate="1">
+        <record id="seq_spb" model="ir.sequence">
+            <field name="name">Surat Permohonan Pembayaran</field>
+            <field name="code">spb.sequence</field>
+            <field name="padding">10</field>
+            <field name="number_increment">1</field>
+        </record>
+</odoo>

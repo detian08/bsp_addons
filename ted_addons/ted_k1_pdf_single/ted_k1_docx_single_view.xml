@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+		<record id="purchase_request_excel_view" model="ir.ui.view">
+			<field name="name">purchase.request.docx.k1wizard</field>
+			<field name="model">purchase.request.docx.k1wizard</field>
+			<field name="arch" type="xml">
+				<form string="Export Purchase Request">
+				<p class="oe_grey">
+				You want to Download Purchase Request K1 Form?
+				</p>			  
+					<footer>
+						<button string="Download K1 Report" class="btn-primary" name="get_result" type="object" />
+						<button string="Cancel" class="btn-primary" special="cancel"/>
+					</footer>
+				</form>						
+			</field>
+		</record>
+
+
+	<record id="purchase_excel_views" model="ir.ui.view">
+		<field name="name">purchase.request.docx.k1single</field>
+		<field name="model">purchase.request.docx.k1single</field>
+		<field name="arch" type="xml">
+			<form string="Download Purchase Request K1s">
+				<group>
+					<field name="filedata" filename="filename" />
+					<field name="filename" invisible="1" />
+				</group>
+				<footer>
+					<button string="Cancel" class="btn-primary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>	
+		
+
+	<act_window id="action_purchase_request_tedk1_docxs"
+				key2="client_action_multi"
+				name="Purchase Request - K1 Docx "
+				res_model="purchase.request.docx.k1wizard"
+				src_model="purchase.request"
+				view_mode="form"
+				target="new" />
+`
+</odoo>

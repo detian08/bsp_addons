@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_spb_user,ted.surat.permohonan.bayar,model_spb,group_spb_user,1,1,1,1
+access_spb_manager,ted.surat.permohonan.bayar,model_spb,group_spb_manager,1,1,1,1
+access_spb_line_user,ted.surat.permohonan.bayar.line,model_spb_line,group_spb_user,1,1,1,1
+access_spb_line_manager,ted.surat.permohonan.bayar.line,model_spb_line,group_spb_manager,1,1,1,1

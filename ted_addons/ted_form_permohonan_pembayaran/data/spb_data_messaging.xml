@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2018 Eficent Business and IT Consulting Services S.L.
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0) -->
+<odoo>
+
+    <!-- Request-related subtypes for messaging / Chatter -->
+    <record id="mt_request_to_approve" model="mail.message.subtype">
+        <field name="name">SPB to be approved</field>
+        <field name="res_model">ted.surat.permohonan.bayar</field>
+        <field name="default" eval="True"/>
+        <field name="description">SPB to be approved</field>
+    </record>
+
+    <record id="mt_request_approved" model="mail.message.subtype">
+        <field name="name">SPB approved</field>
+        <field name="res_model">ted.surat.permohonan.bayar</field>
+        <field name="default" eval="True"/>
+        <field name="description">SPB approved</field>
+    </record>
+
+    <record id="mt_request_rejected" model="mail.message.subtype">
+        <field name="name">SPB rejected</field>
+        <field name="res_model">ted.surat.permohonan.bayar</field>
+        <field name="default" eval="True"/>
+        <field name="description">SPB rejected</field>
+    </record>
+
+    <record id="mt_request_done" model="mail.message.subtype">
+        <field name="name">SPB Paid</field>
+        <field name="res_model">ted.surat.permohonan.bayar</field>
+        <field name="default" eval="True"/>
+        <field name="description">SPB is paid</field>
+    </record>
+
+</odoo>

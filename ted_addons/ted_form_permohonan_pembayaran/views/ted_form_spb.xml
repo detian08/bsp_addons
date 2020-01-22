@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="spb_tree_view" model="ir.ui.view">
+        <field name="name">ted.surat.permohonan.bayar.tree</field>
+        <field name="model">ted.surat.permohonan.bayar</field>
+        <field name="arch" type="xml">
+            <tree string="Surat Permohonan Pembayaran">
+                <field name="name"/>
+                <field name="assigned_to"/>
+                <field name="doc_date"/>
+                <field name="payment_purpose"/>
+                <field name="supplier_id"/>
+                <field name="supplier_name"/>
+                <field name="amount_value"/>
+                <field name="amount_words"/>
+                <field name="payment_dest_supplier_name"/>
+                <field name="payment_dest_bank_acc_name"/>
+                <field name="payment_dest_bank_acc_no"/>
+                <field name="payment_dest_bank_name"/>
+                <field name="payment_dest_bank_branch_name"/>
+                <field name="payment_dest_bank_branch_address"/>
+                <field name="acknowledged_by1"/>
+                <field name="acknowledged_by2"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="spb_form_view" model="ir.ui.view">
+        <field name="name">ted.surat.permohonan.bayar.form</field>
+        <field name="model">ted.surat.permohonan.bayar</field>
+        <field name="arch" type="xml">
+            <form string="SPB">
+                <header>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,to_approve,approved,open,rejected,cancel"
+                           statusbar_colors='{"approved":"blue", "cancel":"red"}'/>
+                </header>
+
+                <sheet String="SPB Data" class='oe_chatter'>
+                    <div class="oe_title" attrs="{'invisible': [('state', '=', 'draft')]}">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_view_bills"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                attrs="{'invisible':[('state', 'in', ('draft','sent','to approve')),('invoice_ids','=',[])]}">
+                            <field name="invoice_count" widget="statinfo" string="Vendor Bills"/>
+                            <field name='invoice_ids' invisible="1"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <!--    name,-->
+                            <field name="name"/>
+                            <!--    assigned_to-->
+                            <field name="assigned_to"/>
+                            <!--    doc_date-->
+                            <field name="doc_date"/>
+                            <!--    payment_purpose-->
+                            <field name="payment_purpose"/>
+                            <!--    company_id-->
+                            <field name="company_id"/>
+                            <!--    currency_id-->
+                            <field name="currency_id"/>
+                            <!--    supplier_id-->
+                            <field name="supplier_id"/>
+                            <!--    supplier_name-->
+                            <field name="supplier_name"/>
+                            <!--    amount_value-->
+                            <field name="amount_value"/>
+                            <!--    amount_words-->
+                            <field name="amount_words_disp"/>
+                        </group>
+                        <group>
+                            <!--    payment_dest_supplier_name-->
+                            <field name="payment_dest_supplier_name"/>
+                            <!--    payment_dest_bank_acc_name-->
+                            <field name="payment_dest_bank_acc_name"/>
+                            <!--    payment_dest_bank_acc_no-->
+                            <field name="payment_dest_bank_acc_no"/>
+                            <!--    payment_dest_bank_name-->
+                            <field name="payment_dest_bank_name"/>
+                            <!--    payment_dest_bank_branch_name-->
+                            <field name="payment_dest_bank_branch_name"/>
+                            <!--    payment_dest_bank_branch_address-->
+                            <field name="payment_dest_bank_branch_address"/>
+                            <!--    acknowledged_by1-->
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="acknowledged_by1"/>
+                            <!--    acknowledged_by2                                -->
+                            <field name="acknowledged_by2"/>
+                        </group>
+                    </group>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                    <notebook>
+                        <page string="Purchase Orders">
+                            <label for="autofill_advance" string="Auto Fill Advance Value"
+                                   class="btn btn-sm btn-primary"/>
+                            <field name="autofill_advance" invisible="1"/>
+                            <!--                                <button name="auto_fill_payments_detail" string="Auto-Fill Pay Amount" type="action" class="oe_edit_only " style="background-color:cyan;"/>-->
+                            <field name="line_ids" colspan="4" nolabel="1" widget="one2many_list">
+                                <tree string="SPB Item" editable="bottom">
+                                    <field name="purchase_order_id" options='{"no_open": True,"no_create": True}'/>
+<!--                                    <field name="purchase_order_name"/>-->
+                                    <field name="purchase_order_amount"/>
+                                    <field name="last_advance_payment_date"/>
+                                    <field name="state"/>
+                                    <field name="last_advance_payment_amount"/>
+                                    <field name="spb_line_amount"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="spb_action">
+        <field name="name">Surat Permohonan Pembayaran</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ted.surat.permohonan.bayar</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_spb"
+              name="Surat Permohonan Pembayaran"
+              parent="purchase.menu_procurement_management"
+              action="spb_action"
+              sequence="15"/>
+</odoo>

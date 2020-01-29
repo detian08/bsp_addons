@@ -8,19 +8,6 @@
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="priority" eval="99"/>
         <field name="arch" type="xml">
-<!--            <xpath expr="//notebook/page[@name='note']" position="after">-->
-<!--                <page string="BPFA Info">-->
-<!--                    <group string="Bukti Penerimaan Fixed Asset">-->
-<!--                        <field name="bpfa_flag"/>-->
-<!--                        <field name="bpfa_name"/>-->
-<!--                        <field name="bpfa_tgl_kirim"/>-->
-<!--                        <field name="bpfa_tgl_terima"/>-->
-<!--                        <field name="bpfa_menyerahkan"/>-->
-<!--                        <field name="bpfa_menerima"/>-->
-<!--                        <field name="bpfa_mengetahui"/>-->
-<!--                    </group>-->
-<!--                </page>-->
-<!--            </xpath>-->
             <xpath expr="//notebook/page/field[@name='move_lines']/tree/field[@name='product_uom']" position="after">
                 <field name="is_damage_aggr"/>
                 <field name="damage_qty_aggr"/>

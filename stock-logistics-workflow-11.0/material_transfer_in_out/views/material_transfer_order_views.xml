@@ -34,12 +34,12 @@
                             string="Done" type="object"
                             attrs="{'invisible': [('state', 'not in', ['open'])]}"/>
 
-                    <button name="button_create_picking" string="Create Outgoing Picking"
+                    <button name="button_create_picking" string="Create Picking"
                             type="object" class="oe_highlight"
                             states="open"/>
-                    <button name="button_finish_picking" string="Create Incoming Picking"
-                            type="object" class="oe_highlight"
-                            states="open"/>
+<!--                    <button name="button_finish_picking" string="Create Incoming Picking"-->
+<!--                            type="object" class="oe_highlight"-->
+<!--                            states="open"/>-->
 <!--                    <button name="button_reassign_movement" string="Refresh Picking Info"-->
 <!--                            type="object" class="oe_highlight"-->
 <!--                            states="open"/>-->

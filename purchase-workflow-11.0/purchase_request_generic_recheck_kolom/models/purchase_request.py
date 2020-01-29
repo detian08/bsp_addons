@@ -25,7 +25,9 @@ class PurchaseRequestLine(models.Model):
             rectext = []
             text_line = ""
             idx = 0
-            for rec in product.attribute_line_ids:
-                text_line = rec[idx].attribute_id.name + ' : ' + rec[idx].value_ids.name
-                rectext.append(text_line)
+            if product.attribute_line_ids:
+                for rec in product.attribute_line_ids:
+                    if rec[idx].attribute_id.name and rec[idx].value_ids.name:
+                        text_line = rec[idx].attribute_id.name + ' : ' + rec[idx].value_ids.name
+                        rectext.append(text_line)
             self.specifications = rectext

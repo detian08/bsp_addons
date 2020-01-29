@@ -10,6 +10,7 @@
 
                 <xpath expr="//field[@name='number']" position="after">
                     <field name="kontrabon_reference"/>
+                    <field name="kontrabon_amount_payment"/>
                 </xpath>
 
             </field>

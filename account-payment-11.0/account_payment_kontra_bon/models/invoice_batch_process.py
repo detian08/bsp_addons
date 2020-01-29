@@ -82,7 +82,8 @@ class AccountRegisterPayments(models.TransientModel):
                         'partner_id': inv.partner_id.id,
                         'invoice_id': inv.id,
                         'balance_amt': inv.residual or 0.0,
-                        'paying_amt': inv.residual or 0.0,
+                        # 'paying_amt': inv.residual or 0.0,
+                        'paying_amt': inv.kontrabon_amount_payment or 0.0,
                     }
                     lines.append((0, 0, dict_line))
                 dict_val = {
@@ -102,6 +103,7 @@ class AccountRegisterPayments(models.TransientModel):
         if 'batch' in context and context.get('batch'):
             total_amount = sum(
                 inv.residual * INV_TO_PAYM_SIGN[inv.type] for inv in invoices)
+                # inv.amount_payment * INV_TO_PAYM_SIGN[inv.type] for inv in invoices)
 
             dict_val_rec = {
                 'amount': abs(total_amount),

@@ -14,7 +14,7 @@ Suggestions & Feedback to: Corentin Pouhet-Brunerie
     """,
     "website": "http://www.smile.fr",
     "category": "Accounting & Finance",
-    "sequence": 32,
+    # "sequence": 32,
     "data": [
         "security/ir.model.access.csv",
         "views/account_journal_view.xml",

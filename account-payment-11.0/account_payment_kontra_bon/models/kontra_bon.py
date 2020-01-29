@@ -198,6 +198,9 @@ class KontraBon(models.Model):
                 _("You can only register payments for open invoices"))
 
         invoice_ids = self.invoice_line_ids.mapped('invoice_id').ids
+
+        # for invoice in invoice_ids:
+        #     invoice.paymenet_residual = invoice.amount_payment
         # prepare_amount_invoices = self._prepare_invoice
         ctx =  dict (
             kontrabon_number = self.name
@@ -280,7 +283,8 @@ class KontraBon(models.Model):
     @api.onchange('my_detail')
     def _onchange_my_detail(self):
         for payline in self.invoice_line_ids:
-            payline.amount_payment = payline.residual
+            # payline.amount_payment = payline.residual
+            payline.residual = payline.amount_payment
 
     @api.depends('invoice_line_ids.invoice_id.state')
     def _compute_payment(self):

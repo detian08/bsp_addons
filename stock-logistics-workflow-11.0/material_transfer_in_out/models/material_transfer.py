@@ -67,17 +67,23 @@ class MaterialTransfer(models.Model):
     department_id = fields.Many2one('hr.department',
                                     'Requesting Department',
                                     states={'draft': [('readonly', False)]},
-                                    track_visibility='onchange')
+                                    track_visibility='onchange',
+                                    # required=True
+                                    )
     request_id = fields.Many2one('purchase.request',
                                  String='Purchase Request',
                                  states={'draft': [('readonly', False)]},
                                  domain=[('state', 'in', ['approved', 'done'])],
-                                 track_visibility='onchange')
+                                 track_visibility='onchange',
+                                 # required=True
+                                 )
     order_id = fields.Many2one('purchase.order',
                                String='Purchase Order',
                                states={'draft': [('readonly', False)]},
                                domain=[('state', 'in', ['purchase'])],
-                               track_visibility='onchange')
+                               track_visibility='onchange',
+                               # required=True
+                               )
     line_ids = fields.One2many('material.transfer.line',
                                'transfer_id',
                                'Products to Transfer',
@@ -276,13 +282,18 @@ class MaterialTransfer(models.Model):
         if self.request_id:
             pr = self.request_id
             emp_ids = [-1]
-            po_ids = pr.line_ids.purchase_lines.order_id.ids
+            po_ids = []
+            for pr_line in pr.line_ids:
+                for po_lines in pr_line.purchase_lines:
+                    po_ids.append(po_lines.order_id.id)
+            # po_ids = pr.line_ids.purchase_lines.order_id.ids
+            list_of_po = self.env['purchase.order'].search([('id','in',po_ids),('state','=','done')])
             if self.department_id:
                 emp_ids = self.env['hr.employee'].search([('company_id', '=', self.env.user.company_id.id)]).ids
             else:
                 emp_ids = self.env['hr.employee'].search([('company_id', '=', self.env.user.company_id.id)]).ids
             return {'domain':
-                        {'order_id': [('id', 'in', po_ids)],
+                        {'order_id': [('id', 'in', list_of_po.ids)],
                          # 'receiver_employee': [('id', 'in', emp_ids)]
                          }
                     }
@@ -306,7 +317,11 @@ class MaterialTransfer(models.Model):
     def _order_id_onchange(self):
         test = 0
         if self.order_id:
+
             # self._add_product_material_transfer_lines(self.request_id)
+            # for line in self.line_ids:
+            #     line.unlink()
+            self.line_ids = [(5,0,0)]   #clear the lines
             self._add_product_material_transfer_lines_by_po(self.order_id)
             # if self.request_id:
             #     # order = self.order_id
@@ -362,6 +377,7 @@ class MaterialTransfer(models.Model):
 
     @api.model
     def _prepare_picking(self):
+        # create outgoing
         picking_values = {
             'picking_type_id': self.picking_type_id.id,
             'date': self.transfer_date,
@@ -433,6 +449,7 @@ class MaterialTransfer(models.Model):
                 pickings = order.picking_ids.filtered(lambda x: x.state not in ('done', 'cancel'))
                 if not pickings:  # sudah ada PO namun belum ada penerimaan item barang PO
                     res = order._prepare_picking()
+                    # check jika ada transit location, tambahkan 1 transaksi
                     picking = StockPicking.create(res)
                 else:
                     picking = pickings[0]
@@ -453,7 +470,43 @@ class MaterialTransfer(models.Model):
                         order.write({
                             'move_dest_ids': [(0, 0, stock_move.ids)]
                         })
+
         return True
+
+    @api.multi
+    def _create_picking_ret_list(self):
+        picking_retval = []
+        StockPicking = self.env['stock.picking']
+        for order in self:
+            if any([ptype in ['product', 'consu'] for ptype in order.line_ids.mapped('product_id.type')]):
+                # picking untuk Material Transfer Order dengan status bukan done/cancel
+                pickings = order.picking_ids.filtered(lambda x: x.state not in ('done', 'cancel'))
+                if not pickings:  # sudah ada PO namun belum ada penerimaan item barang PO
+                    res = order._prepare_picking()
+                    # check jika ada transit location, tambahkan 1 transaksi
+                    picking = StockPicking.create(res)
+                else:
+                    picking = pickings[0]
+                moves = order.line_ids._create_stock_moves(picking)
+                if moves:
+                    moves = moves.filtered(lambda x: x.state not in ('done', 'cancel'))._action_confirm()
+                    seq = 0
+                    for move in sorted(moves, key=lambda move: move.date_expected):
+                        seq += 5
+                        move.sequence = seq
+                    moves._action_assign()
+                    picking.message_post_with_view('mail.message_origin_link',
+                                                   values={'self': picking,
+                                                           'origin': order},
+                                                   subtype_id=self.env.ref('mail.mt_note').id)
+
+                    for stock_move in moves:
+                        order.write({
+                            'move_dest_ids': [(0, 0, stock_move.ids)]
+                        })
+
+                    picking_retval.append(picking)
+        return picking_retval
 
     @api.multi
     def _create_finalize_picking(self, outgoing_pickings):
@@ -507,11 +560,28 @@ class MaterialTransfer(models.Model):
     @api.multi
     def button_create_picking(self, force=False):
         # self.button_reassign_movement()
-        if self.order_id:
-            self._create_picking()
+        # if self.order_id:
+        is_dest_transit_loc = self._is_dest_transit_loc()
+        outgoing_picking = []
+        outgoing_picking = self._create_picking_ret_list()
+        if is_dest_transit_loc:
+            self._create_finalize_picking(outgoing_picking)
         # self.button_reassign_movement()
         return {}
 
+    # def _is_direct(self):
+    #     retval = False
+    #     # check if destination is
+    #     is_dest_transit_loc = self._is_dest_transit_loc()
+    #     # if not is_dest_transit_loc:
+    #
+    #     return retval
+
+    def _is_dest_transit_loc(self):
+        retval_value = False
+        if self.picking_type_id.default_location_dest_id.usage == 'transit':
+            retval_value = True
+        return retval_value
     @api.multi
     def button_finish_picking(self, force=False):
         # self.button_reassign_movement()
@@ -784,51 +854,52 @@ class MaterialTransferLine(models.Model):
 
     @api.depends('move_ids')
     def _count_quantity(self):
-        if self.move_dest_ids:
-            retrieved_qty = 0
-            for move_out in self.move_dest_ids:
-                retrieved_qty += self.product_uom._compute_quantity(move_out.product_qty,
-                                                                    move_out.product_uom,
-                                                                    rounding_method='HALF-UP')
-            self.retrieved_qty = retrieved_qty
-            self.retrieved_uom = self.product_uom.id
-            self.write({'retrieved_qty': retrieved_qty})
-            self.write({'retrieved_uom': self.product_uom.id})
-        if self.move_receive_ids:
-            delivered_qty = 0
-            for move_in in self.move_receive_ids:
-                delivered_qty += self.product_uom._compute_quantity(move_in.product_qty,
-                                                                    move_in.product_uom,
-                                                                    rounding_method='HALF-UP')
-            self.delivered_qty = delivered_qty
-            self.delivered_uom = self.product_uom.id
-            self.write({'delivered_qty': delivered_qty})
-            self.write({'delivered_uom': self.product_uom.id})
-        #   get damaged
-        damaged_qty = 0
-        damaged_uom = self.product_uom.id
-        not_match_qty = 0
-        not_match_uom = self.product_uom.id
-        sorted_moves = self.move_ids.sorted(key='write_date', reverse=True)
-        if sorted_moves:
-            last_move = sorted_moves[0]
-            for move_line in last_move.move_line_ids:
-                if move_line.is_damage_line == True:
-                    damaged_qty += self.product_uom._compute_quantity(move_line.damage_qty_line,
-                                                                      move_line.damage_uom_line,
-                                                                      rounding_method='HALF-UP')
-                if move_line.is_not_match_line == True:
-                    not_match_qty += self.product_uom._compute_quantity(move_line.not_match_qty_line,
-                                                                        move_line.not_match_uom_line,
+        for line in self:
+            if line.move_dest_ids:
+                retrieved_qty = 0
+                for move_out in self.move_dest_ids:
+                    retrieved_qty += line.product_uom._compute_quantity(move_out.product_qty,
+                                                                        move_out.product_uom,
                                                                         rounding_method='HALF-UP')
-            if damaged_qty > 0:
-                self.write({'damage_qty': damaged_qty})
-                self.write({'is_damage': True})
-                self.write({'damage_uom': move_line.damage_uom_line})
-            if not_match_qty > 0:
-                self.write({'not_match_qty': not_match_qty})
-                self.write({'not_match_uom': move_line.not_match_uom_line})
-                self.write({'is_not_match': True})
+                line.retrieved_qty = retrieved_qty
+                line.retrieved_uom = line.product_uom.id
+                line.write({'retrieved_qty': retrieved_qty})
+                line.write({'retrieved_uom': line.product_uom.id})
+            if line.move_receive_ids:
+                delivered_qty = 0
+                for move_in in line.move_receive_ids:
+                    delivered_qty += line.product_uom._compute_quantity(move_in.product_qty,
+                                                                        move_in.product_uom,
+                                                                        rounding_method='HALF-UP')
+                line.delivered_qty = delivered_qty
+                line.delivered_uom = line.product_uom.id
+                line.write({'delivered_qty': delivered_qty})
+                line.write({'delivered_uom': line.product_uom.id})
+            #   get damaged
+            damaged_qty = 0
+            damaged_uom = line.product_uom.id
+            not_match_qty = 0
+            not_match_uom = line.product_uom.id
+            sorted_moves = line.move_ids.sorted(key='write_date', reverse=True)
+            if sorted_moves:
+                last_move = sorted_moves[0]
+                for move_line in last_move.move_line_ids:
+                    if move_line.is_damage_line == True:
+                        damaged_qty += line.product_uom._compute_quantity(move_line.damage_qty_line,
+                                                                        move_line.damage_uom_line,
+                                                                        rounding_method='HALF-UP')
+                    if move_line.is_not_match_line == True:
+                        not_match_qty += line.product_uom._compute_quantity(move_line.not_match_qty_line,
+                                                                            move_line.not_match_uom_line,
+                                                                            rounding_method='HALF-UP')
+                if damaged_qty > 0:
+                    line.write({'damage_qty': damaged_qty})
+                    line.write({'is_damage': True})
+                    line.write({'damage_uom': move_line.damage_uom_line})
+                if not_match_qty > 0:
+                    line.write({'not_match_qty': not_match_qty})
+                    line.write({'not_match_uom': move_line.not_match_uom_line})
+                    line.write({'is_not_match': True})
         #   get not match
         # for move in self.move_ids:
         #     debug = 0

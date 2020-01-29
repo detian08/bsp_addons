@@ -3,14 +3,14 @@
      License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0) -->
 <odoo>
     <record id="product_template_view2" model="ir.ui.view">
-            <field name="name">	product.template.form</field>
-            <field name="model">product.template</field>
-            <field name="inherit_id" ref="stock_buffer.product_template_form_buffer_view"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='qty_buffer']" position="attributes">
-                     <attribute name="invisible">1</attribute>
-                </xpath>
-            </field>
+        <field name="name">product.template.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="stock_buffer.product_template_form_buffer_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='qty_buffer']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
     </record>
     <record id="purchase_request.purchase_request_line_form_action" model="ir.actions.act_window">
         <field name="context">{"search_default_request_state_draft":1,"search_default_request_state_approved":1}</field>
@@ -18,7 +18,7 @@
     <record id="action_account_payments_payable_grouping" model="ir.ui.view">
         <field name="name">account.payment.search.group</field>
         <field name="model">account.payment</field>
-        <field name="inherit_id" ref="account.view_account_payment_search" />
+        <field name="inherit_id" ref="account.view_account_payment_search"/>
         <field name="arch" type="xml">
             <xpath expr="//search[1]" position="inside">
                 <filter string="Group By Date" name="payment_date" domain="[]" context="{'group_by': 'payment_date'}"/>
@@ -27,51 +27,68 @@
     </record>
 
     <record id="account.action_account_payments_payable" model="ir.actions.act_window">
-            <field name="name">Payments To Vendors</field>
-            <field name="context">{"search_default_payable_filter":1,"search_default_state_draft":1,'search_default_payment_date':1}</field>
-            <field name="domain">[]</field>
-            <field name="view_id" ref="account.view_account_supplier_payment_tree"/>
-            <field name="search_view_id" ref="account.view_account_payment_search"/>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                  Click to register a payment
-                </p><p>
-                  Payments are used to register liquidity movements (send, collect or transfer money).
-                  You can then process those payments by your own means or by using installed facilities.
-                </p>
-            </field>
+        <field name="name">Payments To Vendors</field>
+        <field name="context">
+            {"search_default_payable_filter":1,"search_default_state_draft":1,'search_default_payment_date':1}
+        </field>
+        <field name="domain">[]</field>
+        <field name="view_id" ref="account.view_account_supplier_payment_tree"/>
+        <field name="search_view_id" ref="account.view_account_payment_search"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to register a payment
+            </p>
+            <p>
+                Payments are used to register liquidity movements (send, collect or transfer money).
+                You can then process those payments by your own means or by using installed facilities.
+            </p>
+        </field>
     </record>
     <record id="ganti_pajak" model="ir.ui.view">
-        <field name="name">	res.partner.form</field>
+        <field name="name">res.partner.form</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
-             <xpath expr="//field[@name='vat']" position="attributes">
-                 <attribute name="string">NPWP</attribute>
-             </xpath>
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="string">NPWP</attribute>
+            </xpath>
         </field>
     </record>
     <record id="purchase_order_form_inherit" model="ir.ui.view">
-            <field name="name">purchase.order.form.view</field>
-            <field name="model">purchase.order</field>
-            <field name="inherit_id" ref="price_history.purchase_order_form_inherit"/>
-            <field name="arch" type="xml">
-                <xpath expr="//button[@name='button_purchase_revision']" position="attributes">
-                     <attribute name="invisible">1</attribute>
-                </xpath>
-            </field>
+        <field name="name">purchase.order.form.view</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="price_history.purchase_order_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='button_purchase_revision']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
     </record>
     <record id="uppercase_default_code" model="ir.ui.view">
         <field name="name">product.template.form</field>
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
-             <xpath expr="//field[@name='default_code']" position="attributes">
-                 <attribute name="invisible">1</attribute>
-             </xpath>
-             <xpath expr="//field[@name='barcode']" position="before">
-                 <field name="default_code" style="text-transform: uppercase;" attrs="{'invisible': [('product_variant_count', '&gt;', 1)]}"/>
-             </xpath>
+            <xpath expr="//field[@name='default_code']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='barcode']" position="before">
+                <field name="default_code" style="text-transform: uppercase;"
+                       attrs="{'invisible': [('product_variant_count', '&gt;', 1)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="stock_picking_actualdate" model="ir.ui.view">
+        <field name="name">stock.picking.actualdate</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='scheduled_date']" position="after">
+                <field name="date_done" />
+                <field name="receiving_dept" />
+                <field name="receiving_employee" />
+            </xpath>
         </field>
     </record>
 

@@ -545,20 +545,24 @@ class SPPLine(models.Model):
 
     @api.depends('advance_payment_ids.state')
     def _update_adv_payment_ref(self):
-        obj_adv_pymnt = self.advance_payment_ids
-        if len(obj_adv_pymnt) > 0:
-            line_state = []
-            a = []
-            for line in obj_adv_pymnt:
-                if line.name:
-                    ref = ''.join([line.name, '-', line.state])
-                else:
-                    ref = ''.join(['New', '-', line.state])
-                line_state.append(line.state)
-                a.append(ref)
-            ref = ', '.join(a)
-            if ref != '':
-                self.advance_payment_reference = ref
+        for item in self:
+            if item.advance_payment_ids:
+                obj_adv_pymnt = item.advance_payment_ids
+                if len(obj_adv_pymnt) > 0:
+                    for payment in obj_adv_pymnt:
+                        item.amount_total_advance_payment += payment.amount
+                # line_state = []
+                # a = []
+                # for line in obj_adv_pymnt:
+                #     if line.name:
+                #         ref = ''.join([line.name, '-', line.state])
+                #     else:
+                #         ref = ''.join(['New', '-', line.state])
+                #     line_state.append(line.state)
+                #     a.append(ref)
+                # ref = ', '.join(a)
+            # if ref != '':
+                # item.advance_payment_reference = ref
 
         # @api.depends('amount_payment')
         # @api.one
@@ -567,19 +571,20 @@ class SPPLine(models.Model):
 
     @api.depends('advance_payment_ids.state')
     def _update_adv_payment_state(self):
-        obj_adv_pymnt = self.advance_payment_ids
-        if len(obj_adv_pymnt) > 0:
-            line_state = []
-            for line in obj_adv_pymnt:
-                line_state.append(line.state)
+        for item in self:
+            obj_adv_pymnt = item.advance_payment_ids
+            if len(obj_adv_pymnt) > 0:
+                line_state = []
+                for line in obj_adv_pymnt:
+                    line_state.append(line.state)
             if len(line_state) > 0:
                 if 'draft' in line_state:
-                    self.advance_payment_state = 'draft'
+                    item.advance_payment_state = 'draft'
                 elif 'cancelled' in line_state and not 'draft' in line_state \
                         and not 'posted' in line_state and not 'sent' in line_state and not 'reconciled' in line_state:
-                    self.advance_payment_state = 'cancelled'
+                    item.advance_payment_state = 'cancelled'
                 elif 'posted' in line_state or 'reconciled' in line_state:
-                    self.advance_payment_state = 'posted'
+                    item.advance_payment_state = 'posted'
 
     spp_id = fields.Many2one("spp", string="Surat Permintaan Pembayaran", required=True, ondelete='cascade')
     payment_type = fields.Selection(selection=_PAYMENT_TYPE, related='spp_id.payment_type', invisible=True)
@@ -683,7 +688,7 @@ class SPPLine(models.Model):
             po_data_final = po_data_search.filtered(lambda x: x.ids != invalid_po_id)
         else:
             po_data_final = po_data_search
-
+        # if po_data_final.ids:
         result['domain'] = {'purchaseorder_id': [('id', 'in', po_data_final.ids)]}
 
         # result['domain'] = {'purchaseorder_id': domain}
@@ -695,7 +700,7 @@ class SPPLine(models.Model):
         po_ids = self.spp_id.spp_line_ids.mapped('purchaseorder_id')
 
         # PO yang sudah di confirm
-        domain = [('state', 'in', ['purchase'])]
+        domain = [('state', 'in', [('purchase'),('done')])]
 
         domain += [('invoice_status', 'in', [('to invoice'), ('no')])]
         if self.spp_id.payment_type == 'BILL':
@@ -706,8 +711,7 @@ class SPPLine(models.Model):
             # belum ada billing atau billing sebelumnya sudah paid atau cancel
 
         if self.spp_id.partner_id:
-            domain += ['|', ('partner_id', 'child_of', self.spp_id.partner_id.id),
-                       ('partner_id', '=', self.spp_id.partner_id.id)
+            domain += [('partner_id', '=', self.spp_id.partner_id.id)
                        ]
 
         # A Purchase Order can be added only if Purchase Order is not already in the SPP
@@ -725,16 +729,18 @@ class SPPLineBill(models.Model):
     @api.depends('billing_ids')
     @api.onchange('billing_ids')
     def _update_billing_ref(self):
-        billing_obj = self.billing_ids
-        if len(billing_obj) > 0:
-            for bill_line in billing_obj:
-                if bill_line.name:
-                    ref = ''.join([bill_line.name, '-', bill_line.state])
-                else:
-                    ref = ''.join(['New', '-', bill_line.state])
-            ref = ', '.join([])
+        ref = ''
+        for item in self:
+            billing_obj = item.billing_ids
+            if len(billing_obj) > 0:
+                for bill_line in billing_obj:
+                    if bill_line.name:
+                        ref = ''.join([bill_line.name, '-', bill_line.state])
+                    else:
+                        ref = ''.join(['New', '-', bill_line.state])
+                ref = ', '.join([])
             if ref != '':
-                self.advance_payment_reference = ref
+                item.advance_payment_reference = ref
 
     # @api.depends('billing_ids.state')
     # def _update_billing_state(self):
@@ -861,7 +867,7 @@ class SPPLineBill(models.Model):
         po_ids = self.spp_id.spp_line_bill_ids.mapped('purchaseorder_id')
 
         # PO yang sudah di confirm
-        domain = [('state', 'in', ['purchase'])]
+        domain = [('state', 'in', [('purchase'),('done')])]
 
         domain += [('invoice_status', 'in', [('to invoice'), ('no')])]
         if self.spp_id.payment_type == 'BILL':
@@ -872,7 +878,8 @@ class SPPLineBill(models.Model):
             # belum ada billing atau billing sebelumnya sudah paid atau cancel
 
         if self.spp_id.partner_id:
-            domain += ['|', ('partner_id', 'child_of', self.spp_id.partner_id.id),
+            domain += [
+			#'|', ('partner_id', 'child_of', self.spp_id.partner_id.id),
                        ('partner_id', '=', self.spp_id.partner_id.id)
                        ]
 

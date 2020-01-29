@@ -22,6 +22,7 @@ class WizardPurchaseRequisition(models.Model):
     def get_data(self):
         self.ensure_one()
         order = self.env['purchase.requisition'].browse(self._context.get('active_ids', list()))
+        name = (order.name if order.name else '')
         vendor1 = ''
         vendor2 = ''
         vendor3 = ''
@@ -37,58 +38,105 @@ class WizardPurchaseRequisition(models.Model):
         items = []
         vno = 1
         memo = ''
+        pajak1 = '-'
+        pajak2 = '-'
+        pajak3 = '-'
+        pic1 = ''
+        pic2 = ''
+        pic3 = ''
         for rec in order:
             if rec.description:
                 memo = rec.description
             for line in rec.line_ids:
                 row = {}
                 no = 0
-                if line.purchase_request_lines.request_id.name !='':
+                # terakhir = ''
+                if line.purchase_request_lines.request_id.name:
                     no_bppb = str(line.purchase_request_lines.request_id.name)
-                if line.purchase_request_lines.request_id.date_start!='':
+                if line.purchase_request_lines.request_id.date_start:
                     # date_doc = str(line.purchase_request_lines.request_id.date_start)
-                    date_doc = str(datetime.datetime.strptime(format(line.purchase_request_lines.request_id.date_start), "%Y-%m-%d").strftime(
+                    date_doc = " & "+str(datetime.datetime.strptime(format(line.purchase_request_lines.request_id.date_start), "%Y-%m-%d").strftime(
                         "%d-%b-%y"))
-                if line.purchase_request_lines.request_id.department_id.name!='':
+                if line.purchase_request_lines.request_id.department_id.name:
                     dept = str(line.purchase_request_lines.request_id.department_id.name)
+                # if line.product_id.last_purchase_date!='':
+                #     terakhir=str(datetime.datetime.strptime(format(line.product_id.last_purchase_date), "%Y-%m-%d").strftime("%d-%b-%y"))
                 # tanggal = datetime.datetime.strptime(line.product_id.last_purchase_date, "%Y-%m-%d %H:%M:%S").strftime('%Y-%m-%d')
-                row.update({
-                    "no": str(vno),
-                    "nama_produk": str(line.product_id.name),
-                    "qty": str("{0:8,.0f}".format(line.product_qty)),
-                    "last_price": str("{0:8,.0f}".format(line.product_id.last_purchase_price)),
-                    "last_supp": str(line.product_id.last_supplier_id.name),
-                    "last_order": str(datetime.datetime.strptime(format(line.product_id.last_purchase_date), "%Y-%m-%d").strftime("%d-%b-%y")),
-                })
+                order_terakhir = self.env['purchase.order.line'].search([('product_id','=',line.product_id.id),('product_qty','>',0),('state','=','purchase')],limit=1,order='create_date desc');
+                if order_terakhir:
+                    date_time_str = str(order_terakhir.order_id.create_date)
+                    date_time_obj = datetime.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S')
+                    row.update({
+                        "no": str(vno),
+                        "nama_produk": str(line.product_id.name),
+                        "qty": str("{0:8,.0f}".format(line.product_qty) if line.product_qty else 0),
+                        "last_price": str("{0:8,.0f}".format(order_terakhir.price_unit) if order_terakhir.price_unit else ''),
+                        "last_supp": str(order_terakhir.order_id.partner_id.name if order_terakhir.order_id.partner_id.name else ''),
+                        "last_order": str(date_time_obj.date()),
+                        # "last_order": str(datetime.datetime.strptime(format(order_terakhir.order_id.create_date), "%Y-%m-%d").strftime("%d-%b-%y") if order_terakhir.order_id.create_date else ''),
+                        # "last_order": terakhir,
+                    })
+                else:
+                    row.update({
+                        "no": str(vno),
+                        "nama_produk": str(line.product_id.name),
+                        "qty": str("{0:8,.0f}".format(line.product_qty) if line.product_qty else 0),
+                        "last_price": '',
+                        "last_supp": '',
+                        "last_order": '',
+                    })
+
+                # row.update({
+                #     "no": str(vno),
+                #     "nama_produk": str(line.product_id.name),
+                #     "qty": str("{0:8,.0f}".format(line.product_qty) if line.product_qty else 0),
+                #     "last_price": str("{0:8,.0f}".format(line.product_id.last_purchase_price) if line.product_id.last_purchase_price and line.product_id.seller_ids[0].min_qty>0 else ''),
+                #     "last_supp": str(line.product_id.last_supplier_id.name if line.product_id.last_supplier_id.name and line.product_id.seller_ids[0].min_qty>0 else ''),
+                #     "last_order": str(datetime.datetime.strptime(format(line.product_id.last_purchase_date), "%Y-%m-%d").strftime("%d-%b-%y") if line.product_id.last_purchase_date and line.product_id.seller_ids[0].min_qty>0 else ''),
+                #     # "last_order": terakhir,
+                # })
                 for record in self.env['purchase.order'].sudo().search(
                     [('requisition_id', '=', rec.id)]):
                     no += 1
                     if no == 1:
+                        row.update({
+                            "price_total1": '',
+                            "price_total2": '',
+                        })
                         vendor1 = str(record.partner_id.name)
+                        # pic1 = (" PIC: "+str(record.partner_id.child_ids[0].name) if record.partner_id.child_ids[0].name else '')+(" - "+str(record.partner_id.child_ids[0].phone) if record.partner_id.child_ids[0].phone else '' )
+                        pic1 = (", pic: " + str(record.partner_id.child_ids[0].name)+(" - "+str(record.partner_id.child_ids[0].phone) if record.partner_id.child_ids[0].phone else '' ) if record.partner_id.child_ids else '' )
                         tv1 = str(record.payment_term_id.name)
                         for isi_po in self.env['purchase.order.line'].search(
                                 [('order_id', '=', record.id), ('product_id', '=', line.product_id.id)]):
                             if isi_po:
                                 row.update({
                                     # "price_total1": str("{0:12,.2f}".format(isi_po.price_unit * isi_po.product_qty)),
-                                    "price_total1": str("{0:12,.0f}".format(isi_po.price_total)),
+                                    # "price_total1": str("{0:12,.0f}".format(isi_po.price_total)),
+                                    "price_total1": str("{0:12,.0f}".format(isi_po.price_unit)),
                                 })
+                                if isi_po.taxes_id.id:
+                                    pajak1 = "Y"
                             else:
                                 row.update({
                                     "price_total1": '',
                                     "price_total2": '',
+
                                 })
                             # penjumlah1 += (isi_po.price_unit * isi_po.product_qty)
                             penjumlah1 += (isi_po.price_total)
                     if no == 2:
                         vendor2 = str(record.partner_id.name)
+                        pic2 = (", pic: " + str(record.partner_id.child_ids[0].name)+(" - "+str(record.partner_id.child_ids[0].phone) if record.partner_id.child_ids[0].phone else '' ) if record.partner_id.child_ids else '' )
                         tv2 = str(record.payment_term_id.name)
                         for isi_po in self.env['purchase.order.line'].search(
                                 [('order_id', '=', record.id), ('product_id', '=', line.product_id.id)]):
                             if isi_po:
                                 row.update({
-                                    "price_total2": str("{0:12,.0f}".format(isi_po.price_total)),
+                                    "price_total2": str("{0:12,.0f}".format(isi_po.price_unit)),
                                 })
+                                if isi_po.taxes_id.id:
+                                    pajak2 = "Y"
                             else:
                                 row.update({
                                     "price_total2": '',
@@ -97,13 +145,16 @@ class WizardPurchaseRequisition(models.Model):
                             penjumlah2 += (isi_po.price_total)
                     if no == 3:
                         vendor3 = str(record.partner_id.name)
+                        pic3 = (", pic: " + str(record.partner_id.child_ids[0].name)+(" - "+str(record.partner_id.child_ids[0].phone) if record.partner_id.child_ids[0].phone else '' ) if record.partner_id.child_ids else '' )
                         tv3 = str(record.payment_term_id.name)
                         for isi_po in self.env['purchase.order.line'].search(
                                 [('order_id', '=', record.id), ('product_id', '=', line.product_id.id)]):
                             if isi_po:
                                 row.update({
-                                    "price_total3": str("{0:12,.0f}".format(isi_po.price_total)),
+                                    "price_total3": str("{0:12,.0f}".format(isi_po.price_unit)),
                                 })
+                                if isi_po.taxes_id.id:
+                                    pajak3 = "Y"
                             else:
                                 row.update({
                                     "price_total3": '',
@@ -130,12 +181,18 @@ class WizardPurchaseRequisition(models.Model):
             'vendor1': vendor1,
             'vendor2': vendor2,
             'vendor3': vendor3,
-            'jumlah1': str("{0:12,.0f}".format(penjumlah1)),
-            'jumlah2': str("{0:12,.0f}".format(penjumlah2)),
-            'jumlah3': str("{0:12,.0f}".format(penjumlah3)),
+            'pic1': pic1,
+            'pic2': pic2,
+            'pic3': pic3,
+            'jumlah1': str("{0:12,.0f}".format(penjumlah1) if penjumlah1>0 else ''),
+            'jumlah2': str("{0:12,.0f}".format(penjumlah2) if penjumlah2>0 else ''),
+            'jumlah3': str("{0:12,.0f}".format(penjumlah3) if penjumlah3>0 else ''),
+            'ppn1': (pajak1 if vendor1 else ''),
+            'ppn2': (pajak2 if vendor2 else ''),
+            'ppn3': (pajak3 if vendor3 else ''),
             'qcf_no': str(rec.name),
             # 'qcf_date': str(rec.ordering_date),
-            "qcf_date": str(datetime.datetime.strptime(format(rec.ordering_date), "%Y-%m-%d").strftime("%d-%b-%y")),
+            "qcf_date": str(datetime.datetime.strptime(format(rec.ordering_date), "%Y-%m-%d").strftime("%d-%b-%y") if rec.ordering_date else '' ),
             'company': rec.company_id.name,
             'value':str("{0:12,.2f}".format(murah)),
             'batas':murah,
@@ -147,6 +204,7 @@ class WizardPurchaseRequisition(models.Model):
             'pay1': tv1,
             'pay2': tv2,
             'pay3': tv3,
+            'name':name,
             'item':items,
         }
         return data
@@ -158,6 +216,8 @@ class WizardPurchaseRequisition(models.Model):
         # f = os.path.join(datadir, 'template/QCF-template.docx')
         context = self.get_data()
         murah = context['batas']
+        nama = context['name']
+        nama =nama.replace('/','')
         if murah > 1000000:
             if platform.system() == 'Linux':
                f = os.path.join(datadir, 'template/QCFbaru5.docx')
@@ -173,15 +233,15 @@ class WizardPurchaseRequisition(models.Model):
         if murah > 1000000:
             if platform.system() == 'Linux':
                 # filename = ('/tmp/QCF_' + str(datetime.today().date()) + '.docx')
-                filename = ('/tmp/QCF_' + 'Besar' + '.docx')
+                filename = ('/prn/' + nama + '.docx')
             else:
-                filename = ('QCF_' + 'Besar' + '.docx')
+                filename = (nama + '.docx')
         else:
             if platform.system() == 'Linux':
                 # filename = ('/tmp/QCF_' + str(datetime.today().date()) + '.docx')
-                filename = ('/tmp/QCF_' + 'Kecil' + '.docx')
+                filename = ('/prn/' + nama + '.docx')
             else:
-                filename = ('QCF_' + 'Kecil' + '.docx')
+                filename = (nama + '.docx')
         template.save(filename)
         fp = open(filename, "rb")
         file_data = fp.read()

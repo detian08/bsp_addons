@@ -13,6 +13,15 @@ class AccountInvoice(models.Model):
         'kontra_bon_line_id',
         string='Kontra Bon Line', readonly=True, copy=False)
     kontrabon_reference = fields.Char(string='Kontra Bon Reference')
+    kontrabon_amount_payment = fields.Monetary(string="Payment Amount", compute = '_compute_kontrabon_payment')
+
+    @api.depends('kontrabon_line_ids')
+    @api.multi
+    def _compute_kontrabon_payment(self):
+        for invoice in self:
+            for kontrabon_line in invoice.kontrabon_line_ids:
+                invoice.kontrabon_amount_payment +=  kontrabon_line.amount_payment
+
 
     @api.multi
     @api.depends('number','amount_total','currency_id')

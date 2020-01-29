@@ -21,6 +21,9 @@ class PurchaseOrderLine(models.Model):
     @api.multi
     def _prepare_stock_moves(self, picking):
         res = super()._prepare_stock_moves(picking)
-        res[0]['group_id'] = (
-            self.procurement_group_id.id or self.order_id.group_id.id)
+        # res[0]['group_id'] = (
+        #     self.procurement_group_id.id or self.order_id.group_id.id)
+        if res:
+            res[0]['group_id'] = (
+                self.procurement_group_id.id or self.order_id.group_id.id)
         return res

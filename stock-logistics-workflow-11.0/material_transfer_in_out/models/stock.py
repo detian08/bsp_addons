@@ -30,26 +30,31 @@ class StockMove(models.Model):
     def _get_aggr(self):
         for move in self:
             # for line in :
-            debug = 0
+            for move_line in move.move_line_ids:
+                if move_line.is_damage_line:
+                    move.is_damage_aggr = True
+                    move.damage_uom_aggr = move_line.damage_uom_line
+                if move_line.is_not_match_line:
+                    move.is_not_match_aggr = True
 
     is_damage_aggr = fields.Boolean(String='Is Damage Product',
-                                    readonly=True,
+                                    readonly=False,
                                     compute='_get_aggr')
     damage_qty_aggr = fields.Float(String='Damage Qty',
                                    digits=dp.get_precision('Product Unit of Measure'),
-                                   readonly=True,
+                                   readonly=False,
                                    compute='_get_aggr')
     damage_uom_aggr = fields.Many2one(comodel_name='product.uom',
                                       string='Damaged Item UoM',
-                                      readonly=True,
+                                      readonly=False,
                                       compute='_get_aggr')
 
     is_not_match_aggr = fields.Boolean(String='Is Not Match Product',
-                                       readonly=True,
+                                       readonly=False,
                                        compute='_get_aggr')
     not_match_qty_aggr = fields.Float(String='Not Match Qty',
                                       digits=dp.get_precision('Product Unit of Measure'),
-                                      readonly=True,
+                                      readonly=False,
                                       compute='_get_aggr')
     not_match_uom_aggr = fields.Many2one('product.uom', 'Not Match Item UoM',
                                          readonly=True,

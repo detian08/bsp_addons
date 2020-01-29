@@ -8,7 +8,10 @@ class AccountPayment(models.Model):
     bsp_po_type = fields.Selection([
         ('general', 'General'),
         ('specific', 'Specific')
-    ], required=True, default='general')
+    ], 
+    string='BSP Print PO Type',
+    required=True, 
+    default='general')
 
     total_pembelian = fields.Text('Harga Total Pembelian')
     cara_pembayaran = fields.Text('Cara Pembayaran')

@@ -1,44 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
-	<record id="stock_picking_print_view" model="ir.ui.view">
-			<field name="name">wizard.material.transfer.bstb.print</field>
-			<field name="model">wizard.material.transfer.bstb.print</field>
-			<field name="arch" type="xml">
-				<form string="Print Stock Picking BSTB">
-				<p class="oe_grey">
-				Print Bukti Serah Terima Barang now?
-				</p>
-					<footer>
-						<button string="Print" class="btn-primary" name="print_report" type="object" />
-						<button string="Cancel" class="btn-primary" special="cancel"/>
-					</footer>
-				</form>
-			</field>
-	</record>
+    <record id="stock_picking_print_view" model="ir.ui.view">
+        <field name="name">wizard.material.transfer.bstb.print</field>
+        <field name="model">wizard.material.transfer.bstb.print</field>
+        <field name="arch" type="xml">
+            <form string="Print Stock Picking BSTB">
+                <p class="oe_grey">
+                    Print Bukti Serah Terima Barang now?
+                </p>
+                <footer>
+                    <button string="Print" class="btn-primary" name="print_report" type="object"/>
+                    <button string="Cancel" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
     <record id="stock_picking_bstb_view" model="ir.ui.view">
-		<field name="name">Material Transfer BSTB Report</field>
-		<field name="model">material.transfer.bstb.report.docx</field>
-		<field name="arch" type="xml">
-			<form string="Purchase BSTB docx">
-				<group>
-					<field name="file_name" filename="material_transfer_bstb_data" />
-					<field name="material_transfer_bstb_data" invisible="1" />
-				</group>
-				<footer>
-					<button string="Cancel" class="btn-primary" special="cancel"/>
-				</footer>
-			</form>
-		</field>
-	</record>
+        <field name="name">Material Transfer BSTB Report</field>
+        <field name="model">material.transfer.bstb.report.docx</field>
+        <field name="arch" type="xml">
+            <form string="Material Transfer BSTB docx">
+                <group>
+                    <field name="material_transfer_bstb_data" filename="material_transfer_bstb_filename"/>
+                    <field name="material_transfer_bstb_filename" invisible="1"/>
+                </group>
+                <footer>
+                    <button string="Cancel" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
-	<!--Menu to Print Docx Report-->
-	<act_window id="action_purchase_bstb_print_doc"
-				key2="client_action_multi"
-				name="Bukti Serah Terima Barang (docx)"
-				res_model="wizard.material.transfer.bstb.print"
-				src_model="material.transfer"
-				view_mode="form"
-				target="new"/>
+    <!--Menu to Print Docx Report-->
+    <act_window id="action_purchase_bstb_print_doc"
+                key2="client_action_multi"
+                name="Bukti Serah Terima Barang (docx)"
+                res_model="wizard.material.transfer.bstb.print"
+                src_model="material.transfer"
+                view_mode="form"
+                target="new"/>
+<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+    <record id="stock_picking_print_view_1step" model="ir.ui.view">
+        <field name="name">wizard.inventory.transfer.bstb.print</field>
+        <field name="model">wizard.inventory.transfer.bstb.print</field>
+        <field name="arch" type="xml">
+            <form string="Print Stock Picking BSTB">
+                <p class="oe_grey">
+                    Print Bukti Serah Terima Barang now?
+                </p>
+                <footer>
+                    <button string="Print" class="btn-primary" name="print_report" type="object"/>
+                    <button string="Cancel" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="stock_picking_bstb_view_1step" model="ir.ui.view">
+        <field name="name">inventory.transfer.bstb.report.docx</field>
+        <field name="model">inventory.transfer.bstb.report.docx</field>
+        <field name="arch" type="xml">
+            <form string="Stock Picking BSTB docx">
+                <group>
+                    <field name="inventory_transfer_bstb_data" filename="inventory_transfer_bstb_filename"/>
+                    <field name="inventory_transfer_bstb_filename" invisible="1"/>
+                </group>
+                <footer>
+                    <button string="Cancel" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_inventory_bstb_print_1step"
+                key2="client_action_multi"
+                name="Bukti Serah Terima Barang (docx)"
+                res_model="wizard.inventory.transfer.bstb.print"
+                src_model="stock.picking"
+                view_mode="form"
+                target="new"/>
+<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+    <record id="bstb_print_view_po_service" model="ir.ui.view">
+        <field name="name">purchase.order.service.bstb.wizard</field>
+        <field name="model">purchase.order.service.bstb.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Print Purchase Order Service BSTB">
+                <p class="oe_grey">
+                    Print Purchase ORder Service BSTB now?
+                </p>
+                <field name="date_done" string="Date of Receive"/>
+                <field name="receiving_dept" string="Receiving Dept."/>
+                <field name="receiving_employee" string="Receiving Empl."/>
+                <footer>
+                    <button string="Print" class="btn-primary" name="print_report" type="object"/>
+                    <button string="Cancel" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="po_service_bstb_view_1step" model="ir.ui.view">
+        <field name="name">purchase.order.service.bstb.output</field>
+        <field name="model">purchase.order.service.bstb.output</field>
+        <field name="arch" type="xml">
+            <form string="Stock Picking BSTB docx">
+                <group>
+                    <field name="po_service_bstb_data" filename="po_service_bstb_filename"/>
+                    <field name="po_service_bstb_filename" invisible="1"/>
+                </group>
+                <footer>
+                    <button string="Cancel" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_purchase_bstb_print_1step"
+                key2="client_action_multi"
+                name="Bukti Serah Terima Barang Service"
+                res_model="purchase.order.service.bstb.wizard"
+                src_model="purchase.order"
+                view_mode="form"
+                target="new"/>
 </odoo>

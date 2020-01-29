@@ -121,7 +121,7 @@
 <!--                                <button name="auto_fill_payments_detail" string="Auto-Fill Pay Amount" type="action" class="oe_edit_only " style="background-color:cyan;"/>-->
                                 <field name="invoice_line_ids" colspan="4" nolabel="1" widget="one2many_list">
                                     <tree string="Kontra Bon lines" editable="bottom">
-                                        <field name="invoice_id" domain="[('state', 'in', ['open']),('partner_id', 'child_of', parent.partner_id)]" options='{"no_open": True,"no_create": True}' context="{'show_date_invoice': True}"/>
+                                        <field name="invoice_id" domain="[('state', 'in', ['open']),('partner_id', 'child_of', parent.partner_id)]" options='{"no_open": True,"no_create": False}' context="{'show_date_invoice': True}"/>
                                         <field name="date_invoice"/>
                                         <field name="date_due"/>
                                         <field name="amount_untaxed" sum="Total Amount Untaxed"/>

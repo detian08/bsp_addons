@@ -7,8 +7,7 @@
     'sequence': 1,
     'license': 'AGPL-3',
     "author": "Alphasoft",
-    'description': """
-This module is aim to add Partner Taxes
+    'description': """ This module is aim to add Partner Taxes
     """,
     'category' : 'Accounting',
     'website': 'https://www.alphasoft.co.id/',

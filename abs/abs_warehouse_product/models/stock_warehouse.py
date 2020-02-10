@@ -18,19 +18,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #################################################################################
-from odoo import api, fields, models, _
-
+from odoo import api,fields,models,_
 
 class Warehouse(models.Model):
-    _inherit = "stock.warehouse"
-
-    warehouse_product_ids = fields.One2many('stock.quant', 'location_id', string='Available Products',
-                                            compute='compute_warehouse_products')
+    _inherit="stock.warehouse"
+ 
+    warehouse_product_ids = fields.One2many('stock.quant','location_id',string='Available Products',compute='compute_warehouse_products')
 
     @api.multi
     def compute_warehouse_products(self):
         for products in self:
-            warehouse_all_products = self.env['stock.quant'].search([('location_id', 'child_of', self.code),
-                                                                     ('quantity', '>=', 0)])
+            warehouse_all_products = self.env['stock.quant'].search([('location_id', 'child_of', self.code),('quantity','>=',0)])
             for i in warehouse_all_products:
                 products.warehouse_product_ids = warehouse_all_products
+	    
+	

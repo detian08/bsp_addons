@@ -101,10 +101,10 @@ class AccountTax(models.Model):
 class WhtTaxPurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
-    amount_wht = fields.Monetary(string='Withholding Tax Amount',
-                                 store=True,
-                                 compute='_compute_amount_wht',
-                                 track_visibility='onchange')
+    # amount_wht = fields.Monetary(string='Withholding Tax Amount',
+    #                              store=True,
+    #                              # compute='_compute_amount_wht',
+    #                              track_visibility='onchange')
     # amount_after_wht = fields.Monetary(string='Amount after Withholding Tax',
     #                                    store=True,
     #                                    # compute='_compute_amount_wht',
@@ -118,19 +118,19 @@ class WhtTaxPurchaseOrder(models.Model):
     # # amount_tax = fields.Monetary(string='Taxes', store=True, readonly=True, compute='_amount_all')
     # # amount_total = fields.Monetary(string='Total', store=True, readonly=True, compute='_amount_all')
     #
-    @api.multi
-
-    def _compute_amount_wht(self):
-        debug = 0
+    # @api.multi
+    # @api.depends('amount_untaxed', 'partner_id')
+    # def _compute_amount_wht(self):
+    #     debug = 0
 
 class WhtTaxPurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
     #
     #
-    amount_wht_line = fields.Monetary(string='Withholding Tax Amount',
-                                 store=True,
-                                 # compute='_compute_amount_wht_line',
-                                 track_visibility='onchange')
+    # amount_wht_line = fields.Monetary(string='Withholding Tax Amount',
+    #                              store=True,
+    #                              # compute='_compute_amount_wht_line',
+    #                              track_visibility='onchange')
     # amount_after_wht_line = fields.Monetary(string='Amount after Withholding Tax',
     #                                    store=True,
     #                                    # compute='_compute_amount_wht_line',
@@ -151,10 +151,6 @@ class WhtTaxPurchaseOrderLine(models.Model):
             taxes = line.product_id.supplier_taxes_id.filtered(lambda r: not line.company_id or r.company_id == line.company_id)
             if with_ht_tax:
                 taxes |= with_ht_tax
-                for tax_item in with_ht_tax:
-                    percentage = tax_item.percentage or 0.0
-                    self.amount_wht_line += self.price_subtotal * (percentage / 100.0)
-                #
             # for tax_item in with_ht_tax:
             #     taxes(0,0,tax_item)
             line.taxes_id = fpos.map_tax(taxes, line.product_id, line.order_id.partner_id) if fpos else taxes

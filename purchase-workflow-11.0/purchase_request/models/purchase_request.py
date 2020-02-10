@@ -159,7 +159,7 @@ class PurchaseRequest(models.Model):
         #     vals['name'] = self.env['ir.sequence'].next_by_code('purchase.request.k3') or '/'
         # else:
         #     vals['name'] = self.env['ir.sequence'].next_by_code('purchase.request') or '/'
-        if self.name == 'New' or not self.name:
+        if self.name == '/' or not self.name:
             default.update({
                 'state': 'draft',
                 'name': self.env['ir.sequence'].next_by_code('purchase.request'),

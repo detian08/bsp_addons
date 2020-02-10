@@ -20,7 +20,7 @@ def get_sample():
         "purc_man": "Erni Sumarni, SE",
         "ref": "PR/BSP/IT/10/2019",
         "termofpayment": "Tempo 45 hari",
-        "lamp": "2 lembah",
+        "lamp": "2 lembar",
         "total_amount": 4400000,
         "down_payments": [
             {
@@ -99,7 +99,7 @@ class WizardPurchase(models.Model):
     def get_data(self):
         self.ensure_one()
         order = self.env['purchase.order'].browse(self._context.get('active_ids', list()))
-        pph = 1
+        pph = 0
         for rec in order:
             items = []
             vno = 1
@@ -176,7 +176,8 @@ class WizardPurchase(models.Model):
                 kon_fak = str(rec.faktur_an)
             fin_dir = self.env['hr.employee'].search([('job_id.name', 'like', 'Finance Director')], limit=1)
             purchase_mgr = self.env['hr.employee'].search([('job_id.name', 'like', 'Purchase Manager')], limit=1)
-            pr_no = rec.order_line[0].purchase_request_lines[0].request_id.name
+            # pr_no = str(rec.order_line[0].purchase_request_lines[0].request_id.name if rec.order_line[0].purchase_request_lines[0].request_id.name else '')
+            pr_no=''
             data = {
                 "pr_no": str(pr_no),
                 "po_no": str(rec.name),
@@ -194,7 +195,7 @@ class WizardPurchase(models.Model):
                 "fin_dir": fin_dir.name if fin_dir else "",
                 "purc_man": purchase_mgr.name if purchase_mgr else "",
                 "ref": strPR,
-                "termofpayment": str(rec.partner_id.property_supplier_payment_term_id.name),
+                "termofpayment": str(rec.partner_id.property_supplier_payment_term_id.name if rec.partner_id.property_supplier_payment_term_id.name else ''),
                 "lamp": "2 lembar",
                 "total_untaxed": str("{0:12,.2f}".format(rec.amount_untaxed)),
                 "total_tax": str("{0:12,.2f}".format(rec.amount_tax)),
@@ -203,7 +204,8 @@ class WizardPurchase(models.Model):
                 "diskon": str("{0:12,.2f}".format(rec.general_discount*penjumlah/100)),
                 "pph":pph,
                 "total_pph": str("{0:12,.2f}".format(pph*penjumlah/100)),
-                "grand_amount": str("{0:12,.2f}".format(((1-rec.general_discount/100) * penjumlah) + rec.amount_tax +(pph*penjumlah/100))),
+                # "grand_amount": str("{0:12,.2f}".format(((1-rec.general_discount/100) * penjumlah) + rec.amount_tax +(pph*penjumlah/100))),
+                "grand_amount": str("{0:12,.2f}".format(rec.amount_total) if rec.amount_total else '0'),
                 "down_payments": down_payments,
                 "kon_total": kon_total,
                 "kon_cara": kon_cara,
@@ -220,9 +222,10 @@ class WizardPurchase(models.Model):
         self.ensure_one()
         datadir = os.path.dirname(__file__)
         order = self.env['purchase.order'].browse(self._context.get('active_ids', list()))
-        # doctype = order.bsp_po_type
-        doctype = order.order_type
+        doctype = order.bsp_po_type
+        # doctype = order.order_type
         doctype = str(doctype).upper()
+        # doctype =''
         if platform.system() == 'LINUX':
             # if doctype == 'general':
             if doctype == 'GENERAL':

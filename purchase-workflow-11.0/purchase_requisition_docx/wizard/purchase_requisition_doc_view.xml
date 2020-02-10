@@ -9,7 +9,8 @@
 				You want to Print Purchase requisition ?
 				</p>
 					<footer>
-						<button string="Print" class="btn-primary" name="print_report_doc" type="object" />
+						<button string="Print Doc" class="btn-primary" name="print_report" type="object" />
+						<button string="Print Pdf" class="btn-primary" name="print_report" type="object" context="{'pdf':True}"/>
 						<button string="Cancel" class="btn-primary" special="cancel"/>
 					</footer>
 				</form>
@@ -35,7 +36,7 @@
 	<!--Menu to Print dot matrix Report-->
 	<act_window id="action_purchase_requisition_doc_print"
 				key2="client_action_multi"
-				name="Print doc QCF"
+				name="Print QCF"
 				res_model="wizard.purchase.requisition.print2"
 				src_model="purchase.requisition"
 				view_mode="form"

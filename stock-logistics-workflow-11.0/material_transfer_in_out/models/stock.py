@@ -34,8 +34,13 @@ class StockMove(models.Model):
                 if move_line.is_damage_line:
                     move.is_damage_aggr = True
                     move.damage_uom_aggr = move_line.damage_uom_line
+                    move.damage_qty_aggr += move_line.damage_uom_line._compute_quantity(move_line.damage_qty_line,
+                                                                                        move_line.damage_uom_line)
                 if move_line.is_not_match_line:
                     move.is_not_match_aggr = True
+                    move.not_match_uom_aggr = move_line.not_match_uom_line
+                    move.damage_qty_aggr += move_line.damage_uom_line._compute_quantity(move_line.damage_qty_line,
+                                                                                        move_line.damage_uom_line)
 
     is_damage_aggr = fields.Boolean(String='Is Damage Product',
                                     readonly=False,

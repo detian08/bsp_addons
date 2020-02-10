@@ -10,7 +10,10 @@
     'summary': 'Bsp Cosmetics',
     'description': """ """,
     'depends': ['product','purchase','purchase_request'],
-    'data': ['views/bsp_cosmetics_views.xml'],
+    'data': [
+        'views/bsp_cosmetics_views.xml',
+        'data/ir_sequence.xml',
+    ],
     'installable': True,
     'application': False,
     'auto_install': False,

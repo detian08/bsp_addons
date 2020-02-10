@@ -16,7 +16,10 @@ class AccountPayment(models.Model):
             if invoice.reference:
                 references += invoice.reference
             else:
-                references += invoice.number
+                if invoice.number:
+                    references += invoice.number
+                else:
+                    references = ''
         self.invoice_vendor_references = references
 
     invoice_vendor_references = fields.Char(

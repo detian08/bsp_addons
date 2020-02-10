@@ -2,13 +2,13 @@
 <odoo>
     <data>
     <!-- Overwrite Action for Batch Payment-->
-    <record id="account_payment_batch_process.view_account_payment_from_invoices_batch_inherited" model="ir.actions.act_window">
+    <record id="account_payment_batch_process.view_account_register_payments_wizard_batch_inherited" model="ir.actions.act_window">
         <field name="name">Batch Payments Kontra Bon</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">account.register.payments</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="account_payment_batch_process.view_account_payment_from_invoices_batch_inherited"/>
+        <field name="view_id" ref="account_payment_batch_process.view_account_register_payments_wizard_batch_inherited"/>
         <field name="context">{'batch':True, 'kontrabon_number', context.get('kontrabon_number')}</field>
         <field name="target">new</field>
         <field name="multi">True</field>

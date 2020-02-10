@@ -22,7 +22,7 @@
     </record>
 
     <!-- Inherited view for Register Payment as Batch -->
-    <record id="view_account_payment_from_invoices_batch_inherited" model="ir.ui.view">
+    <record id="view_account_register_payments_wizard_batch_inherited" model="ir.ui.view">
         <field name="name">account.register.payments.wizard.batch.inherited</field>
         <field name="model">account.register.payments</field>
         <field name="inherit_id" ref="account.view_account_payment_from_invoices" />
@@ -115,7 +115,7 @@
         <field name="res_model">account.register.payments</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="view_account_payment_from_invoices_batch_inherited"/>
+        <field name="view_id" ref="view_account_register_payments_wizard_batch_inherited"/>
         <field name="context">{'batch':True}</field>
         <field name="target">new</field>
         <field name="multi">True</field>

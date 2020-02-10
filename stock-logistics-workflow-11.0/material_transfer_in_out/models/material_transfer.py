@@ -1,5 +1,6 @@
 from odoo import api, fields, models, _
 from odoo.tools.float_utils import float_compare
+from odoo.tools.misc import formatLang
 
 from odoo import exceptions
 
@@ -8,6 +9,40 @@ MATERIAL_STATES = [
     ('open', 'In progress'),
     ('done', 'Done'),
     ('cancel', 'Cancelled')]
+
+
+class PurchaseRequest(models.Model):
+    _inherit = "purchase.request"
+
+    @api.multi
+    @api.depends('name')
+    def name_get(self):
+        result = []
+        for pr in self:
+            name = pr.name
+            if self.env.context.get('show_pr_name_dept') and pr.department_id:
+                name += ': ' + pr.department_id.name
+            result.append((pr.id, name))
+        return result
+
+
+class PurchaseOrder(models.Model):
+    _inherit = "purchase.order"
+
+    @api.multi
+    @api.depends('name', 'partner_ref')
+    def name_get(self):
+        result = []
+        for po in self:
+            name = po.name
+            if po.partner_ref:
+                name += ' (' + po.partner_ref + ')'
+            if self.env.context.get('show_total_amount') and po.amount_total:
+                name += ': ' + formatLang(self.env, po.amount_total, currency_obj=po.currency_id)
+            if self.env.context.get('show_department_name') and po.department_name:
+                name += ': ' + po.department_name
+            result.append((po.id, name))
+        return result
 
 
 class MaterialTransfer(models.Model):
@@ -20,14 +55,25 @@ class MaterialTransfer(models.Model):
         company_id = self.env['res.company']._company_default_get(self._name)
         return self.env['res.company'].browse(company_id.id)
 
+    # @api.onchange('name')
+    # def _domain_picking_type(self):
+
     @api.multi
     def _default_picking_type(self):
         # self.ensure_one()
+
+        # locations = self.env['stock.locations']
         type_obj = self.env['stock.picking.type']
         company_id = self.env.context.get('company_id') or \
                      self.env.user.company_id.id
-        types = type_obj.search([('code', '=', 'internal'),
-                                 ('warehouse_id.company_id', '=', company_id)])
+        if self.env.user.employee_ids[0].department_id:
+            debug = True
+            types = type_obj.search([('code', '=', 'internal'),
+                                     ('warehouse_id.company_id', '=', company_id),
+                                     ('department_ids', 'in', self.env.user.employee_ids[0].department_id.ids)])
+        else:
+            types = type_obj.search([('code', '=', 'internal'),
+                                     ('warehouse_id.company_id', '=', company_id)])
         if not types:
             types = type_obj.search([('code', '=', 'incoming'),
                                      ('warehouse_id', '=', False)])
@@ -73,14 +119,14 @@ class MaterialTransfer(models.Model):
     request_id = fields.Many2one('purchase.request',
                                  String='Purchase Request',
                                  states={'draft': [('readonly', False)]},
-                                 domain=[('state', 'in', ['approved', 'done'])],
+                                 domain=lambda self: [('id', 'in', self._get_default_purchase_request())],
                                  track_visibility='onchange',
-                                 # required=True
                                  )
     order_id = fields.Many2one('purchase.order',
                                String='Purchase Order',
                                states={'draft': [('readonly', False)]},
-                               domain=[('state', 'in', ['purchase'])],
+                               # domain=[('state', 'in', ['purchase'])],
+                               domain=lambda self: [('id', 'in', self._get_default_purchase_order())],
                                track_visibility='onchange',
                                # required=True
                                )
@@ -99,7 +145,7 @@ class MaterialTransfer(models.Model):
                                   string='Transfer',
                                   copy=False,
                                   store=True, compute_sudo=True)
-    final_location = fields.Many2one('stock.location', 'Destination Location')
+    final_location = fields.Many2one('stock.location', 'Destination Location', required=True)
     picking_type_id = fields.Many2one('stock.picking.type',
                                       'Picking Type', required=True,
                                       default=_default_picking_type,
@@ -247,7 +293,7 @@ class MaterialTransfer(models.Model):
         domain_val = {'domain': {'receiver_employee': [('id', 'in', employees.ids)]}}
         return domain_val
 
-    @api.onchange('department_id')
+    @api.onchange('department_id', 'name')
     def _department_id_onchange(self):
         test = 0
         if self.department_id:
@@ -266,17 +312,7 @@ class MaterialTransfer(models.Model):
                          }
                     }
 
-    # @api.onchange('final_location')
-    # def _receiving_employee(self):
-    #     if self.final_location:
-    #         debug = 0
-    #         # department_ids = self.final_location.
-    #         if self.final_location.related_dept.ids:
-    #             emp_ids = self.env['hr.employee'].search(
-    #                 [('department_id', 'in', self.final_location.related_dept.ids)]).ids
-    #             return {'domain': {'receiver_employee': [('id', 'in', emp_ids)]}}
-
-    @api.onchange('request_id')
+    @api.onchange('request_id', 'name')
     def _request_id_onchange(self):
         test = 0
         if self.request_id:
@@ -287,7 +323,7 @@ class MaterialTransfer(models.Model):
                 for po_lines in pr_line.purchase_lines:
                     po_ids.append(po_lines.order_id.id)
             # po_ids = pr.line_ids.purchase_lines.order_id.ids
-            list_of_po = self.env['purchase.order'].search([('id','in',po_ids),('state','=','done')])
+            list_of_po = self.env['purchase.order'].search([('id', 'in', po_ids), ('state', '=', 'done')])
             if self.department_id:
                 emp_ids = self.env['hr.employee'].search([('company_id', '=', self.env.user.company_id.id)]).ids
             else:
@@ -301,7 +337,6 @@ class MaterialTransfer(models.Model):
             if self.department_id:
                 return {'domain':
                             {'request_id': [('department_id', '=', self.department_id.id)],
-                             # 'receiver_employee': [('company_id', '=', self.env.user.company_id.id)],
                              'order_id': [('company_id', '=', self.env.user.company_id.id)],
                              }
                         }
@@ -313,33 +348,24 @@ class MaterialTransfer(models.Model):
                              }
                         }
 
-    @api.onchange('order_id')
+    def _get_default_purchase_order(self):
+        if self.department_id:
+            valid_po = self.env['purchase.order'].search([('department_name', 'in', self.department_id.name),
+                                                          ('state', 'in', ['purchase'])]).ids
+            return valid_po
+
+    def _get_default_purchase_request(self):
+        if self.department_id:
+            valid_pr = self.env['purchase.request'].search([('handover_doc_dept', '=', self.department_id.id),
+                                                            ('state', 'in', ['approved'])]).ids
+            return valid_pr
+
+    @api.onchange('order_id', 'name')
     def _order_id_onchange(self):
         test = 0
         if self.order_id:
-
-            # self._add_product_material_transfer_lines(self.request_id)
-            # for line in self.line_ids:
-            #     line.unlink()
-            self.line_ids = [(5,0,0)]   #clear the lines
+            self.line_ids = [(5, 0, 0)]  # clear the lines
             self._add_product_material_transfer_lines_by_po(self.order_id)
-            # if self.request_id:
-            #     # order = self.order_id
-            #     # dept_ids = [-1]
-            #     # pr_ids = [-1]
-            #     # for oline in order.order_line:
-            #     #     prlines = oline.purchase_request_lines
-            #     #     if len(prlines) > 0:
-            #     #         if not self.department_id:
-            #     #             self.department_id = prlines.request_id.department_id.id
-            #     #         dept_ids += [x.department_id.id for x in prlines if x]
-            #     #         pr_ids += [x.request_id.id for x in prlines if x]
-            #     # if self.department_id:
-            #     #     return {'domain': {'department_id': [('id', 'in', dept_ids)]}}
-            #     # else:
-            #     #     if len(pr_ids) > 0:
-            #     #         self.request_id = pr_ids[0]
-            #     #     return {'domain': {'request_id': [('id', 'in', pr_ids)]}}
         else:
             if self.department_id:
                 return {'domain':
@@ -378,15 +404,32 @@ class MaterialTransfer(models.Model):
     @api.model
     def _prepare_picking(self):
         # create outgoing
-        picking_values = {
-            'picking_type_id': self.picking_type_id.id,
-            'date': self.transfer_date,
-            'origin': self.name,
-            'location_dest_id': self._get_destination_location(),
-            'location_id': self._get_source_location(),
-            'company_id': self.company_id.id,
-            # 'material_transfer_id':self.id
-        }
+        is_dest_transit_loc = self._is_dest_transit_loc()
+        picking_values = {}
+        if is_dest_transit_loc:  # melalui virtual transit
+            picking_values = {
+                'picking_type_id': self.picking_type_id.id,
+                'date': self.transfer_date,
+                'origin': self.name,
+                'location_dest_id': self._get_destination_location(),
+                'location_id': self._get_source_location(),
+                'company_id': self.company_id.id,
+                # 'material_transfer_id':self.id
+                'date_done': self.transfer_date,
+            }
+        else:  # langsung
+            picking_values = {
+                'picking_type_id': self.picking_type_id.id,
+                'date': self.transfer_date,
+                'origin': self.name,
+                'location_dest_id': self._get_destination_location(),
+                'location_id': self._get_source_location(),
+                'company_id': self.company_id.id,
+                # 'material_transfer_id':self.id
+                'date_done': self.transfer_date,
+                'receiving_dept': self.picking_type_id.default_location_dest_id.related_dept.id,
+                'receiving_employee': self.receiver_employee.id
+            }
         return picking_values
 
     # @api.multi
@@ -557,31 +600,44 @@ class MaterialTransfer(models.Model):
         for line in self.line_ids:
             line._count_quantity()
 
+    @api.onchange('picking_type_id')
+    def _onchange_picking_type_set_dest(self):
+        # retval_value = False
+        if not self.picking_type_id.default_location_dest_id.usage == 'transit':
+            self.final_location = self.picking_type_id.default_location_dest_id.id
+        else:
+            self.final_location = {}
+        # return retval_value
+
     @api.multi
     def button_create_picking(self, force=False):
-        # self.button_reassign_movement()
-        # if self.order_id:
-        is_dest_transit_loc = self._is_dest_transit_loc()
-        outgoing_picking = []
-        outgoing_picking = self._create_picking_ret_list()
-        if is_dest_transit_loc:
-            self._create_finalize_picking(outgoing_picking)
-        # self.button_reassign_movement()
-        return {}
+        is_error = False
+        self.ensure_one()
+        for line_item in self.line_ids:
+            if line_item.product_avail_qty <= 0:
+                is_error = True
+                break
 
-    # def _is_direct(self):
-    #     retval = False
-    #     # check if destination is
-    #     is_dest_transit_loc = self._is_dest_transit_loc()
-    #     # if not is_dest_transit_loc:
-    #
-    #     return retval
+        if not self.picking_ids and not is_error:
+            is_dest_transit_loc = self._is_dest_transit_loc()
+            outgoing_picking = []
+            outgoing_picking = self._create_picking_ret_list()
+            if is_dest_transit_loc:
+                self._create_finalize_picking(outgoing_picking)
+            return True
+        else:
+            if is_error:
+                raise exceptions.ValidationError('Negative or Zero available quantity')
+            else:
+            #         sudah ada picking
+                raise exceptions.ValidationError('Picking(s) already exist')
 
     def _is_dest_transit_loc(self):
         retval_value = False
         if self.picking_type_id.default_location_dest_id.usage == 'transit':
             retval_value = True
         return retval_value
+
     @api.multi
     def button_finish_picking(self, force=False):
         # self.button_reassign_movement()
@@ -652,6 +708,17 @@ class MaterialTransferLine(models.Model):
                                   readonly=True)
     product_id = fields.Many2one('product.product',
                                  String='Product')
+
+    product_avail_qty = fields.Float(String='Available Quantity',
+                                     readonly=True,
+                                     track_visibility='onchange',
+                                     compute='_count_avail')
+    product_avail_uom = fields.Many2one('product.uom',
+                                        String='Available Quantity UoM',
+                                        readonly=True,
+                                        track_visibility='onchange',
+                                        compute='_count_avail')
+
     product_qty = fields.Float(String='Quantity', track_visibility='onchange')
     product_uom = fields.Many2one('product.uom',
                                   String='Product Unit of Measure',
@@ -672,11 +739,17 @@ class MaterialTransferLine(models.Model):
     delivered_uom = fields.Many2one('product.uom',
                                     String='Delivered UoM',
                                     track_visibility='onchange')
-    is_damage = fields.Boolean(String='Is Damage Product', readonly=True, default=False)
-    damage_qty = fields.Float(String='Damage Qty', readonly=True)
-    is_not_match = fields.Boolean(String='Is Not Match Product', readonly=True, default=False,
+    is_damage = fields.Boolean(String='Is Damage Product', default=False)
+    damage_qty = fields.Float(String='Damage Qty', )
+    damage_uom = fields.Many2one('product.uom',
+                                 String='Damaged UoM',
+                                 track_visibility='onchange')
+    is_not_match = fields.Boolean(String='Is Not Match Product', default=False,
                                   track_visibility='onchange')
-    not_match_qty = fields.Float(String='Not Match Qty', readonly=True, track_visibility='onchange')
+    not_match_qty = fields.Float(String='Not Match Qty', track_visibility='onchange')
+    not_match_uom = fields.Many2one('product.uom',
+                                    String='Not Match UoM',
+                                    track_visibility='onchange')
     description = fields.Char(String="Description")
     # all stock move
     move_ids = fields.One2many('stock.move',
@@ -697,7 +770,14 @@ class MaterialTransferLine(models.Model):
     @api.onchange('product_id')
     def _product_id_onchange(self):
         product = self.product_id
-        self.product_uom = product.uom_id.id
+        self.product_uom = self.product_id.uom_id.id
+        stock_quant_pointer = self.env['stock.quant'].search([('product_id', '=', self.product_id.id),
+                                                              ('location_id', '=',
+                                                               self.transfer_id.picking_type_id.default_location_src_id.id)])
+        if stock_quant_pointer:
+            self.product_avail_qty = stock_quant_pointer[0].quantity
+            self.product_avail_uom = stock_quant_pointer[0].product_uom_id
+
         # calculate retrieved qty,retrieved uom
         # calculate delivered qty, delivered uom,
         # is damaged, damaged qty, damaged Uom
@@ -852,6 +932,19 @@ class MaterialTransferLine(models.Model):
         # })
         return done
 
+    @api.depends('product_id', 'transfer_id')
+    def _count_avail(self):
+        debug = 0
+        for item in self:
+            stock_quant_pointer = []
+            if item.transfer_id.picking_type_id.default_location_src_id.id:
+                stock_quant_pointer = self.env['stock.quant'].search([('product_id', '=', item.product_id.id),
+                                                                      ('location_id', '=',
+                                                                       item.transfer_id.picking_type_id.default_location_src_id.id)])
+                if stock_quant_pointer:
+                    item.product_avail_qty = stock_quant_pointer[0].quantity
+                    item.product_avail_uom = stock_quant_pointer[0].product_uom_id
+
     @api.depends('move_ids')
     def _count_quantity(self):
         for line in self:
@@ -877,17 +970,15 @@ class MaterialTransferLine(models.Model):
                 line.write({'delivered_uom': line.product_uom.id})
             #   get damaged
             damaged_qty = 0
-            damaged_uom = line.product_uom.id
             not_match_qty = 0
-            not_match_uom = line.product_uom.id
             sorted_moves = line.move_ids.sorted(key='write_date', reverse=True)
             if sorted_moves:
                 last_move = sorted_moves[0]
                 for move_line in last_move.move_line_ids:
                     if move_line.is_damage_line == True:
                         damaged_qty += line.product_uom._compute_quantity(move_line.damage_qty_line,
-                                                                        move_line.damage_uom_line,
-                                                                        rounding_method='HALF-UP')
+                                                                          move_line.damage_uom_line,
+                                                                          rounding_method='HALF-UP')
                     if move_line.is_not_match_line == True:
                         not_match_qty += line.product_uom._compute_quantity(move_line.not_match_qty_line,
                                                                             move_line.not_match_uom_line,
@@ -900,29 +991,3 @@ class MaterialTransferLine(models.Model):
                     line.write({'not_match_qty': not_match_qty})
                     line.write({'not_match_uom': move_line.not_match_uom_line})
                     line.write({'is_not_match': True})
-        #   get not match
-        # for move in self.move_ids:
-        #     debug = 0
-        #     if '/OUT/' in move.reference:
-        #         #     count retrieved
-        #         # retrieved_val = product_qty = self.product_uom._compute_quantity(diff_quantity, quant_uom, rounding_method='HALF-UP')
-        #         retrieved_uom = ''
-        #     elif '/IN/' in move.reference:
-        #         delivered_qty = 0
-        #         delivered_uom = ''
-
-    # @api.multi
-    # def _get_stock_move_price_unit(self):
-    #     self.ensure_one()
-    #     line = self[0]
-    #     order = line.transfer_id
-    #     price_unit = line.price_unit
-    #     if line.taxes_id:
-    #         price_unit = line.taxes_id.with_context(round=False).compute_all(
-    #             price_unit, currency=line.order_id.currency_id, quantity=1.0, product=line.product_id, partner=line.order_id.partner_id
-    #         )['total_excluded']
-    #     if line.product_uom.id != line.product_id.uom_id.id:
-    #         price_unit *= line.product_uom.factor / line.product_id.uom_id.factor
-    #     if order.currency_id != order.company_id.currency_id:
-    #         price_unit = order.currency_id.with_context(date=order.date_approve).compute(price_unit, order.company_id.currency_id, round=False)
-    #     return price_unit

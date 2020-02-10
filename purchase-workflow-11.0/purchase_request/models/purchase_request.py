@@ -2,7 +2,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0).
 
 from odoo import api, fields, models, _
-import odoo.addons.decimal_precision as dp
+import addons.decimal_precision as dp
 from odoo.exceptions import UserError
 
 from datetime import datetime
@@ -150,10 +150,20 @@ class PurchaseRequest(models.Model):
     def copy(self, default=None):
         default = dict(default or {})
         self.ensure_one()
-        default.update({
-            'state': 'draft',
-            'name': self.env['ir.sequence'].next_by_code('purchase.request'),
-        })
+
+        # if self.get('doc_type') == 'K0':
+        #     vals['name'] = self.env['ir.sequence'].next_by_code('purchase.request.k0') or '/'
+        # elif vals.get('doc_type') == 'K1':
+        #     vals['name'] = self.env['ir.sequence'].next_by_code('purchase.request.k1') or '/'
+        # elif vals.get('doc_type') == 'K3':
+        #     vals['name'] = self.env['ir.sequence'].next_by_code('purchase.request.k3') or '/'
+        # else:
+        #     vals['name'] = self.env['ir.sequence'].next_by_code('purchase.request') or '/'
+        if self.name == 'New' or not self.name:
+            default.update({
+                'state': 'draft',
+                'name': self.env['ir.sequence'].next_by_code('purchase.request'),
+            })
         return super(PurchaseRequest, self).copy(default)
 
     @api.model

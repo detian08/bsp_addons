@@ -2,7 +2,7 @@ import datetime as dt
 
 from dateutil.relativedelta import *
 
-import odoo.addons.decimal_precision as dp
+import addons.decimal_precision as dp
 from odoo import api, fields, models
 
 
@@ -16,6 +16,11 @@ class PurchaseRequest(models.Model):
         ('K3', 'Form-K3'),
         ('K4', 'Form-K4')
     ], string='Doc Type', readonly=False, index=True, copy=False, default='K0')
+    @api.model
+    def _get_default_name(self):
+        # return self.env['ir.sequence'].next_by_code('purchase.request')
+        name_retval = '-'
+        return name_retval
 
     @api.depends('line_ids.price_unit', 'line_ids.discount',
                  'line_ids.estimated_cost1', 'line_ids.estimated_cost2', 'line_ids.estimated_cost3')
@@ -118,6 +123,37 @@ class PurchaseRequest(models.Model):
             else:
                 vals['name'] = self.env['ir.sequence'].next_by_code('purchase.request') or '/'
         return super(PurchaseRequest, self).create(vals)
+
+    @api.multi
+    def copy(self, default=None):
+        default = dict(default or {})
+        self.ensure_one()
+
+        if self.doc_type == 'K0':
+            default.update({
+                'state': 'draft',
+                'name': self.env['ir.sequence'].next_by_code('purchase.request.k0'),
+            })
+        elif self.doc_type == 'K1':
+            default.update({
+                'state': 'draft',
+                'name': self.env['ir.sequence'].next_by_code('purchase.request.k1'),
+            })
+        elif self.doc_type == 'K2':
+            default.update({
+            'state': 'draft',
+            'name': self.env['ir.sequence'].next_by_code('purchase.request.k2'),
+        })
+        elif self.doc_type == 'K3':
+            default.update({
+                'state': 'draft',
+                'name': self.env['ir.sequence'].next_by_code('purchase.request.k3'),
+            })
+        # default.update({
+        #     'state': 'draft',
+        #     'name': self.env['ir.sequence'].next_by_code('purchase.request'),
+        # })
+        return super(PurchaseRequest, self).copy(default)
 
 
 class PurchaseRequestLine(models.Model):

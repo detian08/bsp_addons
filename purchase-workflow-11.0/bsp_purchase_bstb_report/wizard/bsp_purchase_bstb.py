@@ -199,6 +199,9 @@ class WizardInventoryTransferBSTB(models.Model):
         po_num = ''
         pr_num = ''
         vendor_name = ''
+        received_name = picking_singleton.receiving_employee.name
+        if not received_name:
+            received_name = ''
         if po_pointer:
             po_num = po_pointer[0].name
             pr_num = po_pointer[0].order_line[0].purchase_request_lines[0].request_id.name

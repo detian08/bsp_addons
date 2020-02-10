@@ -1,19 +1,89 @@
 from odoo import api, fields, models
 
+class PurchaseOrderDept(models.Model):
+    _inherit = "hr.department"
+
+    # purchaseorder_ids = fields.Many2many('purchase.order', string='Purchase Order')
+
+class PurchaseOrder(models.Model):
+    _inherit = "purchase.order"
+
+    @api.multi
+    def _default_po_dept(self):
+        self._set_po_dept()
+
+    # @api.multi
+    # @api.depends('name', 'partner_ref')
+    # def name_get(self):
+    #     result = []
+    #     for po in self:
+    #         name = po.name
+    #         if po.partner_ref:
+    #             name += ' ('+po.partner_ref+')'
+    #         if self.env.context.get('show_total_amount') and po.amount_total:
+    #             name += ': ' + formatLang(self.env, po.amount_total, currency_obj=po.currency_id)
+    #         if self.env.context.get('show_department_name') and po.department_name:
+    #             name += ': ' + self.department_name
+    #         result.append((po.id, name))
+    #     return result
+
+    @api.onchange('name','id')
+    def _get_po_dept(self):
+        self._set_po_dept()
+
+    @api.multi
+    @api.depends('order_line')
+    def _set_po_dept(self):
+        selected_department = []
+        for order in self:
+            if order.order_line:
+                department_name = ''
+                order.department_name = department_name
+                for line in order.order_line:
+                    if line.purchase_request_lines:
+                        for pr_lines in line.purchase_request_lines:
+                            department_name = pr_lines.request_id.department_id.name
+                if order.department_name:
+                    order.department_name = order.department_name +',' + department_name
+                else:
+                    order.department_name = department_name
+        # self.department_ids = selected_department.ids
+
+    department_name = fields.Char( string='Departement',
+                                   default=_default_po_dept,
+                                   track_visibility='onchange',
+                                   compute='_set_po_dept')
+    rfq_name = fields.Char(string='RFQ Number', copy=False, readonly=True)
+
+    @api.multi
+    def button_confirm(self):
+        res = super(PurchaseOrder, self).button_confirm()
+        for purchase in self :
+            purchase.write({
+                'rfq_name': purchase.name,
+                'name': self.env['ir.sequence'].next_by_code('purchase.order'),
+            })
+        return res
+
+    @api.model
+    def create(self, vals):
+        sequence_id = self.env.ref('bsp_cosmetics.seq_purchase_rfq')
+        vals['name'] = sequence_id.next_by_id()
+        return super(PurchaseOrder, self).create(vals)
 
 class Partner(models.Model):
     _inherit = 'res.partner'
 
-    street = fields.Char(required=True)
-    vat = fields.Char(required=True)
-    city = fields.Char(required=True)
-    country_id = fields.Many2one(required=True)
-    phone = fields.Char(required=True)
-    child_ids = fields.One2many(required=True)
-    bank_ids = fields.One2many(required=True)
-    # industry_id = fields.Many2one()
-    company_id = fields.Many2one(required=True)
-    property_supplier_payment_term_id = fields.Many2one(required=True)
+    # street = fields.Char(required=True)
+    # vat = fields.Char(required=True)
+    # city = fields.Char(required=True)
+    # country_id = fields.Many2one(required=True)
+    # phone = fields.Char(required=True)
+    # child_ids = fields.One2many(required=True)
+    # bank_ids = fields.One2many(required=True)
+    # # industry_id = fields.Many2one()
+    # company_id = fields.Many2one(required=True)
+    # property_supplier_payment_term_id = fields.Many2one(required=True)
 
     # property_account_receivable_advance_id = fields.Many2one(required=True)
     # property_account_payable_advance_id = fields.Many2one(required=True)
@@ -122,12 +192,12 @@ class ProductTemplate(models.Model):
 class Company(models.Model):
     _inherit = 'res.company'
 
-    street = fields.Char(required=True)
-    vat = fields.Char(required=True, string="NPWP")
-    city = fields.Char(required=True)
-    country_id = fields.Many2one(required=True)
-    phone = fields.Char(required=True)
-    parent_id = fields.Many2one(required=True)
+    # street = fields.Char(required=True)
+    # vat = fields.Char(required=True, string="NPWP")
+    # city = fields.Char(required=True)
+    # country_id = fields.Many2one(required=True)
+    # phone = fields.Char(required=True)
+    # parent_id = fields.Many2one(required=True)
 
 
 class PurchaseRequest(models.Model):

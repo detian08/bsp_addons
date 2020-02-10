@@ -12,7 +12,7 @@
     'category' : 'Accounting',
     'website': 'https://www.alphasoft.co.id/',
     'images':  ['images/main_screenshot.png'],
-    'depends' : ['base', 'account'],
+    'depends' : ['base', 'account','purchase'],
     'data': [
         "views/partner_view.xml",
     ],

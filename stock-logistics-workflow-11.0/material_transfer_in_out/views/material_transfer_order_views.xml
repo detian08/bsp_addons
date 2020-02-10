@@ -37,12 +37,12 @@
                     <button name="button_create_picking" string="Create Picking"
                             type="object" class="oe_highlight"
                             states="open"/>
-<!--                    <button name="button_finish_picking" string="Create Incoming Picking"-->
-<!--                            type="object" class="oe_highlight"-->
-<!--                            states="open"/>-->
-<!--                    <button name="button_reassign_movement" string="Refresh Picking Info"-->
-<!--                            type="object" class="oe_highlight"-->
-<!--                            states="open"/>-->
+                    <!--                    <button name="button_finish_picking" string="Create Incoming Picking"-->
+                    <!--                            type="object" class="oe_highlight"-->
+                    <!--                            states="open"/>-->
+                    <!--                    <button name="button_reassign_movement" string="Refresh Picking Info"-->
+                    <!--                            type="object" class="oe_highlight"-->
+                    <!--                            states="open"/>-->
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -65,8 +65,9 @@
                         </group>
                         <group string="Source Doc. Info">
                             <field name="department_id"/>
-                            <field name="request_id"/>
-                            <field name="order_id"/>
+                            <field name="request_id" context="{'show_pr_name_dept': True}"/>
+                            <field name="order_id"
+                                   context="{'show_department_name': True}"/>
                             <field name="notes"/>
                         </group>
                         <group string="Receiver Info">
@@ -79,6 +80,8 @@
                             <field name="line_ids">
                                 <tree>
                                     <field name="product_id"/>
+                                    <field name="product_avail_qty"/>
+                                    <field name="product_avail_uom"/>
                                     <field name="product_qty"/>
                                     <field name="product_uom"/>
                                     <field name="retrieved_qty"/>
@@ -87,8 +90,10 @@
                                     <field name="delivered_uom"/>
                                     <field name="is_damage"/>
                                     <field name="damage_qty"/>
+                                    <field name="damage_uom"/>
                                     <field name="is_not_match"/>
                                     <field name="not_match_qty"/>
+                                    <field name="not_match_uom"/>
                                     <field name="description"/>
                                 </tree>
                                 <form>
@@ -96,6 +101,8 @@
                                         <group>
                                             <group>
                                                 <field name="product_id"/>
+                                                <field name="product_avail_qty"/>
+                                                <field name="product_avail_uom"/>
                                                 <field name="product_qty"/>
                                                 <field name="product_uom"
                                                        options="{'no_open': True, 'no_create': True}"/>

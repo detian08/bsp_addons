@@ -104,10 +104,6 @@ class WizardPurchase(models.Model):
             items = []
             vno = 1
             penjumlah = 0
-            # for tax_id in rec.partner_id.sudo().supplier_taxes_wth_id.filtered(lambda r: r.tax_witholding==True):
-            #     pph = abs(tax_id.amount)
-            pph = (rec.amount_wht)
-            # pph = abs(rec.partner_id.supplier_taxes_wth_id.amount)
             for line in rec.order_line:
                 # str_att = ''
                 atts = []
@@ -126,10 +122,10 @@ class WizardPurchase(models.Model):
                     "product_name": str(line.product_id.name) ,
                     # "attribute":str_att,
                     "attributes": atts,
-                    "product_qty": str("{0:8,.0f}".format(line.product_qty)),
+                    "product_qty": str("{0:8,.2f}".format(line.product_qty)),
                     "product_uom":  str(line.product_uom.name),
-                    "price_unit": str("{0:10,.0f}".format(line.price_unit)),
-                    "price_total": str("{0:12,.0f}".format(line.price_unit * line.product_qty)),
+                    "price_unit": str("{0:10,.2f}".format(line.price_unit)),
+                    "price_total": str("{0:12,.2f}".format(line.price_unit * line.product_qty)),
                 }
                 penjumlah += (line.price_unit * line.product_qty)
                 items.append(row)
@@ -155,7 +151,7 @@ class WizardPurchase(models.Model):
                 row = {
                     "no":str(vno),
                     "dp_date": (datetime.strptime(dp.payment_date,'%Y-%m-%d')).strftime('%d-%m-%Y') if dp.payment_date else '',
-                    "dp_amount": str("{0:12,.0f}".format(dp.amount)),
+                    "dp_amount": str("{0:12,.2f}".format(dp.amount)),
                     "remark":  "Uang Muka ke: " + str(vno)
                 }
                 down_payments.append(row)
@@ -166,7 +162,6 @@ class WizardPurchase(models.Model):
             kon_waktu =''
             kon_lok =''
             kon_fak =''
-            attn_user =''
             if rec.partner_id.child_ids:
                 cpnya = str(rec.partner_id.child_ids[0].name)
             if rec.total_pembelian:
@@ -179,11 +174,8 @@ class WizardPurchase(models.Model):
                 kon_lok = str(rec.lokasi_pelaksanaan)
             if rec.faktur_an:
                 kon_fak = str(rec.faktur_an)
-            if rec.notes:
-                nbinfo = str(rec.notes)
             fin_dir = self.env['hr.employee'].search([('job_id.name', 'like', 'Finance Director')], limit=1)
             purchase_mgr = self.env['hr.employee'].search([('job_id.name', 'like', 'Purchase Manager')], limit=1)
-            attn_user = rec.partner_id.child_ids[0].name if rec.partner_id.child_ids else ''
             # pr_no = str(rec.order_line[0].purchase_request_lines[0].request_id.name if rec.order_line[0].purchase_request_lines[0].request_id.name else '')
             pr_no=''
             data = {
@@ -205,22 +197,21 @@ class WizardPurchase(models.Model):
                 "ref": strPR,
                 "termofpayment": str(rec.partner_id.property_supplier_payment_term_id.name if rec.partner_id.property_supplier_payment_term_id.name else ''),
                 "lamp": "2 lembar",
-                "total_untaxed": str("{0:12,.0f}".format(rec.amount_untaxed)),
-                "total_tax": str("{0:12,.0f}".format(rec.amount_other_tax)),
-                "total_amount": str("{0:12,.0f}".format(rec.amount_total)),
-                "total_amount2": str("{0:12,.0f}".format(penjumlah)),
-                "diskon": str("{0:12,.0f}".format(rec.general_discount*penjumlah/100)),
+                "total_untaxed": str("{0:12,.2f}".format(rec.amount_untaxed)),
+                "total_tax": str("{0:12,.2f}".format(rec.amount_tax)),
+                "total_amount": str("{0:12,.2f}".format(rec.amount_total)),
+                "total_amount2": str("{0:12,.2f}".format(penjumlah)),
+                "diskon": str("{0:12,.2f}".format(rec.general_discount*penjumlah/100)),
                 "pph":pph,
-                "total_pph": str("{0:12,.0f}".format(pph)),
+                "total_pph": str("{0:12,.2f}".format(pph*penjumlah/100)),
                 # "grand_amount": str("{0:12,.2f}".format(((1-rec.general_discount/100) * penjumlah) + rec.amount_tax +(pph*penjumlah/100))),
-                "grand_amount": str("{0:12,.0f}".format(rec.amount_total) if rec.amount_total else '0'),
+                "grand_amount": str("{0:12,.2f}".format(rec.amount_total) if rec.amount_total else '0'),
                 "down_payments": down_payments,
                 "kon_total": kon_total,
                 "kon_cara": kon_cara,
                 "kon_waktu": kon_waktu,
                 "kon_lok": kon_lok,
                 "kon_fak": kon_fak,
-                "attn_user": attn_user,
                 'items': items
             }
         return data
@@ -232,34 +223,20 @@ class WizardPurchase(models.Model):
         datadir = os.path.dirname(__file__)
         order = self.env['purchase.order'].browse(self._context.get('active_ids', list()))
         doctype = order.bsp_po_type
-        context = self.get_data()
-        pph=context['pph']
         # doctype = order.order_type
         doctype = str(doctype).upper()
         # doctype =''
         if platform.system() == 'LINUX':
             # if doctype == 'general':
             if doctype == 'GENERAL':
-                if pph != 0:
-                    doc_file = 'templates/suratpesanan_pp1_pph.docx'
-                else:
-                    doc_file = 'templates/suratpesanan_pp1.docx'
+                doc_file = 'templates/suratpesanan_pp1.docx'
             else:
-                if pph != 0:
-                    doc_file = 'templates/suratpesanan_specific_pph.docx'
-                else:
-                    doc_file = 'templates/suratpesanan_specific.docx'
+                doc_file = 'templates/suratpesanan_specific.docx'
         else:
             if doctype == 'GENERAL':
-                if pph != 0:
-                    doc_file = 'templates/suratpesanan_pp1_pph.docx'
-                else:
-                    doc_file = 'templates/suratpesanan_pp1.docx'
+                doc_file = 'templates/suratpesanan_pp1.docx'
             else:
-                if pph != 0:
-                    doc_file = 'templates/suratpesanan_specific_pph.docx'
-                else:
-                    doc_file = 'templates/suratpesanan_specific.docx'
+                doc_file = 'templates/suratpesanan_specific.docx'
 
         f = os.path.join(datadir, doc_file)
         template = DocxTemplate(f)
@@ -269,61 +246,6 @@ class WizardPurchase(models.Model):
         filename = ('PurchaseRep-' + order.name + '__' +  str(datetime.today().date()) + '.docx')
         if platform.system() == 'Linux':
            filename = ('/tmp/PurchaseRep-' + order.name + '__' + str(datetime.today().date()) + '.docx')
-        template.save(filename)
-        fp = open(filename, "rb")
-        file_data = fp.read()
-        out = base64.encodestring(file_data)
-        fp.close()
-        attach_vals = {
-            'purchase_data': filename,
-            'file_name': out,
-        }
-
-        act_id = self.env['purchase.report.docx'].create(attach_vals)
-        # print_job(filename) --> print to default printer
-
-        return {
-            'type': 'ir.actions.act_window',
-            'res_model': 'purchase.report.docx',
-            'res_id': act_id.id,
-            'view_type': 'form',
-            'view_mode': 'form',
-            'context': self.env.context,
-            'target': 'new',
-        }
-
-
-    @api.multi
-    def print_report_atk(self):
-        self.ensure_one()
-        datadir = os.path.dirname(__file__)
-        order = self.env['purchase.order'].browse(self._context.get('active_ids', list()))
-        doctype = order.bsp_po_type
-        context = self.get_data()
-        pph = context['pph']
-        # doctype = order.order_type
-        doctype = str(doctype).upper()
-        # doctype =''
-        if platform.system() == 'LINUX':
-            # if doctype == 'general':
-            if doctype == 'GENERAL':
-                doc_file = 'templates/suratpesanan_atk.docx'
-            else:
-                doc_file = 'templates/suratpesanan_specific.docx'
-        else:
-            if doctype == 'GENERAL':
-                doc_file = 'templates/suratpesanan_atk.docx'
-            else:
-                doc_file = 'templates/suratpesanan_specific.docx'
-
-        f = os.path.join(datadir, doc_file)
-        template = DocxTemplate(f)
-        context = self.get_data()
-        # context = self.get_sample()
-        template.render(context)
-        filename = ('PurchaseRep-' + order.name + '__' + str(datetime.today().date()) + '.docx')
-        if platform.system() == 'Linux':
-            filename = ('/tmp/PurchaseRep-' + order.name + '__' + str(datetime.today().date()) + '.docx')
         template.save(filename)
         fp = open(filename, "rb")
         file_data = fp.read()

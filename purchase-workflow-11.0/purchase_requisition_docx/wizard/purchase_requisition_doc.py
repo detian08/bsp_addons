@@ -119,7 +119,7 @@ class WizardPurchaseRequisition(models.Model):
                                     # "price_total1": str("{0:12,.0f}".format(isi_po.price_total)),
                                     "price_total1": str("{0:12,.0f}".format(isi_po.price_unit) if isi_po.product_qty>0 else ''),
                                 })
-                                if isi_po.taxes_id.id:
+                                if isi_po.taxes_id.ids:
                                     pajak1 = "Y"
                             else:
                                 row.update({
@@ -139,7 +139,7 @@ class WizardPurchaseRequisition(models.Model):
                                 row.update({
                                     "price_total2": str("{0:12,.0f}".format(isi_po.price_unit) if isi_po.product_qty>0 else ''),
                                 })
-                                if isi_po.taxes_id.id:
+                                if isi_po.taxes_id.ids:
                                     pajak2 = "Y"
                             else:
                                 row.update({
@@ -157,7 +157,7 @@ class WizardPurchaseRequisition(models.Model):
                                 row.update({
                                     "price_total3": str("{0:12,.0f}".format(isi_po.price_unit) if isi_po.product_qty>0 else ''),
                                 })
-                                if isi_po.taxes_id.id:
+                                if isi_po.taxes_id.ids:
                                     pajak3 = "Y"
                             else:
                                 row.update({

@@ -9,7 +9,8 @@
 				You want to Print Purchase Order ?
 				</p>
 					<footer>
-						<button string="Print" class="btn-primary" name="print_report" type="object" />
+						<button string="Print Reguler" class="btn-primary" name="print_report" type="object" />
+						<button string="Print ATK" class="btn-primary" name="print_report_atk" type="object" />
 						<button string="Cancel" class="btn-primary" special="cancel"/>
 					</footer>
 				</form>
@@ -17,7 +18,7 @@
 	</record>
 
 
-		<record id="purchase_docx_views" model="ir.ui.view">
+	<record id="purchase_docx_views" model="ir.ui.view">
 		<field name="name">Purchase Report</field>
 		<field name="model">purchase.report.docx</field>
 		<field name="arch" type="xml">

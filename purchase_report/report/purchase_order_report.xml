@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_purchaseorder_signature_document">
+    <t t-call="web.external_layout">
+        <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+        <!-- <t t-set="address">
+            <div t-field="o.partner_id"
+            t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+            <p t-if="o.partner_id.vat"><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="o.partner_id.vat"/></p>
+        </t>
+        <t t-if="o.dest_address_id">
+            <t t-set="information_block">
+                <strong>Shipping address:</strong>
+                <div t-if="o.dest_address_id">
+                    <div t-field="o.dest_address_id"
+                        t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}' name="purchase_shipping_address"/>
+                </div>
+
+            </t>
+        </t> -->
+        <div class="page">
+            <div class="oe_structure"/>
+
+            <h2 class="text-center">Purchase Order</h2>
+            <div><![CDATA[&nbsp;]]></div>
+
+            <table class="table table-sm o_main_table" style="border-color:white;">
+                <tbody>
+                    <tr>
+                        <td style="border-color:white;">Alamat</td>
+                        <td style="border-color:white;">: <span t-esc="o.partner_id.street"/></td>
+                        <td style="border-color:white;">Order No</td>
+                        <td style="border-color:white;">: <span t-esc="o.name"/></td>
+                    </tr>
+                    <tr>
+                        <td style="border-color:white;">Phone</td>
+                        <td style="border-color:white;">: <span t-esc="o.partner_id.phone"/></td>
+                        <td style="border-color:white;">Date</td>
+                        <td style="border-color:white;">: <span t-esc="o.get_date(o.date_order)"/></td>
+                    </tr>
+                    <tr>
+                        <td style="border-color:white;">Email</td>
+                        <td style="border-color:white;">: <span t-esc="o.partner_id.email"/></td>
+                        <td style="border-color:white;">RFQ Ref</td>
+                        <td style="border-color:white;">: <span t-esc="o.partner_ref"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div id="informations" class="row mt32 mb32">
+                <div class="col-3 bm-2">
+                    <strong>Purchase From:</strong>
+                    <p t-field="o.partner_id" class="m-0"/>
+                    <p t-field="o.partner_id.street" class="m-0"/>
+                    <p t-field="o.partner_id.city" class="m-0"/>
+                    <p t-field="o.partner_id.zip" class="m-0"/>
+                </div>
+                <div class="col-3 bm-2">
+                    <strong>Shipping to:</strong>
+                    <p t-field="o.company_id.street" class="m-0"/>
+                    <p t-field="o.company_id.city" class="m-0"/>
+                    <p t-field="o.company_id.zip" class="m-0"/>
+                </div>
+            </div>
+
+            <table class="table table-sm o_main_table">
+                <thead>
+                    <tr>
+                        <th><strong>No</strong></th>
+                        <th><strong>Item</strong></th>
+                        <th class="text-right"><strong>Qty</strong></th>
+                        <th><strong>UoM</strong></th>
+                        <th class="text-right"><strong>Unit Price</strong></th>
+                        <th class="text-right"><strong>Amount</strong></th>
+                    </tr>
+                </thead>
+                <t t-set="num" t-value="0"/>
+                <tbody>
+                    <tr t-foreach="o.order_line" t-as="line">
+                        <t t-set="num" t-value="num+1"/>
+                        <td class="text-center">
+                            <span t-esc="num"/>
+                        </td>
+                        <td>
+                            <span t-field="line.product_id"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="line.product_qty"/>
+                        </td>
+                        <td>
+                            <span t-field="line.product_uom"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="line.price_unit"
+                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="line.price_subtotal"
+                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div id="total" class="row justify-content-end">
+                <div class="col-4">
+                    <table class="table table-sm">
+                        <tr class="border-black">
+                            <td><strong>Subtotal</strong></td>
+                            <td class="text-right">
+                                <span t-field="o.amount_untaxed"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Taxes</td>
+                            <td class="text-right">
+                                <span t-field="o.amount_tax"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                            </td>
+                        </tr>
+                        <tr class="border-black o_total">
+                            <td><strong>Total</strong></td>
+                            <td class="text-right">
+                                <span t-field="o.amount_total"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <p t-field="o.notes"/>
+            <div><strong>Term &amp; Conditions :</strong></div>
+            <div>1. Payment Term : </div><span t-field="o.payment_term_id"/>
+            <div>2. Total does include <strong>10%</strong> VAT tax or any other applicable taxes </div>
+            <div>3. Invoice will be processed bt attaching supporting document. Such as PO, BAST, Invoice and others </div>
+            <div class="oe_structure"/>
+
+            <div><![CDATA[&nbsp;]]></div>
+            <div t-if="o.amount_total &lt;= 1000000" class="row" name="ttd" style="padding-top:20px; page-break-before: avoid;">
+                <div class="col-3 bm-2" style="text-align:center">
+                    <div>Create By,</div>
+                    <div t-if="o.approve_uid.digital_signature"><img t-att-src="image_data_uri(o.create2_uid.digital_signature)" class="float-left" alt="Logo" align="center" height="110" width="110" style='margin:14px;padding-top:0px;'/></div>
+                    <div>   <span t-field="o.create2_uid"/></div>
+                    <div>   HRGA Manager</div>
+                </div>
+                <div class="col-3 bm-2" style="text-align:center">
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="col-3 bm-2" style="text-align:center">
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="col-3 bm-2" style="text-align:center">
+                    <div>Approved By,</div>
+                    <div t-if="o.approve_uid.digital_signature"><img t-att-src="image_data_uri(o.approve_uid.digital_signature)" class="float-left" alt="Logo" align="center" height="110" width="110" style='margin:14px;padding-top:0px;'/></div>
+                    <div>   <span t-field="o.approve_uid"/></div>
+                    <div>   Fin Dep.</div>
+                </div>
+            </div>
+            <div t-if="o.amount_total &gt; 1000000" class="row" name="ttd2" style="padding-top:20px; page-break-after: avoid;">
+                <div class="col-3 bm-2" style="text-align:center">
+                    <div>Create By,</div>
+                    <div t-if="o.approve_uid.digital_signature"><img t-att-src="image_data_uri(o.create2_uid.digital_signature)" class="float-left" alt="Logo" align="center" height="110" width="110" style='margin:14px;padding-top:0px;'/></div>
+                    <div>   <span t-field="o.create2_uid"/></div>
+                    <div>   HRGA Manager</div>
+                </div>
+                <div class="col-3 bm-2" style="text-align:center">
+                    <div>Acknowladge,</div>
+                    <div t-if="o.approve_uid.digital_signature"><img t-att-src="image_data_uri(o.acknowledge_uid.digital_signature)" class="float-left" alt="Logo" align="center" height="110" width="110" style='margin:14px;padding-top:0px;'/></div>
+                    <div>   <span t-field="o.acknowledge_uid"/></div>
+                    <div>   Fin Dep.</div>
+                </div>
+                <div class="col-3 bm-2" style="text-align:center">
+                    <div>Acknowladge,</div>
+                    <div t-if="o.approve_uid.digital_signature"><img t-att-src="image_data_uri(o.acknowledge2_uid.digital_signature)" class="float-left" alt="Logo" align="center" height="110" width="110" style='margin:14px;padding-top:0px;'/></div>
+                    <div>   <span t-field="o.acknowledge2_uid"/></div>
+                    <div>   Chief Business Dev.</div>
+                </div>
+                <div class="col-3 bm-2" style="text-align:center">
+                    <div>Create By,</div>
+                    <div t-if="o.approve_uid.digital_signature"><img t-att-src="image_data_uri(o.approve_uid.digital_signature)" class="float-left" alt="Logo" align="center" height="110" width="110" style='margin:14px;padding-top:0px;'/></div>
+                    <div>   <span t-field="o.approve_uid"/></div>
+                    <div>   Chief Executive Officer</div>
+                </div>
+            </div>
+
+        </div>
+    </t>
+</template>
+
+<template id="report_purchaseorder_signature">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="purchase_report.report_purchaseorder_signature_document" t-lang="o.partner_id.lang"/>
+        </t>
+    </t>
+</template>
+
+<report 
+    string="Purchase Order Signature" 
+    id="action_report_purchase_order" 
+    model="purchase.order" 
+    report_type="qweb-pdf"
+    name="purchase_report.report_purchaseorder_signature" 
+    file="purchase_report.report_purchaseorder_signature"
+    print_report_name="'Purchase Order - %s' % (object.name)"
+/>
+
+</odoo>

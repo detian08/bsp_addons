@@ -38,66 +38,127 @@ class WizardWizards(models.Model):
     @api.multi
     def action_purchase_request_recap_report(self):
         # XLS report
-        rows = {}
-        label_lists = ['TGL. MASUK', 'NAMA BARANG', 'KETERANGAN', 'JENIS BARANG',
-                       'DEPARTEMENT', 'TGL_PR', 'TGL_PROC_PR', 'NO_PR','TGL_QCF','NO_QCF',
-                       'TGL. PO','NO. PO','TGL.APROVE', 'PEMOHON', 'PENGGUNA', 'NO. POLISH',
-                       'QTY','HARGA(Rp.)','HARGA(US$)', 'TOTAL(Rp.)', 'TOTAL(US$)', 'PPN_STT',
-                       'SUPPLIER','KETERANGAN','TGL. PENBAR','TGL. BSTB']
-        order = self.env['purchase.request'].search(['&',('date_start', '>=', self.date_start), ('date_start', '<=', self.date_end)])
+        if self._context.get('purchase', False):
+            rows = {}
+            label_lists = ['TGL. MASUK', 'NAMA BARANG', 'KETERANGAN', 'JENIS BARANG',
+                           'DEPARTEMENT', 'TGL_PR', 'TGL_PROC_PR', 'NO_PR','TGL_QCF','NO_QCF',
+                           'TGL. PO','NO. PO','TGL.APROVE', 'PEMOHON', 'PENGGUNA', 'NO. POLISH',
+                           'QTY','HARGA(Rp.)','HARGA(US$)', 'TOTAL(Rp.)', 'TOTAL(US$)', 'PPN_STT',
+                           'SUPPLIER','KETERANGAN','TGL. PENBAR','TGL. BSTB']
+            order = self.env['purchase.order'].search(['&',('date_order', '>=', self.date_start), ('date_order', '<=', self.date_end)])
 
-        workbook = xlwt.Workbook()
-        sheet = workbook.add_sheet('RECAP-BPPB', cell_overwrite_ok=True)
-        sheet.write(0, 0, 'LAPORAN : ', styles['header'])
-        sheet.write(0, 1, 'BPPB', styles['header'])
-        sheet.write(1, 0, 'PERIODE :', styles['header'])
-        periode = self.date_start + " s/d " + self.date_end
-        sheet.write(1, 1, periode, styles['header'])
-        
-        for x in range(0, 26):
-            sheet.write(3, x, label_lists[x], styles['theader'])
+            workbook = xlwt.Workbook()
+            sheet = workbook.add_sheet('REKAP PURCHASE ORDER', cell_overwrite_ok=True)
+            sheet.write(0, 0, 'LAPORAN : ', styles['header'])
+            sheet.write(0, 1, 'REKAP PURCHASE ORDER', styles['header'])
+            sheet.write(1, 0, 'PERIODE :', styles['header'])
+            periode = self.date_start + " s/d " + self.date_end
+            sheet.write(1, 1, periode, styles['header'])
+            
+            for x in range(0, 26):
+                sheet.write(3, x, label_lists[x], styles['theader'])
 
-        no = 1
-        ii = 4
-        for rec in order:
-            for line in rec.line_ids:
-                sheet.write(ii, 0, datetime.strptime(rec.date_start, "%Y-%m-%d"), styles['date'])
-                sheet.write(ii, 1, line.name, styles['default'])
-                sheet.write(ii, 2, line.name, styles['default'])
-                sheet.write(ii, 3, line.product_id.type, styles['default'])
-                sheet.write(ii, 4, rec.department_id.name, styles['default'])
-                sheet.write(ii, 5, datetime.strptime(rec.date_start, "%Y-%m-%d"), styles['date'])
-                sheet.write(ii, 6, datetime.strptime(rec.received_doc_date, "%Y-%m-%d") if rec.received_doc_date else '', styles['date'])
-                sheet.write(ii, 7, rec.name, styles['default'])
-                sheet.write(ii, 13, rec.requested_by.name, styles['default'])
-                sheet.write(ii, 14, rec.employee_id.name, styles['default'])
-                sheet.write(ii, 15, "No-Insurance", styles['default'])
-                sheet.write(ii, 16, line.product_qty, styles['number'])
-                if line.purchase_lines:
-                    for order_line in (line.purchase_lines):
-                        if order_line.state =='purchase':
-                            sheet.write(ii, 8, datetime.strptime(order_line.order_id.date_order, '%Y-%m-%d %H:%M:%S') if order_line.order_id.date_order else '', styles['date'])
-                            sheet.write(ii, 9, order_line.order_id.name, styles['default'])
-                            sheet.write(ii, 10, datetime.strptime(order_line.order_id.date_order, "%Y-%m-%d %H:%M:%S") if order_line.order_id.date_order else '' , styles['date'])
-                            sheet.write(ii, 11, order_line.order_id.name, styles['default'])
-                            sheet.write(ii, 12, datetime.strptime(order_line.order_id.date_approve, "%Y-%m-%d") if order_line.order_id.date_approve else '', styles['date'])
-                            sheet.write(ii, 17, order_line.price_unit, styles['number'])
-                            sheet.write(ii, 18, order_line.price_unit, styles['number'])
-                            sheet.write(ii, 19, order_line.order_id.amount_total, styles['number'])
-                            sheet.write(ii, 20, order_line.order_id.amount_total, styles['number'])
-                            sheet.write(ii, 21, order_line.price_tax, styles['number'])
-                            sheet.write(ii, 22, order_line.order_id.partner_id.name, styles['default'])
-                            sheet.write(ii, 23, order_line.order_id.notes, styles['default'])
-                            sheet.write(ii, 24, datetime.strptime(order_line.move_ids.date, "%Y-%m-%d %H:%M:%S") if order_line.move_ids.date else '' , styles['date'])
-                            sheet.write(ii, 25, datetime.strptime(order_line.move_ids.date, "%Y-%m-%d %H:%M:%S") if order_line.move_ids.date else '', styles['date'])
+            no = 1
+            ii = 4
+            for rec in order:
+                for line in rec.order_line:
+                    sheet.write(ii, 0, datetime.strptime(rec.date_order[:10], "%Y-%m-%d"), styles['date'])
+                    sheet.write(ii, 1, line.name, styles['default'])
+                    sheet.write(ii, 2, line.name, styles['default'])
+                    sheet.write(ii, 3, line.product_id.type, styles['default'])
+                    sheet.write(ii, 4, rec.request_id.department_id.name, styles['default'])
+                    sheet.write(ii, 5, datetime.strptime(rec.date_order[:10], "%Y-%m-%d"), styles['date'])
+                    sheet.write(ii, 6, datetime.strptime(rec.request_id.received_doc_date, "%Y-%m-%d") if rec.request_id.received_doc_date else '', styles['date'])
+                    sheet.write(ii, 7, rec.request_id.name, styles['default'])
+                    sheet.write(ii, 13, rec.request_id.requested_by.name, styles['default'])
+                    sheet.write(ii, 14, rec.request_id.employee_id.name, styles['default'])
+                    sheet.write(ii, 15, "No-Insurance", styles['default'])
+                    sheet.write(ii, 16, line.product_qty, styles['number'])
 
-                ii += 1
-                no += 1
+                    order_line = line
+                    sheet.write(ii, 8, datetime.strptime(order_line.order_id.date_order, '%Y-%m-%d %H:%M:%S') if order_line.order_id.date_order else '', styles['date'])
+                    sheet.write(ii, 9, order_line.order_id.name, styles['default'])
+                    sheet.write(ii, 10, datetime.strptime(order_line.order_id.date_order, "%Y-%m-%d %H:%M:%S") if order_line.order_id.date_order else '' , styles['date'])
+                    sheet.write(ii, 11, order_line.order_id.name, styles['default'])
+                    sheet.write(ii, 12, datetime.strptime(order_line.order_id.date_approve, "%Y-%m-%d") if order_line.order_id.date_approve else '', styles['date'])
+                    sheet.write(ii, 17, order_line.price_unit, styles['number'])
+                    sheet.write(ii, 18, order_line.price_unit, styles['number'])
+                    sheet.write(ii, 19, order_line.order_id.amount_total, styles['number'])
+                    sheet.write(ii, 20, order_line.order_id.amount_total, styles['number'])
+                    sheet.write(ii, 21, order_line.price_tax, styles['number'])
+                    sheet.write(ii, 22, order_line.order_id.partner_id.name, styles['default'])
+                    sheet.write(ii, 23, order_line.order_id.notes, styles['default'])
+                    sheet.write(ii, 24, datetime.strptime(order_line.move_ids.date, "%Y-%m-%d %H:%M:%S") if order_line.move_ids.date else '' , styles['date'])
+                    sheet.write(ii, 25, datetime.strptime(order_line.move_ids.date, "%Y-%m-%d %H:%M:%S") if order_line.move_ids.date else '', styles['date'])
 
-        if platform.system() == 'Linux':
-            filename = ('/tmp/PurchaseRequestRecapReport-' + str(datetime.today().date()) + '.xls')
-        else:
-            filename = ('PurchaseRequestRecapReport-' + str(datetime.today().date()) + '.xls')
+                    ii += 1
+                    no += 1
+
+            if platform.system() == 'Linux':
+                filename = ('/tmp/PurchaseRequestRecapReport-' + str(datetime.today().date()) + '.xls')
+            else:
+                filename = ('PurchaseRequestRecapReport-' + str(datetime.today().date()) + '.xls')
+        else :
+            rows = {}
+            label_lists = ['TGL. MASUK', 'NAMA BARANG', 'KETERANGAN', 'JENIS BARANG',
+                           'DEPARTEMENT', 'TGL_PR', 'TGL_PROC_PR', 'NO_PR','TGL_QCF','NO_QCF',
+                           'TGL. PO','NO. PO','TGL.APROVE', 'PEMOHON', 'PENGGUNA', 'NO. POLISH',
+                           'QTY','HARGA(Rp.)','HARGA(US$)', 'TOTAL(Rp.)', 'TOTAL(US$)', 'PPN_STT',
+                           'SUPPLIER','KETERANGAN','TGL. PENBAR','TGL. BSTB']
+            order = self.env['purchase.request'].search(['&',('date_start', '>=', self.date_start), ('date_start', '<=', self.date_end)])
+
+            workbook = xlwt.Workbook()
+            sheet = workbook.add_sheet('RECAP-BPPB', cell_overwrite_ok=True)
+            sheet.write(0, 0, 'LAPORAN : ', styles['header'])
+            sheet.write(0, 1, 'BPPB', styles['header'])
+            sheet.write(1, 0, 'PERIODE :', styles['header'])
+            periode = self.date_start + " s/d " + self.date_end
+            sheet.write(1, 1, periode, styles['header'])
+            
+            for x in range(0, 26):
+                sheet.write(3, x, label_lists[x], styles['theader'])
+
+            no = 1
+            ii = 4
+            for rec in order:
+                for line in rec.line_ids:
+                    sheet.write(ii, 0, datetime.strptime(rec.date_start, "%Y-%m-%d"), styles['date'])
+                    sheet.write(ii, 1, line.name, styles['default'])
+                    sheet.write(ii, 2, line.name, styles['default'])
+                    sheet.write(ii, 3, line.product_id.type, styles['default'])
+                    sheet.write(ii, 4, rec.department_id.name, styles['default'])
+                    sheet.write(ii, 5, datetime.strptime(rec.date_start, "%Y-%m-%d"), styles['date'])
+                    sheet.write(ii, 6, datetime.strptime(rec.received_doc_date, "%Y-%m-%d") if rec.received_doc_date else '', styles['date'])
+                    sheet.write(ii, 7, rec.name, styles['default'])
+                    sheet.write(ii, 13, rec.requested_by.name, styles['default'])
+                    sheet.write(ii, 14, rec.employee_id.name, styles['default'])
+                    sheet.write(ii, 15, "No-Insurance", styles['default'])
+                    sheet.write(ii, 16, line.product_qty, styles['number'])
+                    if line.purchase_lines:
+                        for order_line in (line.purchase_lines):
+                            if order_line.state =='purchase':
+                                sheet.write(ii, 8, datetime.strptime(order_line.order_id.date_order, '%Y-%m-%d %H:%M:%S') if order_line.order_id.date_order else '', styles['date'])
+                                sheet.write(ii, 9, order_line.order_id.name, styles['default'])
+                                sheet.write(ii, 10, datetime.strptime(order_line.order_id.date_order, "%Y-%m-%d %H:%M:%S") if order_line.order_id.date_order else '' , styles['date'])
+                                sheet.write(ii, 11, order_line.order_id.name, styles['default'])
+                                sheet.write(ii, 12, datetime.strptime(order_line.order_id.date_approve, "%Y-%m-%d") if order_line.order_id.date_approve else '', styles['date'])
+                                sheet.write(ii, 17, order_line.price_unit, styles['number'])
+                                sheet.write(ii, 18, order_line.price_unit, styles['number'])
+                                sheet.write(ii, 19, order_line.order_id.amount_total, styles['number'])
+                                sheet.write(ii, 20, order_line.order_id.amount_total, styles['number'])
+                                sheet.write(ii, 21, order_line.price_tax, styles['number'])
+                                sheet.write(ii, 22, order_line.order_id.partner_id.name, styles['default'])
+                                sheet.write(ii, 23, order_line.order_id.notes, styles['default'])
+                                sheet.write(ii, 24, datetime.strptime(order_line.move_ids.date, "%Y-%m-%d %H:%M:%S") if order_line.move_ids.date else '' , styles['date'])
+                                sheet.write(ii, 25, datetime.strptime(order_line.move_ids.date, "%Y-%m-%d %H:%M:%S") if order_line.move_ids.date else '', styles['date'])
+
+                    ii += 1
+                    no += 1
+
+            if platform.system() == 'Linux':
+                filename = ('/tmp/PurchaseRequestRecapReport-' + str(datetime.today().date()) + '.xls')
+            else:
+                filename = ('PurchaseRequestRecapReport-' + str(datetime.today().date()) + '.xls')
         # filename = filename.split('/')[0]
         workbook.save(filename)
         fp = open(filename, "rb")

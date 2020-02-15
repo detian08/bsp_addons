@@ -1,0 +1,54 @@
+<odoo>
+    <data>
+
+        <record id="bsp_purchase_report_wizard_form_view" model="ir.ui.view">
+            <field name="name">bsp.purchase.report.wizard.form</field>
+            <field name="model">bsp.purchase.report.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                
+                <form string="Purchase Report">
+                    <group>
+                        <field name="report_type"/>
+                    </group>
+                    <group string="Filter">
+                        <label for="start_date" string="Period"/>
+                        <div>
+                            <field name="start_date" attrs="{'required': [('report_type','in',['bppb','qcf','summary_purchasing'])]}" class="oe_inline" placeholder="Start Date"/> - <field name="end_date" attrs="{'required': [('report_type','in',['bppb','qcf','summary_purchasing'])]}" class="oe_inline" placeholder="End Date"/>
+                        </div>
+                        <field name="state" attrs="{'invisible': [('report_type','not in',['summary','detail'])]}"/>
+                    </group>
+                    
+                    <notebook attrs="{'invisible': [('report_type','not in',['summary','detail'])]}">
+                        <page string="Supplier">
+                            <field name="partner_ids" domain="[('supplier','=',True)]"/>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="print_excel_report" string="Export Report" type="object" class="oe_highlight"/>
+                         or 
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+
+            </field>
+        </record>
+        
+        <record id="action_bsp_purchase_report_wizard" model="ir.actions.act_window">
+            <field name="name">Excel Format</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bsp.purchase.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="bsp_purchase_report_wizard_form_view"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem id="purchase.purchase_report" name="Reporting" parent="purchase.menu_purchase_root" sequence="99"
+        groups="purchase.group_purchase_manager"/>
+        <menuitem id="purchase_report_analysis" name="Purchase Analysis" parent="purchase.purchase_report" sequence="10"
+        groups="purchase.group_purchase_manager" action="purchase.action_purchase_order_report_all"/>
+        <menuitem id="menu_bsp_purchase_report_wizard" parent="purchase.purchase_report" action="action_bsp_purchase_report_wizard" sequence="20"/>
+        
+    </data>
+</odoo>

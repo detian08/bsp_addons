@@ -8,6 +8,17 @@ class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
     @api.multi
+    @api.depends('order_line.purchase_request_lines.request_id')
+    def _get_request(self):
+        for order in self :
+            request_ids = order.mapped('order_line.purchase_request_lines.request_id')
+            print("\n request_ids",request_ids)
+            if request_ids :
+                order.request_id = request_ids[:1].id
+
+    request_id = fields.Many2one('purchase.request', compute='_get_request', store=True)
+
+    @api.multi
     def _purchase_request_confirm_message_content(self, request,
                                                   request_dict):
         self.ensure_one()
